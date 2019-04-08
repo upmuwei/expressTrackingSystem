@@ -1,7 +1,9 @@
 package com.expresstracking.service.impl;
 
+import com.expresstracking.dao.CustomerInfoDao;
 import com.expresstracking.entity.CustomerInfo;
 import com.expresstracking.service.CustomerInfoService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -16,30 +18,31 @@ import java.util.List;
 @Service
 @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
 public class CustomerInfoServiceImpl implements CustomerInfoService {
-
+    @Autowired
+    private CustomerInfoDao customerInfoDao;
     @Override
     public CustomerInfo get(int id) {
-        return null;
+        return customerInfoDao.get(id);
     }
 
     @Override
     public List<CustomerInfo> findByName(String name) {
-        return null;
+        return customerInfoDao.findByName(name);
     }
 
     @Override
     public List<CustomerInfo> findByTelCode(String telCode) {
-        return null;
+        return customerInfoDao.findByTelCode(telCode);
     }
 
     @Override
     public void save(CustomerInfo customerInfo) {
-
+        customerInfoDao.insert(customerInfo);
     }
 
     @Override
     public int removeById(int id) {
-        return 0;
+        return customerInfoDao.delete(id);
     }
 
     @Override

@@ -1,11 +1,7 @@
 package com.expresstracking.dao;
-
 import com.expresstracking.entity.CustomerInfo;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
-
-
 @Repository
 public interface CustomerInfoDao {
 
@@ -18,5 +14,9 @@ public interface CustomerInfoDao {
     public CustomerInfo get(int id);
 
     public List<CustomerInfo> getAll();
+
+    public List<CustomerInfo> findByName(String name);
+
+    public List<CustomerInfo> findByTelCode(String telCode);
 
 }
