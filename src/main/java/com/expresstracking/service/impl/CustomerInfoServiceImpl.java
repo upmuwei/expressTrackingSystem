@@ -47,6 +47,6 @@ public class CustomerInfoServiceImpl implements CustomerInfoService {
 
     @Override
     public int findByPropertyWithoutID(CustomerInfo customerInfo) {
-        return 0;
+        return 1;
     }
 }
