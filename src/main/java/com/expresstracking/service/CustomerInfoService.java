@@ -16,5 +16,4 @@ public interface CustomerInfoService {
 
     public int removeById(int id);
 
-    public int findByPropertyWithoutID(CustomerInfo customerInfo);
 }

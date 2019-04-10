@@ -45,8 +45,5 @@ public class CustomerInfoServiceImpl implements CustomerInfoService {
         return customerInfoDao.delete(id);
     }
 
-    @Override
-    public int findByPropertyWithoutID(CustomerInfo customerInfo) {
-        return 0;
-    }
+
 }
