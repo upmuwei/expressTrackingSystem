@@ -18,8 +18,6 @@ public interface ExpressSheetService {
 
     public void save(ExpressSheet expressSheet);
 
-    public int delete(String id);
-
     public int removeById(String id);
 
 }
