@@ -18,8 +18,13 @@ import java.util.List;
 @Service
 @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
 public class ExpressSheetServiceImpl implements ExpressSheetService {
+    private final ExpressSheetDao expressSheetDao;
+
     @Autowired
-    private ExpressSheetDao expressSheetDao;
+    public ExpressSheetServiceImpl(ExpressSheetDao expressSheetDao) {
+        this.expressSheetDao = expressSheetDao;
+    }
+
     @Override
     public int update(ExpressSheet expressSheet) {
         return expressSheetDao.update(expressSheet);
@@ -48,11 +53,6 @@ public class ExpressSheetServiceImpl implements ExpressSheetService {
     @Override
     public void save(ExpressSheet expressSheet) {
         expressSheetDao.insert(expressSheet);
-    }
-
-    @Override
-    public int delete(String id) {
-        return expressSheetDao.delete(id);
     }
 
     @Override
