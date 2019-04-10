@@ -8,6 +8,3 @@
 out
 gen
 .gitignore
-.idea/dataSources.local.xml
-.idea/workspace.xml
-src/test/
