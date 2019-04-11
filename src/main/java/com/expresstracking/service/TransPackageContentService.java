@@ -8,6 +8,8 @@ public interface TransPackageContentService {
 
     public int getSn(String id, String uId);
 
+    public List<String> selectExpressId(String transPackageId);
+
     public void save(TransPackageContent transPackageContent);
 
     public int update(TransPackageContent transPackageContent);

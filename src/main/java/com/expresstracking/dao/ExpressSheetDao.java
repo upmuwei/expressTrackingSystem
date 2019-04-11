@@ -22,5 +22,4 @@ public interface ExpressSheetDao {
 
     public List<ExpressSheet> findLike(String propertyName, Object value, String orderBy, boolean isAsc);
 
-    public List<ExpressSheet> getListInPackage(String packageId);
 }

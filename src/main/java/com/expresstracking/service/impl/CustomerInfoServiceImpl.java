@@ -44,8 +44,7 @@ public class CustomerInfoServiceImpl implements CustomerInfoService {
     public int removeById(int id) {
         return customerInfoDao.delete(id);
     }
-
-    @Override
+    
     public int findByPropertyWithoutID(CustomerInfo customerInfo) {
         return 0;
     }

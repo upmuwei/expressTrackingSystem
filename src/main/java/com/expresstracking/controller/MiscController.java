@@ -151,7 +151,7 @@ public class MiscController {
 	 */
     @RequestMapping(value = "/getProvinceList",method = RequestMethod.GET)
 	public List<CodeNamePair> getProvinceList() {
-		List<Region> listrg = regionService.getProvinceList();
+			List<Region> listrg = regionService.getProvinceList();
 		List<CodeNamePair> listCN = new ArrayList<>();
 		for(Region rg : listrg){
 			CodeNamePair cn = new CodeNamePair(rg.getORMID(),rg.getPrv());
@@ -211,7 +211,7 @@ public class MiscController {
 	 * @see Region
 	 */
     @RequestMapping(value = "/getRegion/{id}",method = RequestMethod.GET)
-	public Region getRegion(@PathVariable("id") String code) {
+	public String getRegion(@PathVariable("id") String code) {
 		return regionService.getFullNameRegionById(code);
 	}
 

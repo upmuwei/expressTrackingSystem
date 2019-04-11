@@ -9,11 +9,13 @@ import java.util.List;
 public interface TransNodeDao {
     public int update(TransNode transNode);
 
-    public int delete(int id);
+    public int delete(String id);
 
     public void insert(TransNode transNode);
 
-    public TransNode get(int id);
+    public TransNode get(String id);
 
     public List<TransNode> getAll();
+
+    public List<TransNode> findByRegionCodeAndType(String regionCode,int type);
 }

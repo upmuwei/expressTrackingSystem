@@ -1,7 +1,9 @@
 package com.expresstracking.service.impl;
 
+import com.expresstracking.dao.TransPackageContentDao;
 import com.expresstracking.entity.TransPackageContent;
 import com.expresstracking.service.TransPackageContentService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -16,6 +18,8 @@ import java.util.List;
 @Service
 @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
 public class TransPackageContentServiceImpl implements TransPackageContentService {
+    @Autowired
+    private TransPackageContentDao transPackageContentDao;
     @Override
     public int getSn(String id, String uId) {
         return 0;
@@ -23,12 +27,12 @@ public class TransPackageContentServiceImpl implements TransPackageContentServic
 
     @Override
     public void save(TransPackageContent transPackageContent) {
-
+        transPackageContentDao.insert(transPackageContent);
     }
 
     @Override
     public int update(TransPackageContent transPackageContent) {
-        return 0;
+        return transPackageContentDao.update(transPackageContent);
     }
 
     @Override
@@ -44,5 +48,9 @@ public class TransPackageContentServiceImpl implements TransPackageContentServic
     @Override
     public List<TransPackageContent> findBy(String propertyName, Object value, String orderBy, boolean isAsc) {
         return null;
+    }
+    @Override
+    public List<String> selectExpressId(String transPackageId){
+        return  null;
     }
 }

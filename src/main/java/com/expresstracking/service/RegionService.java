@@ -13,5 +13,5 @@ public interface RegionService {
 
     public String getRegionNameById(String code);
 
-    public Region getFullNameRegionById(String code);
+    public String getFullNameRegionById(String code);
 }

@@ -1,7 +1,4 @@
 package com.expresstracking.controller;
-
-
-
 import com.expresstracking.entity.*;
 
 import com.expresstracking.service.*;
@@ -83,7 +80,6 @@ public class DomainController {
                 break;
             default:
         }
-
         return list;
     }
 

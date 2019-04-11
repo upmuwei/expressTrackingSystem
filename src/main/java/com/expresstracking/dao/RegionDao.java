@@ -13,7 +13,8 @@ public interface RegionDao {
 
     public void insert(Region region);
 
-    public Region get(int id);
+    public Region get(String id);
 
     public List<Region> getAll();
+
 }

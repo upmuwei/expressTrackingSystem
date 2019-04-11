@@ -1,6 +1,7 @@
 package com.expresstracking.service.impl;
 
 import com.expresstracking.dao.ExpressSheetDao;
+import com.expresstracking.dao.TransPackageContentDao;
 import com.expresstracking.entity.ExpressSheet;
 import com.expresstracking.service.ExpressSheetService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,9 +22,12 @@ import java.util.List;
 public class ExpressSheetServiceImpl implements ExpressSheetService {
     private final ExpressSheetDao expressSheetDao;
 
+    private final TransPackageContentDao transPackageContentDao;
+
     @Autowired
-    public ExpressSheetServiceImpl(ExpressSheetDao expressSheetDao) {
+    public ExpressSheetServiceImpl(ExpressSheetDao expressSheetDao, TransPackageContentDao transPackageContentDao) {
         this.expressSheetDao = expressSheetDao;
+        this.transPackageContentDao = transPackageContentDao;
     }
 
     @Override
@@ -34,15 +39,18 @@ public class ExpressSheetServiceImpl implements ExpressSheetService {
     public List<ExpressSheet> findBy(String propertyName, Object value, String orderBy, boolean isAsc) {
         return expressSheetDao.findBy(propertyName,value,orderBy,isAsc);
     }
-
     @Override
     public List<ExpressSheet> findLike(String propertyName, Object value, String orderBy, boolean isAsc) {
         return expressSheetDao.findLike(propertyName,value,orderBy,isAsc);
     }
-
     @Override
     public List<ExpressSheet> getListInPackage(String packageId) {
-        return expressSheetDao.getListInPackage(packageId);
+        List<String> expressId=transPackageContentDao.selectExpressId(packageId);
+        List<ExpressSheet> expressSheets=new ArrayList<>();
+        for(String id:expressId){
+            expressSheets.add(expressSheetDao.get(id));
+        }
+        return expressSheets;
     }
 
     @Override

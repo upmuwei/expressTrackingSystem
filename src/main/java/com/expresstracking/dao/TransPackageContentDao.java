@@ -13,6 +13,8 @@ public interface TransPackageContentDao {
 
     public void insert(TransPackageContent transPackageContent);
 
+    public List<String> selectExpressId(String transPackageId);
+
     public TransPackageContent get(int id);
 
     public List<TransPackageContent> getAll();
