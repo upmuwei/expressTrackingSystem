@@ -383,12 +383,9 @@ public class DomainController {
      */
     @RequestMapping(value = "/openTransPackage/{uid}/{id}", method = RequestMethod.GET)
     public int openTransPackage(@PathVariable("uid")int uId,@PathVariable("id")String id) {
-        List<UserInfo> userInfos = new ArrayList<>();
         List<TransPackageContent> transPackageContents = new ArrayList<>();
         UserInfo userInfo = new UserInfo();
-        TransPackageContent transPackageContent = new TransPackageContent();
-        userInfos = userInfoService.findBy("UID", uId, "UID", true);
-        userInfo = userInfos.get(0);
+        userInfo = userInfoService.get(uId);
         transPackageContents = transPackageContentService.findBy("TransPackageID", id, "SN", true);
         //传入包裹ID不存在 返回2
         if(transPackageContents.isEmpty()){
@@ -396,27 +393,21 @@ public class DomainController {
         }
         TransPackage transPackage = new TransPackage();
         transPackage = transPackageService.get(id);
-        System.out.println(transPackage);
+        //包裹处于新建状态
         if(transPackage.getStatus() == 0){
             return 1;
         }
         transPackage.setStatus(0);
-        transPackageService.save(transPackage);
-        System.out.println(transPackageContents);
-        for (TransPackageContent transPackageContent1 : transPackageContents) {
-            transPackageContent = transPackageContent1;
+        transPackageService.update(transPackage);
+        for (TransPackageContent transPackageContent : transPackageContents) {
             if (transPackageContent.getStatus() == 1) {
                 continue;
             }
             transPackageContent.setStatus(TransPackageContent.STATUS.STATUS_OUTOF_PACKAGE);
             transPackageContentService.update(transPackageContent);
-
-            TransPackageContent tpc = new TransPackageContent();
-            tpc.setExpress(transPackageContent.getExpress());
-            tpc.setPkg(transPackageService.get(userInfo.getReceivePackageId()));
-            tpc.setStatus(TransPackageContent.STATUS.STATUS_ACTIVE);
-            System.out.println(tpc);
-            transPackageContentService.save(tpc);
+            ExpressSheet expressSheet = transPackageContent.getExpress();
+            //设置快递为分件状态
+            expressSheet.setStatus(ExpressSheet.STATUS.STATUS_PARTATION);
         }
         return 0;
     }

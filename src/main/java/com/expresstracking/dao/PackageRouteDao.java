@@ -7,6 +7,7 @@ import java.util.List;
 
 @Repository
 public interface PackageRouteDao {
+
     public int update(PackageRoute packageRoute);
 
     public int delete(int id);

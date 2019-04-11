@@ -40,4 +40,8 @@ public class TransPackageImpl implements TransPackageService {
     public void save(TransPackage expressSheet) {
 
     }
+
+    public void update(TransPackage transPackage) {
+
+    }
 }

@@ -18,8 +18,13 @@ import java.util.List;
 @Service
 @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
 public class CustomerInfoServiceImpl implements CustomerInfoService {
+    private final CustomerInfoDao customerInfoDao;
+
     @Autowired
-    private CustomerInfoDao customerInfoDao;
+    public CustomerInfoServiceImpl(CustomerInfoDao customerInfoDao) {
+        this.customerInfoDao = customerInfoDao;
+    }
+
     @Override
     public CustomerInfo get(int id) {
         return customerInfoDao.get(id);
@@ -44,8 +49,5 @@ public class CustomerInfoServiceImpl implements CustomerInfoService {
     public int removeById(int id) {
         return customerInfoDao.delete(id);
     }
-    
-    public int findByPropertyWithoutID(CustomerInfo customerInfo) {
-        return 0;
-    }
+
 }

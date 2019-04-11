@@ -18,8 +18,13 @@ import java.util.List;
 @Service
 @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
 public class PackageRouteServiceImpl implements PackageRouteService {
+    private final PackageRouteDao packageRouteDao;
+
     @Autowired
-    private PackageRouteDao packageRouteDao;
+    public PackageRouteServiceImpl(PackageRouteDao packageRouteDao) {
+        this.packageRouteDao = packageRouteDao;
+    }
+
     @Override
     public void save(PackageRoute route) {
          packageRouteDao.insert(route);

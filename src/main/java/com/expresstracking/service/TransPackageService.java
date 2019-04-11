@@ -14,5 +14,7 @@ public interface TransPackageService {
 
     public TransPackage get(String id);
 
-    public void save(TransPackage expressSheet);
+    public void save(TransPackage transPackage);
+
+    public void update(TransPackage transPackage);
 }

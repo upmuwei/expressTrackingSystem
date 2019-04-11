@@ -19,36 +19,39 @@ import java.util.List;
 @Service
 @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
 public class RegionServiceImpl implements RegionService {
+    private final RegionDao regionDao;
+
     @Autowired
-    private RegionDao regionDao;
-
-    @Override
-    public List<Region> getProvinceList() {//查询省名称不为空的
-        return regionDao.getAll();
+    public RegionServiceImpl(RegionDao regionDao) {
+        this.regionDao = regionDao;
     }
 
     @Override
-    public List<Region> getCityList(String prv) {//通过省名称查到code，然后like code的前二位
+    public List<Region> getProvinceList() {
 
-        return regionDao.getCityList(prv);
+        return null;
     }
 
     @Override
-    public List<Region> getTownList(String city) {//like前四位
+    public List<Region> getCityList(String city) {
 
-        return regionDao.getTownList(city);
+        return null;
     }
 
     @Override
-    public String getRegionNameById(String code) {//获得不了省份名称
+    public List<Region> getTownList(String tow) {
+
+        return null;
+    }
+
+    @Override
+    public String getRegionNameById(String code) {
         Region region=regionDao.get(code);
-        String name=region.getPrv()+region.getCty()+region.getTwn();
-        return name;
+        return region.getPrv()+region.getCty()+region.getTwn();
     }
 
     @Override
     public Region getFullNameRegionById(String code) {
-        Region region=regionDao.get(code);
-        return region;
+        return regionDao.get(code);
     }
 }
