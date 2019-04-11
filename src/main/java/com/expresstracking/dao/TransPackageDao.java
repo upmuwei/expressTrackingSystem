@@ -13,7 +13,7 @@ public interface TransPackageDao {
 
     public void insert(TransPackage transPackage);
 
-    public TransPackage get(int id);
+    public TransPackage get(String id);
 
     public List<TransPackage> getAll();
 }

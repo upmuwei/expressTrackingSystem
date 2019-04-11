@@ -1,7 +1,9 @@
 package com.expresstracking.service.impl;
 
+import com.expresstracking.dao.TransPackageDao;
 import com.expresstracking.entity.TransPackage;
 import com.expresstracking.service.TransPackageService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -16,6 +18,8 @@ import java.util.List;
 @Service
 @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
 public class TransPackageImpl implements TransPackageService {
+    @Autowired
+    private TransPackageDao transPackageDao;
     @Override
     public List<TransPackage> findBy(String propertyName, Object value, String orderBy, boolean isAsc) {
         return null;
@@ -33,15 +37,15 @@ public class TransPackageImpl implements TransPackageService {
 
     @Override
     public TransPackage get(String id) {
-        return null;
+        return transPackageDao.get(id);
     }
 
     @Override
-    public void save(TransPackage expressSheet) {
-
+    public void save(TransPackage transPackage) {
+        transPackageDao.insert(transPackage);
     }
-
+    @Override
     public void update(TransPackage transPackage) {
-
+        transPackageDao.update(transPackage);
     }
 }
