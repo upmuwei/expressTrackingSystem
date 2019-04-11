@@ -18,12 +18,17 @@ import java.util.List;
 @Service
 @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
 public class TransPackageContentServiceImpl implements TransPackageContentService {
-    @Autowired
+
     private TransPackageContentDao transPackageContentDao;
-    @Override
-    public int getSn(String id, String uId) {
-        return 0;
+    @Autowired
+    public TransPackageContentServiceImpl(TransPackageContentDao transPackageContentDao) {
+        this.transPackageContentDao=transPackageContentDao;
     }
+
+//    @Override
+//    public int getSn(String id, String uId) {
+//        return 0;
+//    }
 
     @Override
     public void save(TransPackageContent transPackageContent) {
@@ -48,9 +53,5 @@ public class TransPackageContentServiceImpl implements TransPackageContentServic
     @Override
     public List<TransPackageContent> findBy(String propertyName, Object value, String orderBy, boolean isAsc) {
         return null;
-    }
-    @Override
-    public List<String> selectExpressId(String transPackageId){
-        return  null;
     }
 }

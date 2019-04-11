@@ -211,7 +211,7 @@ public class MiscController {
 	 * @see Region
 	 */
     @RequestMapping(value = "/getRegion/{id}",method = RequestMethod.GET)
-	public String getRegion(@PathVariable("id") String code) {
+	public Region getRegion(@PathVariable("id") String code) {
 		return regionService.getFullNameRegionById(code);
 	}
 

@@ -18,4 +18,6 @@ public interface TransPackageContentDao {
     public TransPackageContent get(int id);
 
     public List<TransPackageContent> getAll();
+
+    public List<String> getPackageId(String expressId);
 }

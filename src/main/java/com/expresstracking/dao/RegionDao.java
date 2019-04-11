@@ -17,4 +17,15 @@ public interface RegionDao {
 
     public List<Region> getAll();
 
+    //service中粘贴出来的方法
+
+    public List<Region> getProvinceList();
+
+    public List<Region> getCityList(String prv);
+
+    public List<Region> getTownList(String city);
+
+    public String getRegionNameById(String code);
+
+    public String getFullNameRegionById(String code);
 }

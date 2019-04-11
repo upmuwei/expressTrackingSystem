@@ -30,13 +30,13 @@ public class RegionServiceImpl implements RegionService {
     @Override
     public List<Region> getCityList(String prv) {//通过省名称查到code，然后like code的前二位
 
-        return null;
+        return regionDao.getCityList(prv);
     }
 
     @Override
     public List<Region> getTownList(String city) {//like前四位
 
-        return null;
+        return regionDao.getTownList(city);
     }
 
     @Override
@@ -47,14 +47,8 @@ public class RegionServiceImpl implements RegionService {
     }
 
     @Override
-    public String getFullNameRegionById(String code) {
+    public Region getFullNameRegionById(String code) {
         Region region=regionDao.get(code);
-        return "Region[ " +
-                "RegionCode=" + region.getRegionCode() + " " +
-                "Prv=" + region.getPrv() + " " +
-                "Cty=" + region.getCty() + " " +
-                "Twn=" + region.getTwn() + " " +
-                "Stage=" + region.getStage() + " " +
-                "]";
+        return region;
     }
 }

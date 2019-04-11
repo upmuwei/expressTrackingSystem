@@ -2,6 +2,7 @@ package com.expresstracking.service.impl;
 
 import com.expresstracking.dao.ExpressSheetDao;
 import com.expresstracking.dao.TransHistoryDao;
+import com.expresstracking.dao.TransPackageContentDao;
 import com.expresstracking.entity.ExpressSheet;
 import com.expresstracking.entity.TransHistory;
 import com.expresstracking.service.TransHistoryService;
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,26 +24,33 @@ import java.util.List;
 public class TransHistoryServiceImpl implements TransHistoryService {
     private final TransHistoryDao transHistoryDao;
     private ExpressSheetDao expressSheetDao;
+    private TransPackageContentDao transPackageContentDao;
     @Autowired
-    public TransHistoryServiceImpl(ExpressSheetDao expressSheetDao, TransHistoryDao transHistoryDao) {
-        this.expressSheetDao = expressSheetDao;
+    public TransHistoryServiceImpl(TransHistoryDao transHistoryDao, ExpressSheetDao expressSheetDao, TransPackageContentDao transPackageContentDao) {
         this.transHistoryDao = transHistoryDao;
+        this.expressSheetDao = expressSheetDao;
+        this.transPackageContentDao = transPackageContentDao;
     }
 
-    @Override
-    public String appointTransPorter(String packageId, int nodeUId, int userId) {
-        return null;
-    }
 
-    @Override
-    public TransHistory appointDeliver(String transPackageId, String expressSheetId) {
-        return null;
-    }
+//    @Override
+//    public String appointTransPorter(String packageId, int nodeUId, int userId) {
+//        return null;
+//    }
+//
+//    @Override
+//    public TransHistory appointDeliver(String transPackageId, String expressSheetId) {
+//        return null;
+//    }
 
     @Override
     public List<TransHistory> getTransHistory(String expressSheetId) {
-        ExpressSheet expressSheet=expressSheetDao.get(expressSheetId);
-        return null;
+        List<String> packageId=transPackageContentDao.getPackageId(expressSheetId);//????
+        List<TransHistory> transHistoryList=new ArrayList<>();
+        for(String packageid:packageId){
+            transHistoryList.add(transHistoryDao.get(packageid));
+        }
+        return transHistoryList;
     }
 
     @Override

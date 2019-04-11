@@ -13,7 +13,9 @@ public interface TransHistoryDao {
 
     public void insert(TransHistory transHistory);
 
-    public TransHistory get(int id);
+
+
+    public TransHistory get(String id);
 
     public List<TransHistory> getAll();
 }
