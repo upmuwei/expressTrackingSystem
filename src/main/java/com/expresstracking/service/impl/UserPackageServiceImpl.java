@@ -14,8 +14,12 @@ import java.util.List;
 @Service
 @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
 public class UserPackageServiceImpl implements UserPackageService {
+    private final UsersPackageDao usersPackageDao;
+
     @Autowired
-    private UsersPackageDao usersPackageDao;
+    public UserPackageServiceImpl(UsersPackageDao usersPackageDao) {
+        this.usersPackageDao = usersPackageDao;
+    }
 
     @Override
     public List<UsersPackage> getTransPackageList(int userUId) {

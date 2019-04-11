@@ -18,8 +18,13 @@ import java.util.List;
 @Service
 @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
 public class UserInfoServiceImpl implements UserInfoService {
+    private final UserInfoDao userInfoDao;
+
     @Autowired
-    private UserInfoDao userInfoDao;
+    public UserInfoServiceImpl(UserInfoDao userInfoDao) {
+        this.userInfoDao = userInfoDao;
+    }
+
     @Override
     public UserInfo get(int uId) {
         return userInfoDao.get(uId);

@@ -19,8 +19,13 @@ import java.util.List;
 @Service
 @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
 public class TransNodeServiceImpl implements TransNodeService {
+    private final TransNodeDao transNodeDao;
+
     @Autowired
-    private TransNodeDao transNodeDao;
+    public TransNodeServiceImpl(TransNodeDao transNodeDao) {
+        this.transNodeDao = transNodeDao;
+    }
+
     @Override
     public TransNode get(String id) {
         return transNodeDao.get(id);

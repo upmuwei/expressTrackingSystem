@@ -23,8 +23,9 @@ import java.util.List;
 @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
 public class TransHistoryServiceImpl implements TransHistoryService {
     private final TransHistoryDao transHistoryDao;
-    private ExpressSheetDao expressSheetDao;
-    private TransPackageContentDao transPackageContentDao;
+    private final ExpressSheetDao expressSheetDao;
+    private final TransPackageContentDao transPackageContentDao;
+
     @Autowired
     public TransHistoryServiceImpl(TransHistoryDao transHistoryDao, ExpressSheetDao expressSheetDao, TransPackageContentDao transPackageContentDao) {
         this.transHistoryDao = transHistoryDao;
@@ -45,7 +46,8 @@ public class TransHistoryServiceImpl implements TransHistoryService {
 
     @Override
     public List<TransHistory> getTransHistory(String expressSheetId) {
-        List<String> packageId=transPackageContentDao.getPackageId(expressSheetId);//????
+
+        List<String> packageId=transPackageContentDao.getPackageId(expressSheetId);
         List<TransHistory> transHistoryList=new ArrayList<>();
         for(String packageid:packageId){
             transHistoryList.add(transHistoryDao.get(packageid));

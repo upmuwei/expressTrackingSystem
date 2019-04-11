@@ -106,14 +106,14 @@ public class DomainController {
         return ResponseEntity.ok().header("EntityClass", "ExpressSheet").body(expressSheet);
     }
 
-    /**
+ /*   *
      * 新建快递订单
      * @param id 快递单号
      * @param uid 使用者id
      * @return {@code ResponseEntity<ExpressSheet>, HttpStatus=200, Header={"EntityClass", "ExpressSheet"}}成功时返回快递单，
      * {@code ResponseEntity<String>, HttpStatus=500}异常时返回异常信息
      * {@code ResponseEntity<String>，HttpStatus=200， Header={"EntityClass", "E_ExpressSheet"}}订单已经存在时
-     *//*
+
     @RequestMapping(value = "/newExpressSheet/id/{id}/uid/{uid}", method = RequestMethod.GET)
     public ResponseEntity newExpressSheet(@PathVariable("id")String id, @PathVariable("uid")int uid) {
         ExpressSheet es = null;
