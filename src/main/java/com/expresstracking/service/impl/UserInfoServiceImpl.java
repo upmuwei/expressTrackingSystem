@@ -52,11 +52,11 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public List<UserInfo> findLike(String propertyName, Object value, String orderBy, boolean isAsc) {
-        return null;
+        return userInfoDao.findLike(propertyName,value,orderBy,isAsc);
     }
 
     @Override
     public List<UserInfo> findBy(String propertyName, Object value, String orderBy, boolean isAsc) {
-        return null;
+        return userInfoDao.findBy(propertyName,value,orderBy,isAsc);
     }
 }

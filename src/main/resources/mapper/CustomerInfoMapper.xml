@@ -3,5 +3,24 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.expresstracking.dao.CustomerInfoDao">
+    <select id="get" parameterType="int" resultType="CustomerInfo">
+        select id,name,TelCode,Department,RegionCode,Address,PostCode FROM customerinfo;
+    </select>
+
+    <select id="findByName" parameterType="String" resultType="CustomerInfo">
+        select id,name,TelCode,Department,RegionCode,Address,PostCode FROM customerinfo where name=#{name};
+    </select>
+
+    <delete id="delete" parameterType="int">
+        delete from customerinfo where id=#{id};
+    </delete>
+
+    <select id="findByTelCode" parameterType="String" resultType="CustomerInfo">
+        select id,name,TelCode,Department,RegionCode,Address,PostCode FROM customerinfo where TelCode=#{TelCode};
+    </select>
+
+    <insert id="insert" parameterType="CustomerInfo">
+        insert into customerinfo values(#{id},#{name},#{telCode},#{Department},#{RegionCode},#{Address},#{PostCode});
+    </insert>
 
 </mapper>

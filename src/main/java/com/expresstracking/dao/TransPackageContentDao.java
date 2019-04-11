@@ -15,7 +15,7 @@ public interface TransPackageContentDao {
 
     public List<String> selectExpressId(String transPackageId);
 
-    public TransPackageContent get(int id);
+    public TransPackageContent get(String packageId);
 
     public List<TransPackageContent> getAll();
 

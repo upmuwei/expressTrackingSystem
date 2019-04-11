@@ -13,7 +13,9 @@ public interface UsersPackageDao {
 
     public void insert(UsersPackage userPackage);
 
-    public UsersPackage get(int id);
+    public List<UsersPackage> get(int id);
 
     public List<UsersPackage> getAll();
+
+    public String getPackageId(int userId);
 }

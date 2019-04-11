@@ -1,5 +1,6 @@
 package com.expresstracking.service.impl;
 
+import com.expresstracking.dao.TransPackageContentDao;
 import com.expresstracking.dao.UsersPackageDao;
 import com.expresstracking.entity.UsersPackage;
 import com.expresstracking.service.UserPackageService;
@@ -14,7 +15,7 @@ import java.util.List;
 @Service
 @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
 public class UserPackageServiceImpl implements UserPackageService {
-    private final UsersPackageDao usersPackageDao;
+    private UsersPackageDao usersPackageDao;
 
     @Autowired
     public UserPackageServiceImpl(UsersPackageDao usersPackageDao) {
@@ -23,7 +24,8 @@ public class UserPackageServiceImpl implements UserPackageService {
 
     @Override
     public List<UsersPackage> getTransPackageList(int userUId) {
-        return null;
+        List<UsersPackage> usersPackages=usersPackageDao.get(userUId);
+        return usersPackages;
     }
 
     @Override
