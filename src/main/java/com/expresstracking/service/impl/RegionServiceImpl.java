@@ -29,19 +29,19 @@ public class RegionServiceImpl implements RegionService {
     @Override
     public List<Region> getProvinceList() {
 
-        return null;
+        return regionDao.getProvinceList();
     }
 
     @Override
-    public List<Region> getCityList(String city) {
+    public List<Region> getCityList(String prv) {
 
-        return null;
+        return regionDao.getCityList(prv);
     }
 
     @Override
-    public List<Region> getTownList(String tow) {
+    public List<Region> getTownList(String city) {
 
-        return null;
+        return regionDao.getTownList(city);
     }
 
     @Override
