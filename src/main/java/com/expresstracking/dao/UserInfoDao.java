@@ -20,7 +20,4 @@ public interface UserInfoDao {
 
     public UserInfo checkLogin(int uId, String password);
 
-    public List<UserInfo> findLike(String propertyName, Object value, String orderBy, boolean isAsc);
-
-    public List<UserInfo> findBy(String propertyName, Object value, String orderBy, boolean isAsc);
 }

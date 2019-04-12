@@ -24,8 +24,7 @@ public class UserPackageServiceImpl implements UserPackageService {
 
     @Override
     public List<UsersPackage> getTransPackageList(int userUId) {
-        List<UsersPackage> usersPackages=usersPackageDao.get(userUId);
-        return usersPackages;
+        return usersPackageDao.get(userUId);
     }
 
     @Override

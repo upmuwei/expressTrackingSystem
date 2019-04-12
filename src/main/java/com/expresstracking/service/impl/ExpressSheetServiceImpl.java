@@ -21,7 +21,6 @@ import java.util.List;
 @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
 public class ExpressSheetServiceImpl implements ExpressSheetService {
     private final ExpressSheetDao expressSheetDao;
-
     private final TransPackageContentDao transPackageContentDao;
 
     @Autowired

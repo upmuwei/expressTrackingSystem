@@ -3,6 +3,25 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.expresstracking.dao.UserInfoDao">
+<select id="get" parameterType="int" resultType="UserInfo">
+    select * from userinfo where UID=#{id};
+</select>
 
+    <insert id="insert" parameterType="UserInfo">
+        insert into userinfo values (#{uid},#{pwd},#{name},#{urull},#{telCode} ,#{status} ,#{dptid},#{receivePackageId} ,#{delivePackageId} ,#{transPackageId} );
 
+    </insert>
+
+    <update id="update" parameterType="UserInfo">
+        update userinfo set uid=#{uid},pwd=#{pwd},name=#{name},urull=#{urull},TelCode=#{telCode} ,DptID=#{dptId} ,ReceivePackageID=#{receivePackageId} ,DelivePackageID=#{delivePackageId} ,TransPackageID=#{transPackageId} ;
+
+    </update>
+
+    <delete id="delete" parameterType="int">
+        delete from userinfo where uid=#{id};
+    </delete>
+
+    <select id="checkLogin" resultType="UserInfo">
+        select * from userinfo where uid=#{uid} and password=#{password};
+    </select>
 </mapper>

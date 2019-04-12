@@ -28,7 +28,6 @@ public class RegionServiceImpl implements RegionService {
 
     @Override
     public List<Region> getProvinceList() {
-
         return regionDao.getProvinceList();
     }
 

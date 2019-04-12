@@ -4,5 +4,15 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.expresstracking.dao.TransPackageDao">
 
+<select id="get" parameterType="String" resultType="TransPackage">
+    select * from transpackage where id=#{id};
+</select>
 
+    <update id="update" parameterType="TransPackage">
+        update transpackage set ID=#{id}, SourceNode=#{sourceNode} ,TargetNode=#{targetNode} ,CreateTime=#{createTime} ,Status=#{status} ;
+    </update>
+
+    <insert id="insert" parameterType="TransPackage">
+        insert into transpackage values (#{id},#{sourceNode} ,#{targetNode} ,#{createTime} ,#{status} );
+    </insert>
 </mapper>

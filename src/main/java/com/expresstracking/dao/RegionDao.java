@@ -27,5 +27,5 @@ public interface RegionDao {
 
     public String getRegionNameById(String code);
 
-    public String getFullNameRegionById(String code);
+    public Region getFullNameRegionById(String code);
 }

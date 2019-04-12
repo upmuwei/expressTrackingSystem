@@ -9,7 +9,7 @@ import java.util.List;
 public interface UsersPackageDao {
     public int update(UsersPackage userPackage);
 
-    public int delete(int id);
+    public int delete(int sn);
 
     public void insert(UsersPackage userPackage);
 

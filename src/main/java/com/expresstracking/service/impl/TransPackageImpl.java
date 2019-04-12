@@ -31,6 +31,7 @@ public class TransPackageImpl implements TransPackageService {
     }
 
     @Override
+    //该方法没有被用到
     public List<TransPackage> getListInPackage(String packageId) {
         return null;
     }
