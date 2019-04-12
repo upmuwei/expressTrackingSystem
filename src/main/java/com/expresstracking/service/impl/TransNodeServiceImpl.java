@@ -1,6 +1,5 @@
 package com.expresstracking.service.impl;
 
-import com.expresstracking.dao.RegionDao;
 import com.expresstracking.dao.TransNodeDao;
 import com.expresstracking.entity.TransNode;
 import com.expresstracking.service.TransNodeService;

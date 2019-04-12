@@ -16,19 +16,16 @@ import java.util.List;
  * @date 2019/4/8
  */
 @Service
-@Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
+@Transactional(isolation = Isolation.READ_COMMITTED,
+        propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
 public class TransPackageContentServiceImpl implements TransPackageContentService {
 
     private TransPackageContentDao transPackageContentDao;
+
     @Autowired
     public TransPackageContentServiceImpl(TransPackageContentDao transPackageContentDao) {
         this.transPackageContentDao=transPackageContentDao;
     }
-
-//    @Override
-//    public int getSn(String id, String uId) {
-//        return 0;
-//    }
 
     @Override
     public void save(TransPackageContent transPackageContent) {
@@ -45,6 +42,14 @@ public class TransPackageContentServiceImpl implements TransPackageContentServic
         return null;
     }
 
+    /**
+     *
+     * @param orderBy 排序依据
+     * @param isAsc 是否为升序
+     * @param expressSheetId 快件id
+     * @param status 包裹内容状态
+     * @return 包裹内容集合
+     */
     @Override
     public List<TransPackageContent> findBy(String orderBy, boolean isAsc, String expressSheetId, int status) {
         return null;

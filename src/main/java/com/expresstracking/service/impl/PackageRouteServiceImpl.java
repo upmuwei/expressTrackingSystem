@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,10 +20,12 @@ import java.util.List;
 @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
 public class PackageRouteServiceImpl implements PackageRouteService {
     private final PackageRouteDao packageRouteDao;
+    private final TransPackageContentDao transPackageContentDao;
 
     @Autowired
-    public PackageRouteServiceImpl(PackageRouteDao packageRouteDao) {
+    public PackageRouteServiceImpl(PackageRouteDao packageRouteDao, TransPackageContentDao transPackageContentDao) {
         this.packageRouteDao = packageRouteDao;
+        this.transPackageContentDao = transPackageContentDao;
     }
 
     @Override
@@ -35,9 +38,14 @@ public class PackageRouteServiceImpl implements PackageRouteService {
         return packageRouteDao.update(route);
     }
 
+    //已改
     @Override
-    //先通过快件查到包裹id，然后得到路线
     public List<PackageRoute> getPackageRouteList(String expressSheetId) {
-        return packageRouteDao.getAll();
+        List<String> packageIds = transPackageContentDao.getPackageId(expressSheetId);
+        List<PackageRoute> packageRouteList = new ArrayList<>();
+        for(String packageId : packageIds) {
+            packageRouteList.add(packageRouteDao.getByPackageId(packageId));
+        }
+        return packageRouteList;
     }
 }

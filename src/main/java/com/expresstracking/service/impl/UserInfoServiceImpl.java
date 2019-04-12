@@ -16,7 +16,8 @@ import java.util.List;
  * @date 2019/4/8
  */
 @Service
-@Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
+@Transactional(isolation = Isolation.READ_COMMITTED,
+        propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
 public class UserInfoServiceImpl implements UserInfoService {
     private final UserInfoDao userInfoDao;
 

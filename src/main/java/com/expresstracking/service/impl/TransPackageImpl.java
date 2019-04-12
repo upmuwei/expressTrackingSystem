@@ -18,8 +18,13 @@ import java.util.List;
 @Service
 @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
 public class TransPackageImpl implements TransPackageService {
+    private final TransPackageDao transPackageDao;
+
     @Autowired
-    private TransPackageDao transPackageDao;
+    public TransPackageImpl(TransPackageDao transPackageDao) {
+        this.transPackageDao = transPackageDao;
+    }
+
     @Override
     public List<TransPackage> findBy(String propertyName, Object value, String orderBy, boolean isAsc) {
         return null;

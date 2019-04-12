@@ -6,7 +6,6 @@ import java.util.List;
 
 public interface TransPackageContentService {
 
-    //public int getSn(String id, String uId);
 
     public void save(TransPackageContent transPackageContent);
 
