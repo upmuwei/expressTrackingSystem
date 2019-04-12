@@ -7,7 +7,7 @@ import java.util.List;
 
 @Repository
 public interface UsersPackageDao {
-    public int update(UsersPackage userPackage);
+  //  public int update(UsersPackage userPackage);
 
     public int delete(int sn);
 
@@ -15,7 +15,7 @@ public interface UsersPackageDao {
 
     public List<UsersPackage> get(int id);
 
-    public List<UsersPackage> getAll();
+   // public List<UsersPackage> getAll();
 
-    public String getPackageId(int userId);
+  //  public String getPackageId(int userId);
 }

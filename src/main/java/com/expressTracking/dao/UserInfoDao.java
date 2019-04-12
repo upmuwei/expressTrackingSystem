@@ -16,7 +16,7 @@ public interface UserInfoDao {
 
     public UserInfo get(int id);
 
-    public List<UserInfo> getAll();
+  //  public List<UserInfo> getAll();
 
     public UserInfo checkLogin(int uId, String password);
 

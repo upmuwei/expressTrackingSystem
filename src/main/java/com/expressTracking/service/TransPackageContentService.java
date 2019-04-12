@@ -11,7 +11,7 @@ public interface TransPackageContentService {
 
     public int update(TransPackageContent transPackageContent);
 
-    public TransPackageContent get(String id, String sourcePkgId);
+//    public TransPackageContent get(String id, String sourcePkgId);
 
     public List<TransPackageContent> findBy(String orderBy, boolean isAsc, String expressSheetId, int status);
 
