@@ -1,6 +1,7 @@
 package com.expresstracking.dao;
 
 import com.expresstracking.entity.ExpressSheet;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,9 +17,12 @@ public interface ExpressSheetDao {
 
     public ExpressSheet get(String id);
 
-    public List<ExpressSheet> getAll();
+    //public List<ExpressSheet> getAll();
 
-    public List<ExpressSheet> findBy(String propertyName, Object value, String orderBy, boolean isAsc);
+    //具有多个参数都按照这种形式改一下
+    public List<ExpressSheet> findBy(@Param("propertyName") String propertyName,
+                                     @Param("value") Object value, @Param("orderBy") String orderBy,
+                                     @Param("isAsc") boolean isAsc);
 
     public List<ExpressSheet> findLike(String propertyName, Object value, String orderBy, boolean isAsc);
 

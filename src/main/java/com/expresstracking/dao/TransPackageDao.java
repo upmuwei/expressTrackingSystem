@@ -9,11 +9,11 @@ import java.util.List;
 public interface TransPackageDao {
     public int update(TransPackage transPackage);
 
-    public int delete(int id);
+  //  public int delete(int id);
 
     public void insert(TransPackage transPackage);
 
     public TransPackage get(String id);
 
-    public List<TransPackage> getAll();
+ //   public List<TransPackage> getAll();
 }

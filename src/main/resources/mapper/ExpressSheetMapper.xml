@@ -6,11 +6,12 @@
     <update id="update" parameterType="ExpressSheet" >
         update expresssheet set id=#{id},type=#{type},sender=#{sender},Recever=#{recever},Weight=#{weight},TranFee=#{tranFee},PackageFee=#{packageFee},InsuFee=#{insuFee},Accepter=#{accepter},Deliver=#{deliver},AccepteTime=#{accepteTime},DeliveTime=#{deliveTime},Acc1=#{acc1},Acc2=#{acc2},Status=#{status};        
     </update>
-    
+    <!--使用级联-->
     <select id="get" parameterType="String" resultType="ExpressSheet">
         select id,type,sender,recever,weight,tranFee,packageFee,insuFee,accepter,deliver,accepteTime,DeliveTime,acc1,acc2,status from expresssheet where id=#{id};
     </select>
-    
+
+    <!--有问题，实体中sender、recever是对应的实体，出现错误-->
     <insert id="insert" parameterType="ExpressSheet">
         insert into expresssheet values(#{id},#{type},#{sender},#{recever},#{weight},#{tranFee},#{packageFee},#{insuFee},#{accepter},#{deliver},#{accepteTime},#{deliveTime},#{acc1},#{acc2},#{status}); 
     </insert>

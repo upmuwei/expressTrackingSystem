@@ -6,7 +6,6 @@
     <select id="get" parameterType="int" resultType="CustomerInfo">
         select id,name,TelCode,Department,RegionCode,Address,PostCode FROM customerinfo;
     </select>
-
     <select id="findByName" parameterType="String" resultType="CustomerInfo">
         select id,name,TelCode,Department,RegionCode,Address,PostCode FROM customerinfo where name=#{name};
     </select>
@@ -16,7 +15,7 @@
     </delete>
 
     <select id="findByTelCode" parameterType="String" resultType="CustomerInfo">
-        select id,name,TelCode,Department,RegionCode,Address,PostCode FROM customerinfo where TelCode=#{TelCode};
+        select id,name,TelCode,Department ,RegionCode,Address,PostCode FROM customerinfo where TelCode=#{TelCode};
     </select>
 
     <insert id="insert" parameterType="CustomerInfo">

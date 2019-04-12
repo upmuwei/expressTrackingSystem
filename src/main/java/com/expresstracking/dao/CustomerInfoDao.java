@@ -5,7 +5,7 @@ import java.util.List;
 @Repository
 public interface CustomerInfoDao {
 
-    public int update(CustomerInfo customerInfo);
+ //   public int update(CustomerInfo customerInfo);
 
     public int delete(int id);
 
@@ -13,7 +13,7 @@ public interface CustomerInfoDao {
 
     public CustomerInfo get(int id);
 
-    public List<CustomerInfo> getAll();
+   // public List<CustomerInfo> getAll();
 
     public List<CustomerInfo> findByName(String name);
 

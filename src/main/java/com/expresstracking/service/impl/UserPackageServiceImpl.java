@@ -1,6 +1,5 @@
 package com.expresstracking.service.impl;
 
-import com.expresstracking.dao.TransPackageContentDao;
 import com.expresstracking.dao.UsersPackageDao;
 import com.expresstracking.entity.UsersPackage;
 import com.expresstracking.service.UserPackageService;
