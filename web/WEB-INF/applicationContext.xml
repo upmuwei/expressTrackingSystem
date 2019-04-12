@@ -31,7 +31,7 @@
     </bean>
 
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.expresstracking.dao"/>
+        <property name="basePackage" value="com.expressTracking.dao"/>
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
         <property name="annotationClass" value="org.springframework.stereotype.Repository"/>
     </bean>

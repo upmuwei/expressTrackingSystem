@@ -1,4 +1,4 @@
-package com.expresstracking.entity;
+package com.expressTracking.entity;
 
 import java.io.Serializable;
 import java.util.Date;

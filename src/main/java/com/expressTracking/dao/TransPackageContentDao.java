@@ -1,6 +1,6 @@
-package com.expresstracking.dao;
+package com.expressTracking.dao;
 
-import com.expresstracking.entity.TransPackageContent;
+import com.expressTracking.entity.TransPackageContent;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -9,15 +9,9 @@ import java.util.List;
 public interface TransPackageContentDao {
     public int update(TransPackageContent transPackageContent);
 
-    public int delete(int id);
-
     public void insert(TransPackageContent transPackageContent);
 
     public List<String> selectExpressId(String transPackageId);
-
-    public TransPackageContent get(String packageId);
-
-    public List<TransPackageContent> getAll();
 
     public List<String> getPackageId(String expressId);
 }

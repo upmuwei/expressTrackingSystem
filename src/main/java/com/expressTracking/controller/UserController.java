@@ -1,7 +1,7 @@
-package com.expresstracking.controller;
+package com.expressTracking.controller;
 
-import com.expresstracking.entity.UserInfo;
-import com.expresstracking.service.UserInfoService;
+import com.expressTracking.entity.UserInfo;
+import com.expressTracking.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

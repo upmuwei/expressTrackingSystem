@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.expresstracking.dao.RegionDao">
+<mapper namespace="com.expressTracking.dao.RegionDao">
 
 <select id="getProvinceList"  resultType="Region">
     select RegionCode,Prv,Cty,Twn,Stage from region;

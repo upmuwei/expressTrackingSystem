@@ -2,12 +2,16 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.expresstracking.dao.TransNodeDao">
-<select id="get" parameterType="String" resultType="TransNode">
-    select * from transnode where id=#{id};
-</select>
+<mapper namespace="com.expressTracking.dao.TransNodeDao">
+    <select id="get" parameterType="String" resultType="TransNode">
+        select * from transnode where id=#{id};
+    </select>
 
     <select id="findByRegionCodeAndType" resultType="TransNode">
         select * from transnode where RegionCode=#{regioncode} and NodeType=#{type};
     </select>
+
+    <insert id="insert" parameterType="TransNode">
+
+    </insert>
 </mapper>
