@@ -4,20 +4,20 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.expressTracking.dao.RegionDao">
 
-<select id="getProvinceList"  resultType="Region">
-    select RegionCode,Prv,Cty,Twn,Stage from region;
-</select>
-    <!--不要用*-->
-<select id="getCityList" parameterType="String" resultType="Region">
-    select * from region where left(RegionCode,2)=(select left(RegionCode,2) from region where Prv=#{prv});
-</select>
-<!--不要用*-->
- <select id="getTownList" parameterType="String" resultType="Region">
-     select * from region where left(RegionCode,4)=(select left(RegionCode,4) from region where cty=#{cty});
- </select>
+    <select id="getProvinceList"  resultType="Region">
+         select RegionCode,Prv,Cty,Twn,Stage from region;
+    </select>
 
-<select id="get" parameterType="String" resultType="Region">
-    select RegionCode as regionCode, Prv as prv,Cty as cty ,Twn as twm from region where RegionCode=#{id};
-</select>
+    <select id="getCityList" parameterType="String" resultType="Region">
+         select RegionCode,regioncode, prv, cty, twn, stage from region where left(RegionCode,2)=(select left(RegionCode,2) from region where Prv=#{prv});
+    </select>
+
+    <select id="getTownList" parameterType="String" resultType="Region">
+         select RegionCode,regioncode, prv, cty, twn, stage from region where left(RegionCode,4)=(select left(RegionCode,4) from region where cty=#{cty});
+    </select>
+
+    <select id="get" parameterType="String" resultType="Region">
+         select RegionCode as regionCode, Prv as prv,Cty as cty ,Twn as twm from region where RegionCode=#{id};
+    </select>
 
 </mapper>

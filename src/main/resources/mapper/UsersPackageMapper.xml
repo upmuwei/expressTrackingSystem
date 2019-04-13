@@ -3,12 +3,12 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.expressTracking.dao.UsersPackageDao">
-<select id="get" parameterType="int" resultType="UsersPackage">
-    select * from userspackage where UserUID=#{id};
-</select>
+    <select id="get" parameterType="int" resultType="UsersPackage">
+        select * from userspackage where UserUID=#{id};
+    </select>
 
     <insert id="insert" parameterType="UsersPackage">
-        insert into userspackage values (#{useruid},#{packageid}):
+        insert into userspackage values (#{useruid},#{packageid});
     </insert>
 
     <delete id="delete" parameterType="int">

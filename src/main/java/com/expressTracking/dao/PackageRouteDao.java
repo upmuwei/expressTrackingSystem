@@ -3,18 +3,18 @@ package com.expressTracking.dao;
 import com.expressTracking.entity.PackageRoute;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface PackageRouteDao {
 
     public int update(PackageRoute packageRoute);
 
- //   public int delete(int sn);
+  //  public int delete(int id);
 
     public void insert(PackageRoute packageRoute);
 
-  //  public PackageRoute getBySn(int sn);
+    //public PackageRoute get(int id);
 
-    public PackageRoute getByPackageId(String packageId);
-
-    //public List<PackageRoute> getAll();
+   // public List<PackageRoute> getAll();
 }

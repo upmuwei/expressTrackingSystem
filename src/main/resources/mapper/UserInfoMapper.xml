@@ -8,13 +8,24 @@
 </select>
 
     <insert id="insert" parameterType="UserInfo">
-        insert into userinfo values (#{uid},#{pwd},#{name},#{urull},#{telCode} ,#{status} ,#{dptid},#{receivePackageId} ,#{delivePackageId} ,#{transPackageId} );
+        insert into userinfo(pwd, name, urull, telcode, status, dptid, receivepackageid, delivepackageid, transpackageid) values (#{pwd},#{name},#{urull},#{telCode} ,#{status} ,#{dptid},#{receivePackageId} ,#{delivePackageId} ,#{transPackageId} );
 
     </insert>
 
     <update id="update" parameterType="UserInfo">
-        update userinfo set uid=#{uid},pwd=#{pwd},name=#{name},urull=#{urull},TelCode=#{telCode} ,DptID=#{dptId} ,ReceivePackageID=#{receivePackageId} ,DelivePackageID=#{delivePackageId} ,TransPackageID=#{transPackageId} ;
+        update userinfo
+        <set>
+            <if test="pwd != null"> pwd=#{pwd},</if>
+            <if test="name != null and name != ''"> name=#{name},</if>
+            <if test="uRull != null"> urull=#{urull}, </if>
+            <if test="telCode != null and telCode != ''"> TelCode=#{telCode}, </if>
+            <if test="status != null"> Status=#{status},  </if>
+            <if test="dptId != null and dptId != ''"> DptID=#{dptId}, </if>
+            <if test="receivePackageId != null and receivePackageId != ''"> ReceivePackageID=#{receivePackageId},  </if>
+            <if test="delivePackageId != null and delivePackageId != ''"> DelivePackageID=#{delivePackageId} , </if>
+            <if test="transPackageId != null and transPackageId != ''"> TransPackageID=#{transPackageId}   </if>
 
+        </set>
     </update>
 
     <delete id="delete" parameterType="int">
@@ -22,6 +33,6 @@
     </delete>
 
     <select id="checkLogin" resultType="UserInfo">
-        select * from userinfo where uid=#{uid} and password=#{password};
+        select uid, pwd, name, urull, telcode, status, dptid, receivepackageid, delivepackageid, transpackageid from userinfo where uid=#{uid} and password=#{password};
     </select>
 </mapper>

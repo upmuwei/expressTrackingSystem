@@ -5,14 +5,22 @@
 <mapper namespace="com.expressTracking.dao.TransPackageDao">
 
 <select id="get" parameterType="String" resultType="TransPackage">
-    select * from transpackage where id=#{id};
+    select id, sourcenode, targetnode, createtime, status from transpackage where id=#{id};
 </select>
 
     <update id="update" parameterType="TransPackage">
-        update transpackage set ID=#{id}, SourceNode=#{sourceNode} ,TargetNode=#{targetNode} ,CreateTime=#{createTime} ,Status=#{status} ;
+        update transpackage
+        <set>
+            <if test="id != null and id != ''"> id=#{id}, </if>
+            <if test="sourceNode != null and sourceNode != ''"> SourceNode=#{sourceNode} , </if>
+            <if test="targetNode != null and targetNode != ''"> TargetNode=#{targetNode}, </if>
+            <if test="createTime != null"> CreateTime=#{createTime} ,</if>
+            <if test="status != null"> Status=#{status}</if>
+
+        </set>
     </update>
 
     <insert id="insert" parameterType="TransPackage">
-        insert into transpackage values (#{id},#{sourceNode} ,#{targetNode} ,#{createTime} ,#{status} );
+        insert into transpackage(id, sourcenode, targetnode, createtime, status) values (#{id},#{sourceNode} ,#{targetNode} ,#{createTime} ,#{status} );
     </insert>
 </mapper>
