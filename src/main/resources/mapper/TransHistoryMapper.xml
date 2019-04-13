@@ -3,13 +3,21 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.expressTracking.dao.TransHistoryDao">
+    <resultMap id="transhistoryMap" type="TransHistory">
+        <id property="sn" column="sn"/>
+        <result property="x" column="x"/>
+        <result property="y" column="y"/>
+        <result property="actTime" column="act_time"/>
+        <!--uidfrom and uidto-->
+        <association property="pkg" column="PackageID" select="com.expressTracking.dao.TransPackageDao.get"/>
+    </resultMap>
 
     <select id="get" parameterType="String" resultType="TransHistory">
-        select * from transhistory where PackageID=#{id};
+        select sn, packageid, acttime, uidfrom, uidto, x, y from transhistory where PackageID=#{id};
     </select>
 
     <insert id="insert" parameterType="TransHistory">
-        insert into transhistory(packageid, acttime, uidfrom, uidto, x, y) values(#{PackageId}, #{actTime} ,#{UIDFrom}, #{UIDto}, #{x} ,#{y} );
+        insert into transhistory(packageid, acttime, uidfrom, uidto, x, y) values(#{pkg.PackageId}, #{actTime} ,#{UIDFrom}, #{UIDto}, #{x} ,#{y} );
     </insert>
 
 </mapper>

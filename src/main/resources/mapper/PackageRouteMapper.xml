@@ -5,11 +5,16 @@
 <mapper namespace="com.expressTracking.dao.PackageRouteDao">
 
     <resultMap id="packageRouteMap" type="PackageRoute">
+         <id column="sn" property="sn"/>
+         <result column="tm" property="tm"/>
+         <result column="x" property="x"/>
+         <result column="y" property="y"/>
+        <association property="pkg" column="PackageID" select="com.expressTracking.dao.TransPackageDao.get"/>
 
     </resultMap>
     <!--写resultMap-->
     <insert id="insert" parameterType="PackageRoute">
-        insert into packageroute values(#{packageid},#{x},#{y},#{tm});
+        insert into packageroute(packageid, x, y, tm) values(#{pkg.packageid},#{x},#{y},#{tm});
     </insert>
 
     <update id="update" parameterType="PackageRoute"  >
@@ -20,10 +25,10 @@
                 <if test="y != null"> y=#{y}, </if>
                 <if test="tm != null"> tm=#{tm} </if>
             </set>
-            where PackageID=#{packageid};
+            where PackageID=#{pkg.packageid};
     </update>
 
     <select id="getByPackageId" parameterType="String" resultMap="packageRouteMap" >
-
+         select sn,PackageID,x,y,tm from packageroute where PackageID=#{packageID};
     </select>
 </mapper>
