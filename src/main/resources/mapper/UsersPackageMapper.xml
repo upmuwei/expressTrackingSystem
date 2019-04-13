@@ -5,8 +5,8 @@
 <mapper namespace="com.expressTracking.dao.UsersPackageDao">
     <resultMap id="userpackageMap" type="UsersPackage">
         <id column="sn" property="userU"/>
-        <association property="userU" column="UserUID" select="com.expressTracking.dao.UserInfoDao.get"/>
-        <association property="pkg" column="PackageID" select="com.expressTracking.dao.TransPackageDao.get"/>
+        <association column="UserUID" property="userU" select="com.expressTracking.dao.UserInfoDao.get"/>
+        <association column="PackageID" property="pkg"  select="com.expressTracking.dao.TransPackageDao.get"/>
     </resultMap>
     <select id="get" parameterType="int" resultMap="userpackageMap">
         select sn, useruid, packageid from userspackage where UserUID=#{id};

@@ -9,7 +9,7 @@
          <result column="tm" property="tm"/>
          <result column="x" property="x"/>
          <result column="y" property="y"/>
-        <association property="pkg" column="PackageID" select="com.expressTracking.dao.TransPackageDao.get"/>
+         <association column="PackageID" property="pkg"  select="com.expressTracking.dao.TransPackageDao.get"/>
 
     </resultMap>
     <!--写resultMap-->

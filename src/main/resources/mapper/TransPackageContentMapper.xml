@@ -7,7 +7,7 @@
         <id column="sn" property="sn"/>
         <result column="status" property="status"/>
         <association column="packageid" property="pkg" select="com.expressTracking.dao.TransPackageDao.get"/>
-        <association property="express" column="expressid" select="com.expressTracking.dao.ExpressSheetDao.get"/>
+        <association column="expressid" property="express"  select="com.expressTracking.dao.ExpressSheetDao.get"/>
     </resultMap>
     <insert id="insert" parameterType="TransPackageContent">
       insert into transpackagecontent(expressid, packageid, status) values (#{express.expressid} ,#{pkg.packageid},#{status} );

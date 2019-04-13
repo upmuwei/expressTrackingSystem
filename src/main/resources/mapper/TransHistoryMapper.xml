@@ -8,6 +8,8 @@
         <result property="x" column="x"/>
         <result property="y" column="y"/>
         <result property="actTime" column="act_time"/>
+        <result property="uIdFrom" column="uidfrom"/>
+        <result property="uidTo" column="uidto" />
         <!--uidfrom and uidto-->
         <association property="pkg" column="PackageID" select="com.expressTracking.dao.TransPackageDao.get"/>
     </resultMap>
