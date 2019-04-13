@@ -81,6 +81,12 @@ public class MiscController {
 		return transNodeService.findByRegionCodeAndType(regionCode, type);
 	}
 
+    /**
+     * 保存节点信息
+     * @param transNode 节点信息
+     * @return {@code ResponseEntity<TransNode>, HttpStatus=200, Header={"EntityClass", "R_TransNode"}}正确时返回节点信息，
+     * {@code ResponseEntity<String>, HttpStatus=500} 异常时返回异常信息
+     */
 	@RequestMapping(value = "/saveNode",method = RequestMethod.POST)
 	public ResponseEntity saveNodesList(@RequestBody TransNode transNode) {
 		try{
