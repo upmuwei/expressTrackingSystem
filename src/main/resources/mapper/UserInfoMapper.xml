@@ -24,7 +24,6 @@
             <if test="receivePackageId != null and receivePackageId != ''"> ReceivePackageID=#{receivePackageId},  </if>
             <if test="delivePackageId != null and delivePackageId != ''"> DelivePackageID=#{delivePackageId} , </if>
             <if test="transPackageId != null and transPackageId != ''"> TransPackageID=#{transPackageId}   </if>
-
         </set>
             where  uid=#{uid};
     </update>
