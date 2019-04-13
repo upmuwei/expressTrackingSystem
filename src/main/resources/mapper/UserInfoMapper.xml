@@ -26,6 +26,7 @@
             <if test="transPackageId != null and transPackageId != ''"> TransPackageID=#{transPackageId}   </if>
 
         </set>
+            where  uid=#{uid};
     </update>
 
     <delete id="delete" parameterType="int">

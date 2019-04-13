@@ -43,7 +43,6 @@
     <update id="update" parameterType="ExpressSheet" >
         update expresssheet
         <set>
-            <if test="id != null and id != ''"> id=#{id},</if>
             <if test="type != null and type != ''"> type=#{type}, </if>
             <if test="sender != null"> sender=#{sender},  </if>
             <if test="recever != null">  recever =#{recever}, </if>
@@ -59,6 +58,7 @@
             <if test="acc2 != null and acc2 != ''"> acc2=#{acc2}, </if>
             <if test="status != null"> Status=#{status} </if>
         </set>
+        where id=#{id}
     </update>
 
     <select id="get" parameterType="String" resultMap="expressSheetMap">

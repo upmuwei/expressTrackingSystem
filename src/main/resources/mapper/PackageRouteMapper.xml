@@ -13,10 +13,17 @@
     </insert>
 
     <update id="update" parameterType="PackageRoute"  >
-        update packageroute set ,x=#{x},y=#{y},tm=#{tm} where PackageID=#{packageid};
+        update packageroute
+            <set>
+                <if test="PackageID =! null"> PackageID=#{packageID}, </if>
+                <if test="x != null"> x=#{x}, </if>
+                <if test="y != null"> y=#{y}, </if>
+                <if test="tm != null"> tm=#{tm} </if>
+            </set>
+            where PackageID=#{packageid};
     </update>
 
-    <select id="getByPackageId" parameterType="string" resultMap="packageRouteMap" >
+    <select id="getByPackageId" parameterType="String" resultMap="packageRouteMap" >
 
     </select>
 </mapper>

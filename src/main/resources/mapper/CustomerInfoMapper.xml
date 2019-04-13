@@ -24,7 +24,17 @@
     </insert>
 
     <update id="update" parameterType="CustomerInfo">
-
+        update customerinfo
+            <set>
+                <if test="id != null"> ID=#{id}, </if>
+                <if test="name != null and name != ''"> name=#{name}, </if>
+                <if test="telCode != null and telCode != ''"> TelCode=#{telCode}, </if>
+                <if test="department != null and department != ''"> Department=#{department},  </if>
+                <if test="regionCode != null and regionCode != ''"> RegionCode=#{regionCode},  </if>
+                <if test="address != null and address != ''"> address=#{address},  </if>
+                <if test="postCode != null"> PostCode=#{postCode}  </if>
+            </set>
+                where id=#{id};
     </update>
 
 </mapper>

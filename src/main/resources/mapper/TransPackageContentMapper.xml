@@ -14,13 +14,14 @@
             <if test="packageID != null"> PackageID=#{packageId}, </if>
             <if test="status != null"> Status=#{status}  </if>
         </set>
+            where  sn=#{sn};
     </update>
 
     <select id="getPackageId" parameterType="string" resultType="string" >
-
+         select PackageID from transpackagecontent where ExpressID=#{expressid};
     </select>
 
     <select id="selectExpressId" parameterType="string" resultType="string">
-
+         select ExpressID from transpackagecontent where PackageID=#{transPackageId};
     </select>
 </mapper>

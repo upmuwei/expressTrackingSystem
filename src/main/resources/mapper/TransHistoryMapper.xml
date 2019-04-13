@@ -4,12 +4,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.expressTracking.dao.TransHistoryDao">
 
-<select id="get" parameterType="String" resultType="TransHistory">
-    select * from transhistory where PackageID=#{id};
-</select>
+    <select id="get" parameterType="String" resultType="TransHistory">
+        select * from transhistory where PackageID=#{id};
+    </select>
 
-<insert id="insert" parameterType="TransHistory">
-    insert into transhistory values(#{PackageId}, #{actTime} ,#{UIDFrom}, #{UIDto}, #{x} ,#{y} );
-</insert>
+    <insert id="insert" parameterType="TransHistory">
+        insert into transhistory(packageid, acttime, uidfrom, uidto, x, y) values(#{PackageId}, #{actTime} ,#{UIDFrom}, #{UIDto}, #{x} ,#{y} );
+    </insert>
 
 </mapper>

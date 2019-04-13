@@ -16,8 +16,8 @@
             <if test="targetNode != null and targetNode != ''"> TargetNode=#{targetNode}, </if>
             <if test="createTime != null"> CreateTime=#{createTime} ,</if>
             <if test="status != null"> Status=#{status}</if>
-
         </set>
+            where ID=#{id};
     </update>
 
     <insert id="insert" parameterType="TransPackage">

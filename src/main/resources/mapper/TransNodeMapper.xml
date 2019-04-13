@@ -4,14 +4,14 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.expressTracking.dao.TransNodeDao">
     <select id="get" parameterType="String" resultType="TransNode">
-        select * from transnode where id=#{id};
+        select id, nodename, nodetype, regioncode, telcode, x, y from transnode where id=#{id};
     </select>
 
     <select id="findByRegionCodeAndType" resultType="TransNode">
-        select * from transnode where RegionCode=#{regioncode} and NodeType=#{type};
+        select id, nodename, nodetype, regioncode, telcode, x, y from transnode where RegionCode=#{regioncode} and NodeType=#{type};
     </select>
 
     <insert id="insert" parameterType="TransNode">
-
+         insert into transnode(id, nodename, nodetype, regioncode, telcode, x, y) VALUES (#{id},#{nodeName} #{nodeType} #{regionCode} #{telCode} #{x} #{y});
     </insert>
 </mapper>
