@@ -9,15 +9,18 @@
     </select>
 
     <select id="getCityList" parameterType="String" resultType="Region">
-         select RegionCode,regioncode, prv, cty, twn, stage from region where left(RegionCode,2)=(select left(RegionCode,2) from region where Prv=#{prv});
+         select RegionCode,regioncode, prv, cty, twn, stage
+         from region where left(RegionCode,2)=(select left(RegionCode,2) from region where Prv=#{prv}) and Cty IS NOT NULL;
     </select>
 
     <select id="getTownList" parameterType="String" resultType="Region">
-         select RegionCode,regioncode, prv, cty, twn, stage from region where left(RegionCode,4)=(select left(RegionCode,4) from region where cty=#{cty});
+         select RegionCode,regioncode, prv, cty, twn, stage
+         from region where left(RegionCode,4)=(select left(RegionCode,4) from region where cty=#{cty});
     </select>
 
     <select id="get" parameterType="String" resultType="Region">
-         select RegionCode as regionCode, Prv as prv,Cty as cty ,Twn as twm from region where RegionCode=#{id};
+         select RegionCode as regionCode, Prv as prv,Cty as cty ,Twn as twm
+         from region where RegionCode=#{id};
     </select>
 
 </mapper>

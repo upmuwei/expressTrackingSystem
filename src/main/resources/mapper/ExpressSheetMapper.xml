@@ -44,8 +44,8 @@
     </update>
 
     <select id="get" parameterType="String" resultMap="expressSheetMap">
-        select ID, Type, Weight,TranFee, PackageFee, InsuFee, Accepter,Deliver,
-               AccepteTime, DeliveTime, Acc1, Acc2, Status,Sender, Recever
+        select ID, Type, Weight, TranFee, PackageFee, InsuFee, Accepter, Deliver,
+               AccepteTime, DeliveTime, Acc1, Acc2, Status, Sender, Recever
         from expresssheet where ID = #{id};
     </select>
 
@@ -59,7 +59,7 @@
     </insert>
     
     <delete id="delete" parameterType="String">
-        delete from expresssheet where id=#{id};
+        delete * from expresssheet where id=#{id};
     </delete>
 
 </mapper>

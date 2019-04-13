@@ -24,16 +24,16 @@ public class PackageRoute implements Serializable {
 
 	private Date tm;
 	
-	public void setSN(int value) {
+	public void setSn(int value) {
 		this.sn = value;
 	}
 	
-	public int getSN() {
+	public int getSn() {
 		return sn;
 	}
 	
 	public int getORMID() {
-		return getSN();
+		return getSn();
 	}
 	
 	public void setX(float value) {
@@ -75,12 +75,12 @@ public class PackageRoute implements Serializable {
 	
 	public String toString(boolean idOnly) {
 		if (idOnly) {
-			return String.valueOf(getSN());
+			return String.valueOf(getSn());
 		}
 		else {
 			StringBuilder sb = new StringBuilder();
 			sb.append("PackageRoute[ ");
-			sb.append("SN=").append(getSN()).append(" ");
+			sb.append("SN=").append(getSn()).append(" ");
 			if (getPkg() != null) {
 				sb.append("Pkg.Persist_ID=").append(getPkg().toString(true)).append(" ");
 			}

@@ -5,22 +5,26 @@
 <mapper namespace="com.expressTracking.dao.CustomerInfoDao">
 
     <select id="get" parameterType="int" resultType="CustomerInfo">
-        select id, name, telcode, department, regioncode, address, postcode FROM customerinfo;
+        select id, name, telcode, department, regioncode, address, postcode
+        FROM customerinfo where ID = #{id};
     </select>
     <select id="findByName" parameterType="String" resultType="CustomerInfo">
-        select id, name, telcode, department, regioncode, address, postcode FROM customerinfo where name=#{name};
+        select id, name, telcode, department, regioncode, address, postcode
+        FROM customerinfo where name=#{name};
     </select>
 
     <delete id="delete" parameterType="int">
-        delete from customerinfo where id=#{id};
+        delete * from customerinfo where id=#{id};
     </delete>
 
     <select id="findByTelCode" parameterType="String" resultType="CustomerInfo">
-        select id, name, telcode, department, regioncode, address, postcode FROM customerinfo where TelCode=#{TelCode};
+        select id, name, telcode, department, regioncode, address, postcode
+        FROM customerinfo where TelCode=#{TelCode};
     </select>
 
     <insert id="insert" parameterType="CustomerInfo">
-        insert into customerinfo(name, telcode, department, regioncode, address, postcode) values(#{name},#{telCode},#{Department},#{RegionCode},#{Address},#{PostCode});
+        insert into customerinfo(name, telcode, department, regioncode, address, postcode)
+        values(#{name},#{telCode},#{Department},#{RegionCode},#{Address},#{PostCode});
     </insert>
 
     <update id="update" parameterType="CustomerInfo">
