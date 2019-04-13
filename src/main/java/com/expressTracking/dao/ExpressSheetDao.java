@@ -17,8 +17,6 @@ public interface ExpressSheetDao {
 
     public ExpressSheet get(String id);
 
-    //public List<ExpressSheet> getAll();
-
     //具有多个参数都按照这种形式改一下
     public List<ExpressSheet> findBy(@Param("propertyName") String propertyName,
                                      @Param("value") Object value, @Param("orderBy") String orderBy,

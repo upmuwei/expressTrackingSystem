@@ -13,8 +13,6 @@ public interface CustomerInfoDao {
 
     public CustomerInfo get(int id);
 
-   // public List<CustomerInfo> getAll();
-
     public List<CustomerInfo> findByName(String name);
 
     public List<CustomerInfo> findByTelCode(String telCode);

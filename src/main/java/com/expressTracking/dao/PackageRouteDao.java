@@ -10,13 +10,8 @@ public interface PackageRouteDao {
 
     public int update(PackageRoute packageRoute);
 
-  //  public int delete(int id);
-
     public void insert(PackageRoute packageRoute);
 
     public PackageRoute getByPackageId(String packageID);
 
-    //public PackageRoute get(int id);
-
-   // public List<PackageRoute> getAll();
 }
