@@ -21,24 +21,6 @@
                      select="com.expressTracking.dao.CustomerInfoDao.get" />
         <association property="recever" column="recever"
                      select="com.expressTracking.dao.CustomerInfoDao.get" />
-        <!--<association property="sender" javaType="CustomerInfo" >
-            <id property="id" column="ID" />
-            <result property="name" column="Name"/>
-            <result property="telCode" column="TelCode"/>
-            <result property="department" column="Department"/>
-            <result property="regionCode" column="RegionCode"/>
-            <result property="address" column="Address"/>
-            <result property="postCode" column="PostCode"/>
-        </association>
-        <association property="recever" javaType="CustomerInfo" >
-            <id property="id" column="ID" />
-            <result property="name" column="Name"/>
-            <result property="telCode" column="TelCode"/>
-            <result property="department" column="Department"/>
-            <result property="regionCode" column="RegionCode"/>
-            <result property="address" column="Address"/>
-            <result property="postCode" column="PostCode"/>
-        </association>-->
     </resultMap>
     <update id="update" parameterType="ExpressSheet" >
         update expresssheet
@@ -67,7 +49,6 @@
         from expresssheet where ID = #{id};
     </select>
 
-    <!--有问题，实体中sender、recever是对应的实体，出现错误-->
     <insert id="insert" parameterType="ExpressSheet">
         insert into expresssheet(ID, Type, Sender, Recever, Weight,
                                  TranFee, PackageFee, InsuFee, Accepter,
