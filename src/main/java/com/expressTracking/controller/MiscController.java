@@ -62,7 +62,7 @@ public class MiscController {
 	/**
 	 * 获得节点信息
 	 * @param id 节点id
-	 * @return 节点信息
+	 * @return {@code ResponseEntity<TransNode>, HttpStatus=200, Header={"EntityClass", "TransNode"}}返回节点信息
 	 */
 	@RequestMapping(value = "/getNode/{ID}",method = RequestMethod.GET)
 	public ResponseEntity<TransNode> getNode(@PathVariable("ID") String id) {
