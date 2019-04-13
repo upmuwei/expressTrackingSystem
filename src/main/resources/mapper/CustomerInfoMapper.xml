@@ -3,6 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.expressTracking.dao.CustomerInfoDao">
+
     <select id="get" parameterType="int" resultType="CustomerInfo">
         select id, name, telcode, department, regioncode, address, postcode FROM customerinfo;
     </select>

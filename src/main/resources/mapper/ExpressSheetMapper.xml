@@ -3,6 +3,43 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.expressTracking.dao.ExpressSheetDao">
+    <resultMap id="expressSheetMap" type="ExpressSheet" >
+        <id property="id" column="ID"/>
+        <result property="type" column="Type"/>
+        <result property="weight" column="Weight" />
+        <result property="tranFee" column="TranFee"/>
+        <result property="packageFee" column="PackageFee"/>
+        <result property="insuFee" column="InsuFee"/>
+        <result property="accepter" column="Accepter"/>
+        <result property="deliver" column="Deliver"/>
+        <result property="accepteTime" column="AccepteTime"/>
+        <result property="deliveTime" column="DeliveTime"/>
+        <result property="acc1" column="Acc1"/>
+        <result property="acc2" column="Acc2"/>
+        <result property="status" column="Status"/>
+        <association property="sender" column="sender"
+                     select="com.expressTracking.dao.CustomerInfoDao.get" />
+        <association property="recever" column="recever"
+                     select="com.expressTracking.dao.CustomerInfoDao.get" />
+        <!--<association property="sender" javaType="CustomerInfo" >
+            <id property="id" column="ID" />
+            <result property="name" column="Name"/>
+            <result property="telCode" column="TelCode"/>
+            <result property="department" column="Department"/>
+            <result property="regionCode" column="RegionCode"/>
+            <result property="address" column="Address"/>
+            <result property="postCode" column="PostCode"/>
+        </association>
+        <association property="recever" javaType="CustomerInfo" >
+            <id property="id" column="ID" />
+            <result property="name" column="Name"/>
+            <result property="telCode" column="TelCode"/>
+            <result property="department" column="Department"/>
+            <result property="regionCode" column="RegionCode"/>
+            <result property="address" column="Address"/>
+            <result property="postCode" column="PostCode"/>
+        </association>-->
+    </resultMap>
     <update id="update" parameterType="ExpressSheet" >
         update expresssheet
         <set>
@@ -23,14 +60,21 @@
             <if test="status != null"> Status=#{status} </if>
         </set>
     </update>
-    <!--使用级联-->
-    <select id="get" parameterType="String" resultType="ExpressSheet">
-        select id, type, sender, recever, weight, tranfee, packagefee, insufee, accepter, deliver, acceptetime, delivetime, acc1, acc2, status from expresssheet where id=#{id};
+
+    <select id="get" parameterType="String" resultMap="expressSheetMap">
+        select ID, Type, Weight,TranFee, PackageFee, InsuFee, Accepter,Deliver,
+               AccepteTime, DeliveTime, Acc1, Acc2, Status,Sender, Recever
+        from expresssheet where ID = #{id};
     </select>
 
     <!--有问题，实体中sender、recever是对应的实体，出现错误-->
     <insert id="insert" parameterType="ExpressSheet">
-        insert into expresssheet(id, type, sender, recever, weight, tranfee, packagefee, insufee, accepter, deliver, acceptetime, delivetime, acc1, acc2, status) values(#{id},#{type},#{sender},#{recever},#{weight},#{tranFee},#{packageFee},#{insuFee},#{accepter},#{deliver},#{accepteTime},#{deliveTime},#{acc1},#{acc2},#{status});
+        insert into expresssheet(ID, Type, Sender, Recever, Weight,
+                                 TranFee, PackageFee, InsuFee, Accepter,
+                                 Deliver, AccepteTime, DeliveTime, Acc1, Acc2, Status)
+            values(#{id},#{type},#{sender.id},#{recever.id},#{weight},
+                   #{tranFee},#{packageFee},#{insuFee},#{accepter},
+                   #{deliver},#{accepteTime},#{deliveTime},#{acc1},#{acc2},#{status});
     </insert>
     
     <delete id="delete" parameterType="String">
