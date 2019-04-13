@@ -57,23 +57,23 @@ public class TransHistory implements Serializable {
 	public Date getActTime() {
 		return actTime;
 	}
-	
-	public void setUIdFrom(int value) {
-		this.uIdFrom = value;
-	}
-	
-	public int getUIdFrom() {
+
+	public int getuIdFrom() {
 		return uIdFrom;
 	}
-	
-	public void setUIdTo(int value) {
-		this.uIdTo = value;
+
+	public void setuIdFrom(int uIdFrom) {
+		this.uIdFrom = uIdFrom;
 	}
-	
+
 	public int getuIdTo() {
 		return uIdTo;
 	}
-	
+
+	public void setuIdTo(int uIdTo) {
+		this.uIdTo = uIdTo;
+	}
+
 	public void setX(Float value) {
 		this.x = value;
 	}
@@ -117,7 +117,7 @@ public class TransHistory implements Serializable {
 			else {
 				sb.append("Pkg=null ");
 				sb.append("ActTime=").append(getActTime()).append(" ");
-				sb.append("UIDFrom=").append(getUIdFrom()).append(" ");
+				sb.append("UIDFrom=").append(getuIdFrom()).append(" ");
 				sb.append("UIDTo=").append(getuIdTo()).append(" ");
 				sb.append("X=").append(getX()).append(" ");
 				sb.append("Y=").append(getY()).append(" ");

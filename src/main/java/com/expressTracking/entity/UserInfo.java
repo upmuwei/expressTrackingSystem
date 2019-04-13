@@ -42,17 +42,17 @@ public class UserInfo implements Serializable {
 	private String transPackageId;
 
 	private Set<UsersPackage> usersPackage = new HashSet<>();
-	
-	public void setUId(int value) {
-		this.uId = value;
-	}
-	
-	public int getUId() {
+
+	public int getuId() {
 		return uId;
 	}
-	
+
+	public void setuId(int uId) {
+		this.uId = uId;
+	}
+
 	public int getORMID() {
-		return getUId();
+		return getuId();
 	}
 	
 	public void setPassword(String value) {
@@ -70,15 +70,15 @@ public class UserInfo implements Serializable {
 	public String getName() {
 		return name;
 	}
-	
-	public void setURull(Integer value) {
-		this.uRull = value;
-	}
-	
-	public Integer getURull() {
+
+	public Integer getuRull() {
 		return uRull;
 	}
-	
+
+	public void setuRull(Integer uRull) {
+		this.uRull = uRull;
+	}
+
 	public void setTelCode(String value) {
 		this.telCode = value;
 	}
@@ -143,14 +143,14 @@ public class UserInfo implements Serializable {
 	
 	public String toString(boolean idOnly) {
 		if (idOnly) {
-			return String.valueOf(getUId());
+			return String.valueOf(getuId());
 		}
 		else {
 			return "UserInfo[ " +
-					"UID=" + getUId() + " " +
+					"UID=" + getuId() + " " +
 					"PWD=" + getPassword() + " " +
 					"Name=" + getName() + " " +
-					"URull=" + getURull() + " " +
+					"URull=" + getuRull() + " " +
 					"TelCode=" + getTelCode() + " " +
 					"Status=" + getStatus() + " " +
 					"DptID=" + getDptId() + " " +

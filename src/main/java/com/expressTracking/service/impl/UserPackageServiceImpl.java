@@ -23,7 +23,7 @@ public class UserPackageServiceImpl implements UserPackageService {
 
     @Override
     public List<UsersPackage> getTransPackageList(int userUId) {
-        return usersPackageDao.get(userUId);
+        return usersPackageDao.getByUserUId(userUId);
     }
 
     @Override

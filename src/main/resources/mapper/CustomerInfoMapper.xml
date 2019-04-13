@@ -4,12 +4,22 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.expressTracking.dao.CustomerInfoDao">
 
-    <select id="get" parameterType="int" resultType="CustomerInfo">
-        select id, name, telcode, department, regioncode, address, postcode
+    <resultMap id="customerInfoMap" type="CustomerInfo">
+        <id property="id" column="ID"/>
+        <result property="name" column="Name"/>
+        <result property="telCode" column="TelCode"/>
+        <result property="department" column="Department"/>
+        <result property="regionCode" column="RegionCode"/>
+        <result property="address" column="Address"/>
+        <result property="postCode" column="PostCode"/>
+    </resultMap>
+
+    <select id="get" parameterType="int" resultMap="customerInfoMap">
+        select ID, Name, TelCode, Department, RegionCode, Address, PostCode
         FROM customerinfo where ID = #{id};
     </select>
-    <select id="findByName" parameterType="String" resultType="CustomerInfo">
-        select id, name, telcode, department, regioncode, address, postcode
+    <select id="findByName" parameterType="String" resultMap="customerInfoMap">
+        select ID, Name, TelCode, Department, RegionCode, Address, PostCode
         FROM customerinfo where name=#{name};
     </select>
 
@@ -17,25 +27,24 @@
         delete * from customerinfo where id=#{id};
     </delete>
 
-    <select id="findByTelCode" parameterType="String" resultType="CustomerInfo">
-        select id, name, telcode, department, regioncode, address, postcode
-        FROM customerinfo where TelCode=#{TelCode};
+    <select id="findByTelCode" parameterType="String" resultMap="customerInfoMap">
+        select ID, Name, TelCode, Department, RegionCode, Address, PostCode
+        FROM customerinfo where TelCode=#{telCode} ;
     </select>
 
     <insert id="insert" parameterType="CustomerInfo">
-        insert into customerinfo(name, telcode, department, regioncode, address, postcode)
-        values(#{name},#{telCode},#{Department},#{RegionCode},#{Address},#{PostCode});
+        insert into customerinfo(Name, TelCode, Department, RegionCode, Address, PostCode)
+        values(#{name},#{telCode},#{department},#{regionCode},#{address},#{postCode});
     </insert>
 
     <update id="update" parameterType="CustomerInfo">
         update customerinfo
             <set>
-                <if test="id != null"> ID=#{id}, </if>
-                <if test="name != null and name != ''"> name=#{name}, </if>
+                <if test="name != null and name != ''"> Name=#{name}, </if>
                 <if test="telCode != null and telCode != ''"> TelCode=#{telCode}, </if>
                 <if test="department != null and department != ''"> Department=#{department},  </if>
                 <if test="regionCode != null and regionCode != ''"> RegionCode=#{regionCode},  </if>
-                <if test="address != null and address != ''"> address=#{address},  </if>
+                <if test="address != null and address != ''"> Address=#{address},  </if>
                 <if test="postCode != null"> PostCode=#{postCode}  </if>
             </set>
                 where id=#{id};

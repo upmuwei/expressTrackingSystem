@@ -4,22 +4,34 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.expressTracking.dao.RegionDao">
 
-    <select id="getProvinceList"  resultType="Region">
-         select RegionCode,Prv,Cty,Twn,Stage from region;
+    <resultMap id="regionMap" type="Region">
+        <id property="regionCode" column="RegionCode"/>
+        <result property="prv" column="Prv"/>
+        <result property="cty" column="Cty"/>
+        <result property="twn" column="Twn"/>
+        <result property="stage" column="Stage"/>
+    </resultMap>
+
+    <select id="getProvinceList"  resultMap="regionMap">
+         select RegionCode,Prv,Cty,Twn,Stage from region group by left(RegionCode, 2);
     </select>
 
-    <select id="getCityList" parameterType="String" resultType="Region">
-         select RegionCode,regioncode, prv, cty, twn, stage
-         from region where left(RegionCode,2)=(select left(RegionCode,2) from region where Prv=#{prv}) and Cty IS NOT NULL;
+    <select id="getCityList" parameterType="String" resultMap="regionMap">
+         select RegionCode, Prv, Cty, Twn, Stage
+         from region where
+                           left(RegionCode,2) = (select left(RegionCode,2) from region where Prv=#{prv})
+                       and Cty != '';
     </select>
 
-    <select id="getTownList" parameterType="String" resultType="Region">
-         select RegionCode,regioncode, prv, cty, twn, stage
-         from region where left(RegionCode,4)=(select left(RegionCode,4) from region where cty=#{cty});
+    <select id="getTownList" parameterType="String" resultMap="regionMap">
+         select RegionCode, Prv, Cty, Twn, Stage
+         from region where
+                           left(RegionCode,4)=(select left(RegionCode,4) from region where cty=#{cty})
+                       and Twn != '';
     </select>
 
-    <select id="get" parameterType="String" resultType="Region">
-         select RegionCode as regionCode, Prv as prv,Cty as cty ,Twn as twm
+    <select id="get" parameterType="String" resultMap="regionMap">
+         select RegionCode, Prv, Cty, Twn, Stage
          from region where RegionCode=#{id};
     </select>
 

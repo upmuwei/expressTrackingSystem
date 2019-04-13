@@ -1,6 +1,7 @@
 package com.expressTracking.dao;
 
 import com.expressTracking.entity.UserInfo;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,6 +17,6 @@ public interface UserInfoDao {
 
     public UserInfo get(int id);
 
-    public UserInfo checkLogin(int uId, String password);
+    public UserInfo checkLogin(@Param("uId") int uId,@Param("password") String password);
 
 }

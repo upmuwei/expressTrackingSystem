@@ -3,23 +3,25 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.expressTracking.dao.TransHistoryDao">
-    <resultMap id="transhistoryMap" type="TransHistory">
-        <id property="sn" column="sn"/>
+    <resultMap id="transHistoryMap" type="TransHistory">
+        <id property="sn" column="SN"/>
         <result property="x" column="x"/>
         <result property="y" column="y"/>
-        <result property="actTime" column="act_time"/>
-        <result property="uIdFrom" column="uidfrom"/>
-        <result property="uidTo" column="uidto" />
-        <!--uidfrom and uidto-->
-        <association property="pkg" column="PackageID" select="com.expressTracking.dao.TransPackageDao.get"/>
+        <result property="actTime" column="ActTime"/>
+        <result property="uIdFrom" column="UIDFrom"/>
+        <result property="uIdTo" column="UIDTo" />
+        <association property="pkg" column="PackageID"
+                     select="com.expressTracking.dao.TransPackageDao.get"/>
     </resultMap>
 
-    <select id="get" parameterType="String" resultType="TransHistory">
-        select sn, packageid, acttime, uidfrom, uidto, x, y from transhistory where PackageID=#{id};
+    <select id="get" parameterType="String" resultMap="transHistoryMap">
+        select SN, PackageID, ActTime, UIDFrom, UIDTo, x, y
+        from transhistory where PackageID=#{id};
     </select>
 
     <insert id="insert" parameterType="TransHistory">
-        insert into transhistory(packageid, acttime, uidfrom, uidto, x, y) values(#{pkg.PackageId}, #{actTime} ,#{UIDFrom}, #{UIDto}, #{x} ,#{y} );
+        insert into transhistory(PackageID, ActTime, UIDFrom, UIDTo, x, y)
+        values(#{pkg.id}, #{actTime} ,#{uIdFrom} , #{uIdTo} , #{x} ,#{y} );
     </insert>
 
 </mapper>

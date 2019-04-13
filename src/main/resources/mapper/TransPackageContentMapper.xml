@@ -3,31 +3,33 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.expressTracking.dao.TransPackageContentDao">
-    <resultMap id="transpackagecontentMap" type="TransPackageContent">
-        <id column="sn" property="sn"/>
+    <resultMap id="transPackageContentMap" type="TransPackageContent">
+        <id column="SN" property="sn"/>
         <result column="status" property="status"/>
-        <association column="packageid" property="pkg" select="com.expressTracking.dao.TransPackageDao.get"/>
-        <association column="expressid" property="express"  select="com.expressTracking.dao.ExpressSheetDao.get"/>
+        <association column="PackageID" property="pkg" select="com.expressTracking.dao.TransPackageDao.get"/>
+        <association column="ExpressID" property="express"  select="com.expressTracking.dao.ExpressSheetDao.get"/>
     </resultMap>
+
     <insert id="insert" parameterType="TransPackageContent">
-      insert into transpackagecontent(expressid, packageid, status) values (#{express.expressid} ,#{pkg.packageid},#{status} );
+      insert into transpackagecontent(ExpressID, PackageID, Status)
+      values (#{express.id} ,#{pkg.id},#{status} );
     </insert>
 
     <update id="update" parameterType="TransPackageContent">
         update transpackagecontent
         <set>
-            <if test="ExpressID != null"> ExpressID=#{expressid}, </if>
-            <if test="packageID != null"> PackageID=#{packageId}, </if>
+            <if test="express.id != null"> ExpressID=#{express.id}, </if>
+            <if test="pkg.id != null"> PackageID=#{pkg.id}, </if>
             <if test="status != null"> Status=#{status}  </if>
         </set>
-            where sn=#{sn};
+            where SN = #{sn};
     </update>
 
-    <select id="getPackageId" parameterType="string" resultMap="transpackagecontentMap" >
-         select PackageID from transpackagecontent where ExpressID=#{expressid};
+    <select id="getPackageId" parameterType="string" resultType="string" >
+         select PackageID from transpackagecontent where ExpressID=#{expressId} ;
     </select>
 
-    <select id="selectExpressId" parameterType="string" resultMap="transpackagecontentMap">
+    <select id="selectExpressId" parameterType="string" resultType="string">
          select ExpressID from transpackagecontent where PackageID=#{transPackageId};
     </select>
 </mapper>

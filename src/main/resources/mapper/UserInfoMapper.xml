@@ -3,21 +3,42 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.expressTracking.dao.UserInfoDao">
-<select id="get" parameterType="int" resultType="UserInfo">
-    select uid, pwd, name, urull, telcode, status, dptid, receivepackageid, delivepackageid, transpackageid from userinfo where UID=#{id};
-</select>
+
+    <resultMap id="userInfoMap" type="UserInfo">
+        <id property="uId" column="UID"/>
+        <result property="password" column="PWD"/>
+        <result property="name" column="Name"/>
+        <result property="uRull" column="URull"/>
+        <result property="telCode" column="TelCode"/>
+        <result property="status" column="Status" />
+        <result property="dptId" column="DptID"/>
+        <result property="receivePackageId" column="ReceivePackageID"/>
+        <result property="delivePackageId" column="DelivePackageID"/>
+        <result property="transPackageId" column="TransPackageID"/>
+        <collection property="usersPackage" column="UID"
+                    select="com.expressTracking.dao.UsersPackageDao.getByUserUId"/>
+    </resultMap>
+    <select id="get" parameterType="int" resultMap="userInfoMap">
+        select UID, PWD, Name, URull, TelCode,
+               Status, DptID, ReceivePackageID,
+               DelivePackageID, TransPackageID
+        from userinfo where UID = #{id};
+    </select>
 
     <insert id="insert" parameterType="UserInfo">
-        insert into userinfo(pwd, name, urull, telcode, status, dptid, receivepackageid, delivepackageid, transpackageid) values (#{pwd},#{name},#{urull},#{telCode} ,#{status} ,#{dptid},#{receivePackageId} ,#{delivePackageId} ,#{transPackageId} );
-
+        insert into userinfo(PWD, Name, URull, TelCode, Status, DptID,
+                             ReceivePackageID, DelivePackageID, TransPackageID)
+                             values (#{pwd},#{name},#{urull},#{telCode},
+                                     #{status}, #{dptid}, #{receivePackageId},
+                                     #{delivePackageId}, #{transPackageId});
     </insert>
 
     <update id="update" parameterType="UserInfo">
         update userinfo
         <set>
-            <if test="pwd != null"> pwd=#{pwd},</if>
+            <if test="pwd != null"> pwd=#{password} ,</if>
             <if test="name != null and name != ''"> name=#{name},</if>
-            <if test="uRull != null"> urull=#{urull}, </if>
+            <if test="uRull != null"> urull=#{uRull} , </if>
             <if test="telCode != null and telCode != ''"> TelCode=#{telCode}, </if>
             <if test="status != null"> Status=#{status},  </if>
             <if test="dptId != null and dptId != ''"> DptID=#{dptId}, </if>
@@ -25,14 +46,16 @@
             <if test="delivePackageId != null and delivePackageId != ''"> DelivePackageID=#{delivePackageId} , </if>
             <if test="transPackageId != null and transPackageId != ''"> TransPackageID=#{transPackageId}   </if>
         </set>
-            where  uid=#{uid};
+            where uid=#{uId} ;
     </update>
 
     <delete id="delete" parameterType="int">
         delete from userinfo where uid=#{id};
     </delete>
 
-    <select id="checkLogin" resultType="UserInfo">
-        select uid, pwd, name, urull, telcode, status, dptid, receivepackageid, delivepackageid, transpackageid from userinfo where uid=#{uid} and password=#{password};
+    <select id="checkLogin" resultMap="userInfoMap">
+        select UID, PWD, Name, URull, TelCode, Status,
+               DptID, ReceivePackageID, DelivePackageID, TransPackageID
+        from userinfo where uid = #{uId} and PWD = #{password};
     </select>
 </mapper>

@@ -13,5 +13,6 @@ public interface TransNodeDao {
 
     public TransNode get(String id);
 
-    public List<TransNode> findByRegionCodeAndType(@Param("regionCode") String regionCode,@Param("type") int type);
+    public List<TransNode> findByRegionCodeAndType(@Param("regionCode") String regionCode,
+                                                   @Param("type") int type);
 }

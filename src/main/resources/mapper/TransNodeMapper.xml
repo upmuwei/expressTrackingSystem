@@ -3,15 +3,29 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.expressTracking.dao.TransNodeDao">
-    <select id="get" parameterType="String" resultType="TransNode">
-        select id, nodename, nodetype, regioncode, telcode, x, y from transnode where id=#{id};
+
+    <resultMap id="transNodeMap" type="TransNode">
+        <id property="id" column="ID"/>
+        <result property="nodeName" column="NodeName"/>
+        <result property="nodeType" column="NodeType"/>
+        <result property="regionCode" column="RegionCode"/>
+        <result property="telCode" column="TelCode"/>
+        <result property="x" column="x"/>
+        <result property="y" column="y"/>
+    </resultMap>
+
+    <select id="get" parameterType="String" resultMap="transNodeMap">
+        select ID, NodeName, NodeType, RegionCode, TelCode, x, y
+        from transnode where id=#{id};
     </select>
 
-    <select id="findByRegionCodeAndType" resultType="TransNode">
-        select id, nodename, nodetype, regioncode, telcode, x, y from transnode where RegionCode=#{regioncode} and NodeType=#{type};
+    <select id="findByRegionCodeAndType" resultMap="transNodeMap">
+        select ID, NodeName, NodeType, RegionCode, TelCode, x, y
+        from transnode where RegionCode=#{regionCode}  and NodeType=#{type};
     </select>
 
     <insert id="insert" parameterType="TransNode">
-         insert into transnode(id, nodename, nodetype, regioncode, telcode, x, y) VALUES (#{id},#{nodeName} #{nodeType} #{regionCode} #{telCode} #{x} #{y});
+         insert into transnode(ID, NodeName, NodeType, RegionCode, TelCode, x, y)
+         values (#{id}, #{nodeName}, #{nodeType}, #{regionCode}, #{telCode}, #{x}, #{y});
     </insert>
 </mapper>
