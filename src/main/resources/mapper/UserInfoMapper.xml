@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.expressTracking.dao.UserInfoDao">
 <select id="get" parameterType="int" resultType="UserInfo">
-    select * from userinfo where UID=#{id};
+    select uid, pwd, name, urull, telcode, status, dptid, receivepackageid, delivepackageid, transpackageid from userinfo where UID=#{id};
 </select>
 
     <insert id="insert" parameterType="UserInfo">

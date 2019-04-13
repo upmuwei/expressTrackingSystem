@@ -3,12 +3,17 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.expressTracking.dao.UsersPackageDao">
-    <select id="get" parameterType="int" resultType="UsersPackage">
+    <resultMap id="userpackageMap" type="UsersPackage">
+        <id column="sn" property="userU"/>
+        <association column="UserUID" property="userU" select="com.expressTracking.dao.UserInfoDao.get"/>
+        <association column="PackageID" property="pkg"  select="com.expressTracking.dao.TransPackageDao.get"/>
+    </resultMap>
+    <select id="get" parameterType="int" resultMap="userpackageMap">
         select sn, useruid, packageid from userspackage where UserUID=#{id};
     </select>
 
-    <insert id="insert" parameterType="UsersPackage">
-        insert into userspackage(useruid, packageid) values (#{useruid},#{packageid});
+    <insert id="insert" parameterType="UsersPackage" >
+        insert into userspackage(useruid, packageid) values (#{userU.useruid},#{pkg.packageid});
     </insert>
 
     <delete id="delete" parameterType="int">
