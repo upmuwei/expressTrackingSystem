@@ -2,6 +2,7 @@ package com.expressTracking.entity;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+
 public class UserInfo implements Serializable {
 
 	private static final long serialVersionUID = 6899152987896840262L;

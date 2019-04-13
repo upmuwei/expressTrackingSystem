@@ -4,17 +4,23 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.expressTracking.dao.UsersPackageDao">
     <resultMap id="userPackageMap" type="UsersPackage">
-        <id column="sn" property="userU"/>
-        <association column="UserUID" property="userU" select="com.expressTracking.dao.UserInfoDao.get"/>
-        <association column="PackageID" property="pkg"  select="com.expressTracking.dao.TransPackageDao.get"/>
+        <id property="sn" column="SN"/>
+        <result property="userUid" column="UserUID"/>
+        <result property="packageId" column="PackageID"/>
     </resultMap>
 
     <select id="getByUserUId" parameterType="int" resultMap="userPackageMap">
-        select SN, UserUID, PackageID from userspackage where UserUID=#{userUId};
+        select SN, UserUID, PackageID
+        from userspackage where UserUID=#{userUId};
     </select>
 
+    <select id="getByPackageId" parameterType="string" resultMap="userPackageMap">
+        select SN, UserUID, PackageID
+        from userspackage where PackageID = #{packageId} ;
+    </select>
     <insert id="insert" parameterType="UsersPackage" >
-        insert into userspackage(useruid, packageid) values (#{userU.uId},#{pkg.id});
+        insert into userspackage(UserUID, PackageID)
+        values (#{userUid},#{packageId} );
     </insert>
 
     <delete id="delete" parameterType="int">

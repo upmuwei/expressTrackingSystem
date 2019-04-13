@@ -9,45 +9,41 @@ public class UsersPackage implements Serializable {
 
 	public UsersPackage() {
 	}
-	
-	
 
 	private int sn;
-	
 
-	private UserInfo userU;
-	
+	private int userUid;
 
-	private TransPackage pkg;
+	private String packageId;
 	
-	public void setSN(int value) {
+	public void setSn(int value) {
 		this.sn = value;
 	}
 	
-	public int getSN() {
+	public int getSn() {
 		return sn;
 	}
 	
 	public int getORMID() {
-		return getSN();
+		return getSn();
 	}
-	
-	public void setUserU(UserInfo value) {
-		this.userU = value;
+
+	public int getUserUid() {
+		return userUid;
 	}
-	
-	public UserInfo getUserU() {
-		return userU;
+
+	public void setUserUid(int userUid) {
+		this.userUid = userUid;
 	}
-	
-	public void setPkg(TransPackage value) {
-		this.pkg = value;
+
+	public String getPackageId() {
+		return packageId;
 	}
-	
-	public TransPackage getPkg() {
-		return pkg;
+
+	public void setPackageId(String packageId) {
+		this.packageId = packageId;
 	}
-	
+
 	@Override
 	public String toString() {
 		return toString(false);
@@ -55,26 +51,15 @@ public class UsersPackage implements Serializable {
 	
 	public String toString(boolean idOnly) {
 		if (idOnly) {
-			return String.valueOf(getSN());
+			return String.valueOf(getSn());
 		}
 		else {
-			StringBuilder sb = new StringBuilder();
-			sb.append("UsersPackage[ ");
-			sb.append("SN=").append(getSN()).append(" ");
-			if (getUserU() != null) {
-				sb.append("UserU.Persist_ID=").append(getUserU().toString(true)).append(" ");
-			}
-			else {
-				sb.append("UserU=null ");
-			}
-			if (getPkg() != null) {
-				sb.append("Pkg.Persist_ID=").append(getPkg().toString(true)).append(" ");
-			}
-			else {
-				sb.append("Pkg=null ");
-			}
-			sb.append("]");
-			return sb.toString();
+			return "UsersPackage[ " + "SN=" +
+					getSn() + " " +
+					"userUid=" + getUserUid() +
+					" " + "packageId=" +
+					getPackageId() + " " +
+					"]";
 		}
 	}
 	

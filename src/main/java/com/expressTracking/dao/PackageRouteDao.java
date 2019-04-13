@@ -12,6 +12,6 @@ public interface PackageRouteDao {
 
     public void insert(PackageRoute packageRoute);
 
-    public PackageRoute getByPackageId(String packageId);
+    public List<PackageRoute> getByPackageId(String packageId);
 
 }

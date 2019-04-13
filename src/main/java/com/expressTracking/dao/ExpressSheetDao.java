@@ -17,10 +17,27 @@ public interface ExpressSheetDao {
 
     public ExpressSheet get(String id);
 
+    /**
+     * 查找快件
+     * @param propertyName 属性名称
+     * @param value 属性值
+     * @param orderBy 排序依据
+     * @param isAsc 是否为升序
+     * @return List<ExpressSheet>
+     */
     public List<ExpressSheet> findBy(@Param("propertyName") String propertyName,
                                      @Param("value") Object value, @Param("orderBy") String orderBy,
                                      @Param("isAsc") boolean isAsc);
 
-    public List<ExpressSheet> findLike(String propertyName, Object value, String orderBy, boolean isAsc);
+    /**
+     * 查找快件
+     * @param propertyName 属性名称
+     * @param value 属性值
+     * @param orderBy 排序依据
+     * @param isAsc 是否为升序
+     * @return List<ExpressSheet>
+     */
+    public List<ExpressSheet> findLike(@Param("propertyName") String propertyName, @Param("value") Object value,
+                                       @Param("orderBy") String orderBy, @Param("isAsc") boolean isAsc);
 
 }

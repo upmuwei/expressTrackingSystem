@@ -1,6 +1,6 @@
 package com.expressTracking.controller;
-import com.expressTracking.entity.*;
 
+import com.expressTracking.entity.*;
 import com.expressTracking.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -193,8 +193,8 @@ public class DomainController {
             nes.setStatus(ExpressSheet.STATUS.STATUS_CREATED);
             expressSheetService.save(nes);
             TransPackageContent pkgAdd = new TransPackageContent();
-            pkgAdd.setExpress(nes);
-            pkgAdd.setPkg(transPackageService.get(pkgId));
+            pkgAdd.setExpressId(nes.getId());
+            pkgAdd.setPackageId(pkgId);
             pkgAdd.setStatus(TransPackageContent.STATUS.STATUS_ACTIVE);
             transPackageContentService.save(pkgAdd);
             return ResponseEntity.ok().header("EntityClass", "id").body(id);
@@ -218,7 +218,7 @@ public class DomainController {
             List<TransPackageContent> list = new ArrayList<>();
             list = transPackageContentService.findBy("ExpressSheetID",id,"SN",true);
             for(TransPackageContent transPackageContent : list){
-                transPackageContent.setExpress(obj);
+                transPackageContent.setExpressId(obj.getId());
                 transPackageContentService.update(transPackageContent);
             }
             expressSheetService.removeById(id);
@@ -251,8 +251,8 @@ public class DomainController {
             expressSheetService.save(nes);
             UserInfo userInfo = userInfoService.get(uId);
             TransPackageContent transPackageContent = new TransPackageContent();
-            transPackageContent.setPkg(transPackageService.get(userInfo.getReceivePackageId()));
-            transPackageContent.setExpress(nes);
+            transPackageContent.setPackageId(userInfo.getReceivePackageId());
+            transPackageContent.setExpressId(nes.getId());
             transPackageContent.setStatus(TransPackageContent.STATUS.STATUS_ACTIVE);
             transPackageContentService.save(transPackageContent);
             return ResponseEntity.ok().header("EntityClass", "ExpressSheet").body(nes);
@@ -281,8 +281,8 @@ public class DomainController {
             nes.setDeliveTime(getCurrentDate());
             nes.setStatus(ExpressSheet.STATUS.STATUS_DISPATCHED);
             expressSheetService.save(nes);
-            transPackageContent.setPkg(transPackageService.get(userInfoService.get(uId).getDelivePackageId()));
-            transPackageContent.setExpress(nes);
+            transPackageContent.setPackageId(userInfoService.get(uId).getDelivePackageId());
+            transPackageContent.setExpressId(nes.getId());
             transPackageContent.setStatus(TransPackageContent.STATUS.STATUS_ACTIVE);
             transPackageContentService.save(transPackageContent);
             return ResponseEntity.ok().header("EntityClass", "ExpressSheet").body(nes);
@@ -411,7 +411,7 @@ public class DomainController {
             }
             transPackageContent.setStatus(TransPackageContent.STATUS.STATUS_OUTOF_PACKAGE);
             transPackageContentService.update(transPackageContent);
-            ExpressSheet expressSheet = transPackageContent.getExpress();
+            ExpressSheet expressSheet = expressSheetService.get(transPackageContent.getExpressId());
             //设置快递为分件状态
             expressSheet.setStatus(ExpressSheet.STATUS.STATUS_PARTATION);
         }
@@ -442,13 +442,13 @@ public class DomainController {
             userInfo.setTransPackageId(transPackageId);
             userInfoService.update(userInfo);
             usersPackage = usersPackages.get(0);
-            userPackageService.remove(usersPackage.getSN());
-            usersPackage.setUserU(userInfo);
-            usersPackage.setSN(0);
+            userPackageService.remove(usersPackage.getSn());
+            usersPackage.setUserUid(userInfo.getuId());
+            usersPackage.setSn(0);
             userPackageService.save(usersPackage);
             transHistory.setActTime(getCurrentDate());
-            transHistory.setUIdFrom(userId1);
-            transHistory.setUIdTo(userId2);
+            transHistory.setuIdFrom(userId1);
+            transHistory.setuIdTo(userId2);
             transPackage = transPackageService.findBy("ID", transPackageId, "ID", true).get(0);
             transHistory.setPkg(transPackage);
             transHistoryService.save(transHistory);
@@ -466,8 +466,8 @@ public class DomainController {
     public ResponseEntity packTransPackage(@PathVariable("transPackageId")String transPackageId, @PathVariable("expressSheetId")String expressSheetId) {
         try{
             TransPackageContent transPackageContent = new TransPackageContent();
-            transPackageContent.setPkg(transPackageService.get(transPackageId));
-            transPackageContent.setExpress(expressSheetService.get(expressSheetId));
+            transPackageContent.setPackageId(transPackageId);
+            transPackageContent.setExpressId(expressSheetId);
             transPackageContent.setStatus(TransPackageContent.STATUS.STATUS_ACTIVE);
             transPackageContentService.save(transPackageContent);
             return ResponseEntity.ok().header("EntityClass", "TransPackageContent")
@@ -511,7 +511,7 @@ public class DomainController {
         usersPackageList = userPackageService.getTransPackageList(userUId);
         List<TransPackage> transPackageList  = new ArrayList<>();
         for (UsersPackage usersPackage : usersPackageList) {
-            TransPackage transPackage = usersPackage.getPkg();
+            TransPackage transPackage = transPackageService.get(usersPackage.getPackageId());
             transPackageList.add(transPackage);
         }
         return ResponseEntity.ok(transPackageList);

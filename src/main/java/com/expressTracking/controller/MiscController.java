@@ -274,14 +274,14 @@ public class MiscController {
 
 	/**
 	 * 得到包裹路线信息
-	 * @param expressSheetID 快递单号
+	 * @param expressSheetId 快递单号
 	 * @return 包裹路线信息
 	 * @see PackageRoute
 	 */
-	@RequestMapping(value = "/getPackageRoute/{expressSheetID}" , method = RequestMethod.GET)
-	public List<PackageRoute> getPackageRouteList(@PathVariable("expressSheetID") String expressSheetID) {
+	@RequestMapping(value = "/getPackageRoute/{expressSheetId}" , method = RequestMethod.GET)
+	public List<PackageRoute> getPackageRouteList(@PathVariable("expressSheetId") String expressSheetId) {
 		List<PackageRoute> packageRoutes = new ArrayList<>();
-		packageRoutes = packageRouteService.getPackageRouteList(expressSheetID);
+		packageRoutes = packageRouteService.getPackageRouteList(expressSheetId);
 		return packageRoutes;
 	}
 
@@ -308,7 +308,7 @@ public class MiscController {
 		}else{
 			for (TransPackageContent transPackageContent : transPackageContents) {
 				ExpressSheet expressSheet = new ExpressSheet();
-				expressSheet = transPackageContent.getExpress();
+				expressSheet = expressSheetService.get(transPackageContent.getExpressId());
 				expressSheet.setStatus(ExpressSheet.STATUS.STATUS_TRANSPORT);
 				expressSheetService.update(expressSheet);
 			}
@@ -317,17 +317,17 @@ public class MiscController {
 			userInfoService.update(userInfo);
 
 			usersPackage = usersPackages.get(0);
-			userPackageService.remove(usersPackage.getSN());
-			usersPackage.setUserU(userInfo);
-			usersPackage.setSN(0);
+			userPackageService.remove(usersPackage.getSn());
+			usersPackage.setUserUid(userInfo.getuId());
+			usersPackage.setSn(0);
 			userPackageService.save(usersPackage);
 			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 			Date date;
 			try {
 				date = sdf.parse(sdf.format(new Date()));
 				transHistory.setActTime(date);
-				transHistory.setUIdFrom(nodeUId);
-				transHistory.setUIdTo(userId);
+				transHistory.setuIdFrom(nodeUId);
+				transHistory.setuIdTo(userId);
 				transPackage = transPackageService.findBy("ID", packageId, "ID", true).get(0);
 				transHistory.setPkg(transPackage);
 				transHistoryService.save(transHistory);

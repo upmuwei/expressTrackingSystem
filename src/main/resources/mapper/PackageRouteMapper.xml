@@ -3,14 +3,13 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.expressTracking.dao.PackageRouteDao">
-
+    <!--有问题，等待解决-->
     <resultMap id="packageRouteMap" type="PackageRoute">
          <id  column="SN" property="sn"/>
          <result column="tm" property="tm"/>
          <result column="x" property="x"/>
          <result column="y" property="y"/>
-         <association column="PackageID" property="pkg"
-                      select="com.expressTracking.dao.TransPackageDao.get"/>
+         <result column="PackageID" property="packageId"/>
     </resultMap>
 
     <insert id="insert" parameterType="PackageRoute">

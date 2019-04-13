@@ -18,6 +18,7 @@
         <collection property="usersPackage" column="UID"
                     select="com.expressTracking.dao.UsersPackageDao.getByUserUId"/>
     </resultMap>
+
     <select id="get" parameterType="int" resultMap="userInfoMap">
         select UID, PWD, Name, URull, TelCode,
                Status, DptID, ReceivePackageID,
@@ -50,7 +51,7 @@
     </update>
 
     <delete id="delete" parameterType="int">
-        delete from userinfo where uid=#{id};
+        delete from userinfo where uid=#{uId};
     </delete>
 
     <select id="checkLogin" resultMap="userInfoMap">

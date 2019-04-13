@@ -49,6 +49,15 @@
         from expresssheet where ID = #{id};
     </select>
 
+    <select id="findBy" resultMap="expressSheetMap">
+
+    </select>
+
+    <select id="findLike" resultMap="expressSheetMap">
+
+    </select>
+
+
     <insert id="insert" parameterType="ExpressSheet">
         insert into expresssheet(ID, Type, Sender, Recever, Weight,
                                  TranFee, PackageFee, InsuFee, Accepter,

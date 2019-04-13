@@ -4,22 +4,22 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.expressTracking.dao.TransPackageContentDao">
     <resultMap id="transPackageContentMap" type="TransPackageContent">
-        <id column="SN" property="sn"/>
-        <result column="status" property="status"/>
-        <association column="PackageID" property="pkg" select="com.expressTracking.dao.TransPackageDao.get"/>
-        <association column="ExpressID" property="express"  select="com.expressTracking.dao.ExpressSheetDao.get"/>
+        <id property="sn" column="SN" />
+        <result property="expressId" column="ExpressID"/>
+        <result property="packageId" column="PackageID"/>
+        <result property="status" column="status" />
     </resultMap>
 
     <insert id="insert" parameterType="TransPackageContent">
       insert into transpackagecontent(ExpressID, PackageID, Status)
-      values (#{express.id} ,#{pkg.id},#{status} );
+      values (#{expressId}  ,#{packageId} ,#{status} );
     </insert>
 
     <update id="update" parameterType="TransPackageContent">
         update transpackagecontent
         <set>
-            <if test="express.id != null"> ExpressID=#{express.id}, </if>
-            <if test="pkg.id != null"> PackageID=#{pkg.id}, </if>
+            <if test="express.id != null"> ExpressID=#{expressId}, </if>
+            <if test="pkg.id != null"> PackageID=#{packageId}, </if>
             <if test="status != null"> Status=#{status}  </if>
         </set>
             where SN = #{sn};
@@ -29,7 +29,10 @@
          select PackageID from transpackagecontent where ExpressID=#{expressId} ;
     </select>
 
+    <select id="getByPackageId" parameterType="string" resultMap="transPackageContentMap">
+        select SN, ExpressID, PackageID, Status from transpackagecontent where PackageID = #{packageId};
+    </select>
     <select id="selectExpressId" parameterType="string" resultType="string">
-         select ExpressID from transpackagecontent where PackageID=#{transPackageId};
+         select ExpressID from transpackagecontent where PackageID=#{packageId};
     </select>
 </mapper>

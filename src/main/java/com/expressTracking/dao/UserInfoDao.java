@@ -11,11 +11,11 @@ public interface UserInfoDao {
 
     public int update(UserInfo userInfo);
 
-    public int delete(int id);
+    public int delete(int uId);
 
     public void insert(UserInfo userInfo);
 
-    public UserInfo get(int id);
+    public UserInfo get(int uId);
 
     public UserInfo checkLogin(@Param("uId") int uId,@Param("password") String password);
 

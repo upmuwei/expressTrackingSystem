@@ -16,7 +16,7 @@ public class PackageRoute implements Serializable {
 
 	private int sn;
 
-	private TransPackage pkg;
+	private String packageId;
 
 	private float x;
 
@@ -59,15 +59,15 @@ public class PackageRoute implements Serializable {
 	public Date getTm() {
 		return tm;
 	}
-	
-	public void setPkg(TransPackage value) {
-		this.pkg = value;
+
+	public String getPackageId() {
+		return packageId;
 	}
-	
-	public TransPackage getPkg() {
-		return pkg;
+
+	public void setPackageId(String packageId) {
+		this.packageId = packageId;
 	}
-	
+
 	@Override
 	public String toString() {
 		return toString(false);
@@ -78,20 +78,14 @@ public class PackageRoute implements Serializable {
 			return String.valueOf(getSn());
 		}
 		else {
-			StringBuilder sb = new StringBuilder();
-			sb.append("PackageRoute[ ");
-			sb.append("SN=").append(getSn()).append(" ");
-			if (getPkg() != null) {
-				sb.append("Pkg.Persist_ID=").append(getPkg().toString(true)).append(" ");
-			}
-			else {
-				sb.append("Pkg=null ");
-				sb.append("X=").append(getX()).append(" ");
-				sb.append("Y=").append(getY()).append(" ");
-				sb.append("Tm=").append(getTm()).append(" ");
-				sb.append("]");
-			}
-			return sb.toString();
+
+			return "PackageRoute[ " + "SN=" +
+					getSn() + " " +
+					"packageId=" + getPackageId() + " " +
+					"X=" + getX() + " " +
+					"Y=" + getY() + " " +
+					"Tm=" + getTm() + " " +
+					"]";
 		}
 	}
 	

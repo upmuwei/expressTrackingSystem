@@ -13,9 +13,9 @@ public class TransPackageContent implements Serializable {
 
 	private int sn;
 
-	private ExpressSheet express;
+	private String expressId;
 
-	private TransPackage pkg;
+	private String packageId;
 
 	private int status;
 
@@ -30,23 +30,23 @@ public class TransPackageContent implements Serializable {
 	public int getORMId() {
 		return getSn();
 	}
-	
-	public void setExpress(ExpressSheet value) {
-		this.express = value;
+
+	public String getExpressId() {
+		return expressId;
 	}
-	
-	public ExpressSheet getExpress() {
-		return express;
+
+	public void setExpressId(String expressId) {
+		this.expressId = expressId;
 	}
-	
-	public void setPkg(TransPackage value) {
-		this.pkg = value;
+
+	public String getPackageId() {
+		return packageId;
 	}
-	
-	public TransPackage getPkg() {
-		return pkg;
+
+	public void setPackageId(String packageId) {
+		this.packageId = packageId;
 	}
-	
+
 	public void setStatus(int value) {
 		this.status = value;
 	}
@@ -68,13 +68,13 @@ public class TransPackageContent implements Serializable {
 			StringBuilder sb = new StringBuilder();
 			sb.append("TransPackageContent[ ");
 			sb.append("SN=").append(getSn()).append(" ");
-			if (getExpress() != null) {
-				sb.append("Express.Persist_ID=").append(getExpress().toString(true)).append(" ");
+			if (getExpressId() != null) {
+				sb.append("Express.Persist_ID=").append(getExpressId()).append(" ");
 			} else {
 				sb.append("Express=null ");
 			}
-			if (getPkg() != null) {
-				sb.append("Pkg.Persist_ID=").append(getPkg().toString(true)).append(" ");
+			if (getPackageId() != null) {
+				sb.append("Pkg.Persist_ID=").append(getPackageId()).append(" ");
 			} else {
 				sb.append("Pkg=null ");
 				sb.append("Status=").append(getStatus()).append(" ");
@@ -83,7 +83,10 @@ public class TransPackageContent implements Serializable {
 			return sb.toString();
 		}
 	}
-	
+
+	/**
+	 * 包裹内容状态
+	 */
 	public static final class STATUS{
 		/**
 		 * 快递在包裹中

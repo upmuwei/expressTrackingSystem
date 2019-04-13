@@ -38,13 +38,14 @@ public class PackageRouteServiceImpl implements PackageRouteService {
         return packageRouteDao.update(route);
     }
 
-    //已改
+
     @Override
     public List<PackageRoute> getPackageRouteList(String expressSheetId) {
         List<String> packageIds = transPackageContentDao.getPackageId(expressSheetId);
         List<PackageRoute> packageRouteList = new ArrayList<>();
         for(String packageId : packageIds) {
-            packageRouteList.add(packageRouteDao.getByPackageId(packageId));
+            List<PackageRoute> temp = packageRouteDao.getByPackageId(packageId);
+            packageRouteList.addAll(temp);
         }
         return packageRouteList;
     }

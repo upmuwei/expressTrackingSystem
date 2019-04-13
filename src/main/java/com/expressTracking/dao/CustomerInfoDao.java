@@ -1,7 +1,9 @@
 package com.expressTracking.dao;
+
 import com.expressTracking.entity.CustomerInfo;
 import org.springframework.stereotype.Repository;
 import java.util.List;
+
 @Repository
 public interface CustomerInfoDao {
 
