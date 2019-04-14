@@ -27,8 +27,8 @@ public class UserPackageServiceImpl implements UserPackageService {
     }
 
     @Override
-    public List<UsersPackage> findBy(String propertyName, Object value, String orderBy, boolean isAsc) {
-        return null;
+    public List<UsersPackage> findBy(String propertyName, String value) {
+        return usersPackageDao.findBy(propertyName, value);
     }
 
     @Override

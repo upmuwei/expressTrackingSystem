@@ -17,4 +17,6 @@ public interface UsersPackageDao {
 
     public UsersPackage getByPackageId(String packageId);
 
+    public List<UsersPackage> findBy(String propertyName, String value);
+
 }

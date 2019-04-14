@@ -434,7 +434,7 @@ public class DomainController {
         TransPackage transPackage = new TransPackage();
         UserInfo userInfo = new UserInfo();
         List<UsersPackage> usersPackages = new ArrayList<>();
-        usersPackages = userPackageService.findBy("packageID", transPackageId, "SN", true);
+        usersPackages = userPackageService.findBy("packageID", transPackageId);
         if (usersPackages.isEmpty()) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Unavailable packageID");
         }else{
