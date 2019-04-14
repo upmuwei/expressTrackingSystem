@@ -300,9 +300,8 @@ public class MiscController {
 		List<TransPackageContent> transPackageContents = new ArrayList<>();
 		UserInfo userInfo = new UserInfo();
 		List<UsersPackage> usersPackages = new ArrayList<>();
-		usersPackages = userPackageService.findBy("packageID", packageId, "SN", true);
-		transPackageContents = transPackageContentService.findBy("SN", true, packageId, TransPackageContent.STATUS.STATUS_ACTIVE);
-
+		usersPackages = userPackageService.findBy("packageID", packageId);
+		transPackageContents = transPackageContentService.findByPackageIdAndStatus(packageId, TransPackageContent.STATUS.STATUS_ACTIVE);
 		if (usersPackages.isEmpty()) {
 			return "Unavailable packageID";
 		}else{
@@ -315,7 +314,6 @@ public class MiscController {
 			userInfo = userInfoService.get(userId);
 			userInfo.setTransPackageId(packageId);
 			userInfoService.update(userInfo);
-
 			usersPackage = usersPackages.get(0);
 			userPackageService.remove(usersPackage.getSn());
 			usersPackage.setUserUid(userInfo.getuId());
@@ -328,7 +326,7 @@ public class MiscController {
 				transHistory.setActTime(date);
 				transHistory.setuIdFrom(nodeUId);
 				transHistory.setuIdTo(userId);
-				transPackage = transPackageService.findBy("ID", packageId, "ID", true).get(0);
+				transPackage = transPackageService.get(packageId);
 				transHistory.setPkg(transPackage);
 				transHistoryService.save(transHistory);
 			} catch (ParseException e) {

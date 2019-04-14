@@ -27,4 +27,7 @@
         delete from userspackage where sn=#{sn};
     </delete>
 
+    <select id="findBy" resultMap="userPackageMap">
+
+    </select>
 </mapper>

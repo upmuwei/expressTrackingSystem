@@ -59,4 +59,12 @@
                DptID, ReceivePackageID, DelivePackageID, TransPackageID
         from userinfo where uid = #{uId} and PWD = #{password};
     </select>
+
+    <select id="findLike" resultMap="userInfoMap">
+
+    </select>
+
+    <select id="findBy" resultMap="userInfoMap">
+
+    </select>
 </mapper>

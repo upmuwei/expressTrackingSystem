@@ -30,17 +30,6 @@ public class TransHistoryServiceImpl implements TransHistoryService {
         this.transPackageContentDao = transPackageContentDao;
     }
 
-
-//    @Override
-//    public String appointTransPorter(String packageId, int nodeUId, int userId) {
-//        return null;
-//    }
-//
-//    @Override
-//    public TransHistory appointDeliver(String transPackageId, String expressSheetId) {
-//        return null;
-//    }
-
     @Override
     public List<TransHistory> getTransHistory(String expressSheetId) {
 

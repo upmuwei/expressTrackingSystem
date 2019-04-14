@@ -20,7 +20,7 @@
                     select="com.expressTracking.dao.TransHistoryDao.get"/>
     </resultMap>
 
-    <select id="get" parameterType="String" resultType="TransPackage">
+    <select id="get" parameterType="String" resultMap="transPackageMap">
         select id, sourcenode, targetnode, createtime, status from transpackage where id=#{id};
     </select>
 
@@ -39,4 +39,13 @@
     <insert id="insert" parameterType="TransPackage">
         insert into transpackage(id, sourcenode, targetnode, createtime, status) values (#{id},#{sourceNode} ,#{targetNode} ,#{createTime} ,#{status} );
     </insert>
+
+    <select id="findBy" resultMap="transPackageMap">
+
+    </select>
+
+    <select id="findLike" resultMap="transPackageMap">
+
+    </select>
+
 </mapper>

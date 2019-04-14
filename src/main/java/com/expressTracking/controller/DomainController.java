@@ -73,10 +73,10 @@ public class DomainController {
         List<ExpressSheet> list = new ArrayList<>();
         switch(restrictions.toLowerCase()){
             case "eq":
-                list = expressSheetService.findBy(property, value, "ID", true);
+                list = expressSheetService.findBy(property, value);
                 break;
             case "like":
-                list = expressSheetService.findLike(property, value+"%", "ID", true);
+                list = expressSheetService.findLike(property, value+"%");
                 break;
             default:
         }
@@ -206,22 +206,14 @@ public class DomainController {
 
     /**
      * 更新快递订单
-     * @param id 原快递订单id
      * @param obj 快递订单
      * @return {@code ResponseEntity<ExpressSheet>, HttpStatus=200, Header={"EntityClass", "R_ExpressSheet"}}成功时返回快递单，
      * {@code ResponseEntity<String>, HttpStatus=500}异常时返回异常信息
      */
-    @RequestMapping(value = "/updateExpressSheet/{id}", method = RequestMethod.POST)
-    public ResponseEntity updateExpressSheet(@PathVariable("id")String id, @RequestBody ExpressSheet obj) {
+    @RequestMapping(value = "/updateExpressSheet", method = RequestMethod.POST)
+    public ResponseEntity updateExpressSheet(@RequestBody ExpressSheet obj) {
         try{
-            expressSheetService.save(obj);
-            List<TransPackageContent> list = new ArrayList<>();
-            list = transPackageContentService.findBy("ExpressSheetID",id,"SN",true);
-            for(TransPackageContent transPackageContent : list){
-                transPackageContent.setExpressId(obj.getId());
-                transPackageContentService.update(transPackageContent);
-            }
-            expressSheetService.removeById(id);
+            expressSheetService.update(obj);
             return ResponseEntity.ok().header("EntityClass", "R_ExpressSheet").body(obj);
         }
         catch(Exception e)
@@ -307,8 +299,8 @@ public class DomainController {
             ExpressSheet nes = expressSheetService.get(id);
             nes.setStatus(ExpressSheet.STATUS.STATUS_DELIVERIED);
             expressSheetService.save(nes);
-            transPackageContent = transPackageContentService.findBy("SN", true, id,
-                    TransPackageContent.STATUS.STATUS_ACTIVE).get(0);
+            transPackageContent = transPackageContentService.findByExpressIdAndStatus(id,
+                    TransPackageContent.STATUS.STATUS_ACTIVE);
             transPackageContent.setStatus(TransPackageContent.STATUS.STATUS_OUTOF_PACKAGE);
             transPackageContentService.update(transPackageContent);
 
@@ -332,10 +324,10 @@ public class DomainController {
         List<TransPackage> list = new ArrayList<>();
         switch(restrictions.toLowerCase()){
             case "eq":
-                list = transPackageService.findBy(property, value, "ID", true);
+                list = transPackageService.findBy(property, value );
                 break;
             case "like":
-                list = transPackageService.findLike(property, value+"%", "ID", true);
+                list = transPackageService.findLike(property, value+"%");
                 break;
                 default:
         }
@@ -392,7 +384,7 @@ public class DomainController {
         List<TransPackageContent> transPackageContents = new ArrayList<>();
         UserInfo userInfo = new UserInfo();
         userInfo = userInfoService.get(uId);
-        transPackageContents = transPackageContentService.findBy("TransPackageID", id, "SN", true);
+        transPackageContents = transPackageContentService.findByPackageId(id);
         //传入包裹ID不存在 返回2
         if(transPackageContents.isEmpty()){
             return 2;
@@ -434,7 +426,7 @@ public class DomainController {
         TransPackage transPackage = new TransPackage();
         UserInfo userInfo = new UserInfo();
         List<UsersPackage> usersPackages = new ArrayList<>();
-        usersPackages = userPackageService.findBy("packageID", transPackageId, "SN", true);
+        usersPackages = userPackageService.findBy("packageID", transPackageId);
         if (usersPackages.isEmpty()) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Unavailable packageID");
         }else{
@@ -449,7 +441,7 @@ public class DomainController {
             transHistory.setActTime(getCurrentDate());
             transHistory.setuIdFrom(userId1);
             transHistory.setuIdTo(userId2);
-            transPackage = transPackageService.findBy("ID", transPackageId, "ID", true).get(0);
+            transPackage = transPackageService.get(transPackageId);
             transHistory.setPkg(transPackage);
             transHistoryService.save(transHistory);
             return ResponseEntity.ok("Success");

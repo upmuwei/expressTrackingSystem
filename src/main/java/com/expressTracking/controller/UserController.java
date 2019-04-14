@@ -30,19 +30,12 @@ public class UserController {
      * 登录
      * @param uId 用户id
      * @param pwd 密码
-     * @return {@code ResponseEntity<UserInfo>, HttpStatus=200, Header={"EntityClass", "UserInfo"}}成功时返回用户信息,
-     * {@code ResponseEntity<String>, HttpStatus=500}失败时返回失败信息
+     * @return {@code ResponseEntity<UserInfo>, HttpStatus=200, Header={"EntityClass", "UserInfo"}}返回用户信息
      */
     @RequestMapping(value = "/doLogin/{uId}/{pwd}", method = RequestMethod.GET)
-    public ResponseEntity doLogin(@PathVariable("uId") int uId, @PathVariable("pwd") String pwd) {
-        try{
-            UserInfo userInfo = userInfoService.checkLogin(uId, pwd);
-            return ResponseEntity.ok().header("EntityClass", "UserInfo").body(userInfo);
-        }
-        catch(Exception e)
-        {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
+    public ResponseEntity<UserInfo> doLogin(@PathVariable("uId") int uId, @PathVariable("pwd") String pwd) {
+        UserInfo userInfo = userInfoService.checkLogin(uId, pwd);
+        return ResponseEntity.ok().header("EntityClass", "UserInfo").body(userInfo);
     }
 
     /**
@@ -66,25 +59,23 @@ public class UserController {
                                       @PathVariable("Restrictions") String restrictions,
                                       @PathVariable("Value") String value) {
         List<UserInfo> list = new ArrayList<>();
-        int intValue;
         if("uId".equals(property) || "uRull".equals(property) || "status".equals(property)){
-            intValue = Integer.parseInt(value);
             switch(restrictions.toLowerCase()){
                 case "eq":
-                    list = userInfoService.findBy(property, intValue, "uId", true);
+                    list = userInfoService.findBy(property, value);
                     break;
                 case "like":
-                    list = userInfoService.findLike(property, intValue+"%", "uId", true);
+                    list = userInfoService.findLike(property, value+"%");
                     break;
                 default:
             }
         }else{
             switch(restrictions.toLowerCase()){
                 case "eq":
-                    list = userInfoService.findBy(property, value, "uId", true);
+                    list = userInfoService.findBy(property, value);
                     break;
                 case "like":
-                    list = userInfoService.findLike(property, value+"%", "uId", true);
+                    list = userInfoService.findLike(property, value+"%");
                     break;
                 default:
             }
@@ -108,30 +99,22 @@ public class UserController {
     /**
      * 添加用户
      * @param userInfo 用户信息
-     * @return 成功时返回"添加成功",失败时返回异常信息
+     * @return 返回"添加成功"
      */
     @RequestMapping(value = "/addUserInfo", method = RequestMethod.POST)
     public ResponseEntity<String> addUserInfo(@RequestBody UserInfo userInfo) {
-        try {
-            userInfoService.save(userInfo);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
+        userInfoService.save(userInfo);
         return ResponseEntity.ok("添加成功");
     }
 
     /**
      * 更新用户信息
      * @param userInfo 用户信息
-     * @return 成功时返回"更新成功",失败时返回异常信息
+     * @return {@code HttpStatus=200, Header={"EntityClass", "E_UserInfo"}}返回用户信息
      */
     @RequestMapping(value = "/updateUserInfo", method = RequestMethod.POST)
-    public ResponseEntity<String> updateUserInfo(@RequestBody UserInfo userInfo) {
-        try {
-            userInfoService.update(userInfo);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
-        return ResponseEntity.ok("更新成功");
+    public ResponseEntity<UserInfo> updateUserInfo(@RequestBody UserInfo userInfo) {
+        userInfoService.update(userInfo);
+        return ResponseEntity.ok().header("EntityClass", "E_UserInfo").body(userInfo);
     }
 }

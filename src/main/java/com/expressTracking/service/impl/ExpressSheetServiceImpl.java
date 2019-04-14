@@ -35,16 +35,17 @@ public class ExpressSheetServiceImpl implements ExpressSheetService {
     }
 
     @Override
-    public List<ExpressSheet> findBy(String propertyName, Object value, String orderBy, boolean isAsc) {
-        return expressSheetDao.findBy(propertyName,value,orderBy,isAsc);
+    public List<ExpressSheet> findBy(String propertyName, String value) {
+        return expressSheetDao.findBy(propertyName,value);
     }
+
     @Override
-    public List<ExpressSheet> findLike(String propertyName, Object value, String orderBy, boolean isAsc) {
-        return expressSheetDao.findLike(propertyName,value,orderBy,isAsc);
+    public List<ExpressSheet> findLike(String propertyName, String value) {
+        return expressSheetDao.findLike(propertyName,value);
     }
     @Override
     public List<ExpressSheet> getListInPackage(String packageId) {
-        List<String> expressId=transPackageContentDao.selectExpressId(packageId);
+        List<String> expressId=transPackageContentDao.getExpressId(packageId);
         List<ExpressSheet> expressSheets=new ArrayList<>();
         for(String id:expressId){
             expressSheets.add(expressSheetDao.get(id));

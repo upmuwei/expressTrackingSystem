@@ -6,11 +6,9 @@ import java.util.List;
 
 public interface TransPackageService {
 
-    public List<TransPackage> findBy(String propertyName, Object value, String orderBy, boolean isAsc);
+    public List<TransPackage> findBy(String propertyName, String value);
 
-    public List<TransPackage> findLike(String propertyName, Object value, String orderBy, boolean isAsc);
-
-    public List<TransPackage> getListInPackage(String packageId);
+    public List<TransPackage> findLike(String propertyName, String value);
 
     public TransPackage get(String id);
 

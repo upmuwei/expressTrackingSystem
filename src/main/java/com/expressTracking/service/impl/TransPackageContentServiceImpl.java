@@ -37,26 +37,20 @@ public class TransPackageContentServiceImpl implements TransPackageContentServic
         return transPackageContentDao.update(transPackageContent);
     }
 
-    /*@Override
-    public TransPackageContent get(String id, String sourcePkgId) {
-        return null;
-    }*/
-
-    /**
-     *
-     * @param orderBy 排序依据
-     * @param isAsc 是否为升序
-     * @param expressSheetId 快件id
-     * @param status 包裹内容状态
-     * @return 包裹内容集合
-     */
     @Override
-    public List<TransPackageContent> findBy(String orderBy, boolean isAsc, String expressSheetId, int status) {
-        return null;
+    public TransPackageContent findByExpressIdAndStatus(String expressId, int status) {
+        return transPackageContentDao.findByExpressIdAndStatus(expressId, status);
     }
 
     @Override
-    public List<TransPackageContent> findBy(String propertyName, Object value, String orderBy, boolean isAsc) {
-        return null;
+    public List<TransPackageContent> findByPackageIdAndStatus(String packageId, int status) {
+        return transPackageContentDao.findByPackageIdAndStatus(packageId, status);
     }
+
+    @Override
+    public List<TransPackageContent> findByPackageId(String packageId) {
+        return transPackageContentDao.getByPackageId(packageId);
+    }
+
+
 }
