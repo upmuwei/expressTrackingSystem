@@ -25,14 +25,23 @@
             where SN = #{sn};
     </update>
 
-    <select id="getPackageId" parameterType="string" resultType="string" >
-         select PackageID from transpackagecontent where ExpressID=#{expressId} ;
+    <select id="getByExpressId" parameterType="string" resultMap="transPackageContentMap" >
+         select SN, ExpressID, PackageID, Status from transpackagecontent where ExpressID=#{expressId} ;
+    </select>
+
+    <select id="getPackageId" parameterType="string" resultType="string">
+        select PackageID from transpackagecontent where ExpressID=#{expressId} ;
     </select>
 
     <select id="getByPackageId" parameterType="string" resultMap="transPackageContentMap">
         select SN, ExpressID, PackageID, Status from transpackagecontent where PackageID = #{packageId};
     </select>
-    <select id="selectExpressId" parameterType="string" resultType="string">
+
+    <select id="getExpressId" parameterType="string" resultType="string">
          select ExpressID from transpackagecontent where PackageID=#{packageId};
+    </select>
+
+    <select id="findByExpressIdAndStatus" resultMap="transPackageContentMap">
+
     </select>
 </mapper>

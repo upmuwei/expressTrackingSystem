@@ -11,9 +11,16 @@ public interface TransPackageContentService {
 
     public int update(TransPackageContent transPackageContent);
 
-//    public TransPackageContent get(String id, String sourcePkgId);
+    /**
+     * 依据快件id和包裹内容状态查询包裹内容
+     * @param expressId 快件id
+     * @param status 包裹内容状态
+     * @return 包裹内容
+     */
+    public TransPackageContent findByExpressIdAndStatus(String expressId, int status);
 
-    public List<TransPackageContent> findBy(String orderBy, boolean isAsc, String expressSheetId, int status);
+    public List<TransPackageContent> findByExpressId(String expressId);
 
-    public List<TransPackageContent> findBy(String propertyName, Object value, String orderBy, boolean isAsc);
+    public List<TransPackageContent> findByPackageId(String packageId);
+
 }

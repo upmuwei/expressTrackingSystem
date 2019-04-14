@@ -26,19 +26,13 @@ public class TransPackageImpl implements TransPackageService {
     }
 
     @Override
-    public List<TransPackage> findBy(String propertyName, Object value, String orderBy, boolean isAsc) {
-        return null;
+    public List<TransPackage> findBy(String propertyName, String value) {
+        return transPackageDao.findBy(propertyName, value);
     }
 
     @Override
-    public List<TransPackage> findLike(String propertyName, Object value, String orderBy, boolean isAsc) {
-        return null;
-    }
-
-    @Override
-    //该方法没有被用到
-    public List<TransPackage> getListInPackage(String packageId) {
-        return null;
+    public List<TransPackage> findLike(String propertyName, String value) {
+        return transPackageDao.findLike(propertyName, value);
     }
 
     @Override

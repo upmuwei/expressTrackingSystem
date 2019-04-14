@@ -19,4 +19,11 @@ public interface UserInfoDao {
 
     public UserInfo checkLogin(@Param("uId") int uId,@Param("password") String password);
 
+    /**
+     *默认依据id排序，升序
+     */
+    public List<UserInfo> findLike(String propertyName, String value);
+
+    public List<UserInfo> findBy(String propertyName, String value);
+
 }

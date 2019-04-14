@@ -66,25 +66,23 @@ public class UserController {
                                       @PathVariable("Restrictions") String restrictions,
                                       @PathVariable("Value") String value) {
         List<UserInfo> list = new ArrayList<>();
-        int intValue;
         if("uId".equals(property) || "uRull".equals(property) || "status".equals(property)){
-            intValue = Integer.parseInt(value);
             switch(restrictions.toLowerCase()){
                 case "eq":
-                    list = userInfoService.findBy(property, intValue, "uId", true);
+                    list = userInfoService.findBy(property, value);
                     break;
                 case "like":
-                    list = userInfoService.findLike(property, intValue+"%", "uId", true);
+                    list = userInfoService.findLike(property, value+"%");
                     break;
                 default:
             }
         }else{
             switch(restrictions.toLowerCase()){
                 case "eq":
-                    list = userInfoService.findBy(property, value, "uId", true);
+                    list = userInfoService.findBy(property, value);
                     break;
                 case "like":
-                    list = userInfoService.findLike(property, value+"%", "uId", true);
+                    list = userInfoService.findLike(property, value+"%");
                     break;
                 default:
             }

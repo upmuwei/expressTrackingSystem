@@ -301,7 +301,7 @@ public class MiscController {
 		UserInfo userInfo = new UserInfo();
 		List<UsersPackage> usersPackages = new ArrayList<>();
 		usersPackages = userPackageService.findBy("packageID", packageId, "SN", true);
-		transPackageContents = transPackageContentService.findBy("SN", true, packageId, TransPackageContent.STATUS.STATUS_ACTIVE);
+		transPackageContents = transPackageContentService.findByExpressIdAndStatus(packageId, TransPackageContent.STATUS.STATUS_ACTIVE);
 
 		if (usersPackages.isEmpty()) {
 			return "Unavailable packageID";
@@ -328,7 +328,7 @@ public class MiscController {
 				transHistory.setActTime(date);
 				transHistory.setuIdFrom(nodeUId);
 				transHistory.setuIdTo(userId);
-				transPackage = transPackageService.findBy("ID", packageId, "ID", true).get(0);
+				transPackage = transPackageService.get(packageId);
 				transHistory.setPkg(transPackage);
 				transHistoryService.save(transHistory);
 			} catch (ParseException e) {
