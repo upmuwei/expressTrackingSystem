@@ -1,6 +1,7 @@
 package com.expressTracking.dao;
 
 import com.expressTracking.entity.UsersPackage;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.jws.soap.SOAPBinding;
@@ -17,6 +18,7 @@ public interface UsersPackageDao {
 
     public UsersPackage getByPackageId(String packageId);
 
-    public List<UsersPackage> findBy(String propertyName, String value);
+    public List<UsersPackage> findBy(@Param("propertyName") String propertyName,
+                                     @Param("value") String value);
 
 }

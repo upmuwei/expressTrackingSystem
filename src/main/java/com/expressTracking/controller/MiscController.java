@@ -297,11 +297,11 @@ public class MiscController {
 		UsersPackage usersPackage = new UsersPackage();
 		TransHistory transHistory = new TransHistory();
 		TransPackage transPackage = new TransPackage();
+		List<TransPackageContent> transPackageContents = new ArrayList<>();
 		UserInfo userInfo = new UserInfo();
 		List<UsersPackage> usersPackages = new ArrayList<>();
 		usersPackages = userPackageService.findBy("packageID", packageId);
-		TransPackageContent transPackageContent = transPackageContentService.findByExpressIdAndStatus(packageId, TransPackageContent.STATUS.STATUS_ACTIVE);
-
+		transPackageContents = transPackageContentService.findByPackageIdAndStatus(packageId, TransPackageContent.STATUS.STATUS_ACTIVE);
 		if (usersPackages.isEmpty()) {
 			return "Unavailable packageID";
 		}else{
@@ -314,7 +314,6 @@ public class MiscController {
 			userInfo = userInfoService.get(userId);
 			userInfo.setTransPackageId(packageId);
 			userInfoService.update(userInfo);
-
 			usersPackage = usersPackages.get(0);
 			userPackageService.remove(usersPackage.getSn());
 			usersPackage.setUserUid(userInfo.getuId());

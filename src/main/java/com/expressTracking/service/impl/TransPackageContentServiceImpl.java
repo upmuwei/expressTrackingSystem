@@ -37,17 +37,14 @@ public class TransPackageContentServiceImpl implements TransPackageContentServic
         return transPackageContentDao.update(transPackageContent);
     }
 
-    /**
-     *依据sn排序，升序
-     */
     @Override
     public TransPackageContent findByExpressIdAndStatus(String expressId, int status) {
         return transPackageContentDao.findByExpressIdAndStatus(expressId, status);
     }
 
     @Override
-    public List<TransPackageContent> findByExpressId(String expressId) {
-        return transPackageContentDao.getByExpressId(expressId);
+    public List<TransPackageContent> findByPackageIdAndStatus(String packageId, int status) {
+        return transPackageContentDao.findByPackageIdAndStatus(packageId, status);
     }
 
     @Override

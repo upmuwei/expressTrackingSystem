@@ -17,7 +17,9 @@ public interface TransPackageDao {
     /**
      * 依据id排序，升序
      */
-    public List<TransPackage> findBy(@Param("propertyName") String propertyName,@Param("value") String value);
+    public List<TransPackage> findBy(@Param("propertyName") String propertyName,
+                                     @Param("value") String value);
 
-    public List<TransPackage> findLike(@Param("propertyName") String propertyName,@Param("value") String value);
+    public List<TransPackage> findLike(@Param("propertyName") String propertyName,
+                                       @Param("value") String value);
 }

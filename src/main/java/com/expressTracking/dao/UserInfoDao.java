@@ -17,13 +17,15 @@ public interface UserInfoDao {
 
     public UserInfo get(int uId);
 
-    public UserInfo checkLogin(@Param("uId") int uId,@Param("password") String password);
+    public UserInfo checkLogin(@Param("uId") int uId, @Param("password") String password);
 
     /**
      *默认依据id排序，升序
      */
-    public List<UserInfo> findLike(String propertyName, String value);
+    public List<UserInfo> findLike(@Param("propertyName") String propertyName,
+                                   @Param("value") String value);
 
-    public List<UserInfo> findBy(String propertyName, String value);
+    public List<UserInfo> findBy(@Param("propertyName") String propertyName,
+                                 @Param("value") String value);
 
 }

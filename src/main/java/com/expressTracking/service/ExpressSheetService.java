@@ -8,9 +8,9 @@ public interface ExpressSheetService {
 
     public int update(ExpressSheet expressSheet);
 
-    public List<ExpressSheet> findBy(String propertyName, Object value, String orderBy, boolean isAsc);
+    public List<ExpressSheet> findBy(String propertyName, String value);
 
-    public List<ExpressSheet> findLike(String propertyName, Object value, String orderBy, boolean isAsc);
+    public List<ExpressSheet> findLike(String propertyName, String value);
 
     public List<ExpressSheet> getListInPackage(String packageId);
 

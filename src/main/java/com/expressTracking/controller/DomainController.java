@@ -73,10 +73,10 @@ public class DomainController {
         List<ExpressSheet> list = new ArrayList<>();
         switch(restrictions.toLowerCase()){
             case "eq":
-                list = expressSheetService.findBy(property, value, "ID", true);
+                list = expressSheetService.findBy(property, value);
                 break;
             case "like":
-                list = expressSheetService.findLike(property, value+"%", "ID", true);
+                list = expressSheetService.findLike(property, value+"%");
                 break;
             default:
         }
@@ -206,22 +206,14 @@ public class DomainController {
 
     /**
      * 更新快递订单
-     * @param id 原快递订单id
      * @param obj 快递订单
      * @return {@code ResponseEntity<ExpressSheet>, HttpStatus=200, Header={"EntityClass", "R_ExpressSheet"}}成功时返回快递单，
      * {@code ResponseEntity<String>, HttpStatus=500}异常时返回异常信息
      */
-    @RequestMapping(value = "/updateExpressSheet/{id}", method = RequestMethod.POST)
-    public ResponseEntity updateExpressSheet(@PathVariable("id")String id, @RequestBody ExpressSheet obj) {
+    @RequestMapping(value = "/updateExpressSheet", method = RequestMethod.POST)
+    public ResponseEntity updateExpressSheet(@RequestBody ExpressSheet obj) {
         try{
-            expressSheetService.save(obj);
-            List<TransPackageContent> list = new ArrayList<>();
-            list = transPackageContentService.findByExpressId(id);
-            for(TransPackageContent transPackageContent : list){
-                transPackageContent.setExpressId(obj.getId());
-                transPackageContentService.update(transPackageContent);
-            }
-            expressSheetService.removeById(id);
+            expressSheetService.update(obj);
             return ResponseEntity.ok().header("EntityClass", "R_ExpressSheet").body(obj);
         }
         catch(Exception e)

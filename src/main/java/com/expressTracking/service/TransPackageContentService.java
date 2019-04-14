@@ -19,7 +19,7 @@ public interface TransPackageContentService {
      */
     public TransPackageContent findByExpressIdAndStatus(String expressId, int status);
 
-    public List<TransPackageContent> findByExpressId(String expressId);
+    public List<TransPackageContent> findByPackageIdAndStatus(String packageId, int status);
 
     public List<TransPackageContent> findByPackageId(String packageId);
 
