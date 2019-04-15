@@ -27,8 +27,8 @@ public class UserPackageServiceImpl implements UserPackageService {
     }
 
     @Override
-    public List<UsersPackage> findBy(String propertyName, String value) {
-        return usersPackageDao.findBy(propertyName, value);
+    public UsersPackage findByPackageId(String packageId) {
+        return usersPackageDao.getByPackageId(packageId);
     }
 
     @Override

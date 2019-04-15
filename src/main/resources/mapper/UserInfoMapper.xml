@@ -51,7 +51,7 @@
     </update>
 
     <delete id="delete" parameterType="int">
-        delete from userinfo where uid=#{uId};
+        delete * from userinfo where uid=#{uId};
     </delete>
 
     <select id="checkLogin" resultMap="userInfoMap">
@@ -61,10 +61,64 @@
     </select>
 
     <select id="findLike" resultMap="userInfoMap">
-
+        select UID, PWD, Name, URull, TelCode, Status,
+               DptID, ReceivePackageID, DelivePackageID, TransPackageID
+        from userinfo where 1 = 1
+        <choose>
+            <when test="propertyName == null or propertyName == ''"/>
+            <when test="propertyName == 'UID'" >
+                and UID like #{value}
+            </when>
+            <when test="propertyName == 'Name'">
+                and Name like #{value,jdbcType=VARCHAR}
+            </when>
+            <when test="propertyName == 'TelCode'">
+                and TelCode like #{value,jdbcType=VARCHAR}
+            </when>
+            <when test="propertyName == 'DptID'">
+                and DptID like #{value,jdbcType=VARCHAR}
+            </when>
+            <when test="propertyName == 'ReceivePackageID'">
+                and ReceivePackageID like #{value,jdbcType=VARCHAR}
+            </when>
+            <when test="propertyName == 'DelivePackageID'">
+                and DelivePackageID like #{value,jdbcType=VARCHAR}
+            </when>
+            <when test="propertyName == 'TransPackageID'">
+                and TransPackageID like #{value,jdbcType=VARCHAR}
+            </when>
+        </choose>
+        order by UID asc
     </select>
 
     <select id="findBy" resultMap="userInfoMap">
-
+        select UID, PWD, Name, URull, TelCode, Status,
+        DptID, ReceivePackageID, DelivePackageID, TransPackageID
+        from userinfo where 1 = 1
+        <choose>
+            <when test="propertyName == null or propertyName == ''"/>
+            <when test="propertyName == 'UID'" >
+                and UID = #{value}
+            </when>
+            <when test="propertyName == 'Name'">
+                and Name = #{value,jdbcType=VARCHAR}
+            </when>
+            <when test="propertyName == 'TelCode'">
+                and TelCode = #{value,jdbcType=VARCHAR}
+            </when>
+            <when test="propertyName == 'DptID'">
+                and DptID = #{value,jdbcType=VARCHAR}
+            </when>
+            <when test="propertyName == 'ReceivePackageID'">
+                and ReceivePackageID = #{value,jdbcType=VARCHAR}
+            </when>
+            <when test="propertyName == 'DelivePackageID'">
+                and DelivePackageID = #{value,jdbcType=VARCHAR}
+            </when>
+            <when test="propertyName == 'TransPackageID'">
+                and TransPackageID = #{value,jdbcType=VARCHAR}
+            </when>
+        </choose>
+        order by UID asc
     </select>
 </mapper>

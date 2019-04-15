@@ -47,10 +47,4 @@ public class TransPackageContentServiceImpl implements TransPackageContentServic
         return transPackageContentDao.findByPackageIdAndStatus(packageId, status);
     }
 
-    @Override
-    public List<TransPackageContent> findByPackageId(String packageId) {
-        return transPackageContentDao.getByPackageId(packageId);
-    }
-
-
 }

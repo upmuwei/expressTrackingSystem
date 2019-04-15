@@ -46,7 +46,7 @@ public class ExpressSheetServiceImpl implements ExpressSheetService {
     @Override
     public List<ExpressSheet> getListInPackage(String packageId) {
         List<String> expressId=transPackageContentDao.getExpressId(packageId);
-        List<ExpressSheet> expressSheets=new ArrayList<>();
+        List<ExpressSheet> expressSheets = new ArrayList<>();
         for(String id:expressId){
             expressSheets.add(expressSheetDao.get(id));
         }

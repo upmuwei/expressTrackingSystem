@@ -7,7 +7,7 @@ public interface UserPackageService {
 
     public List<UsersPackage> getTransPackageList(int userUId);
 
-    public List<UsersPackage> findBy(String propertyName, String value);
+    UsersPackage findByPackageId(String packageId);
 
     public void save(UsersPackage userPackage);
 
