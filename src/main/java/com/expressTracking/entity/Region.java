@@ -39,10 +39,6 @@ public class Region implements Serializable {
 		return regionCode;
 	}
 	
-	public String getORMID() {
-		return getRegionCode();
-	}
-	
 	public void setPrv(String value) {
 		this.prv = value;
 	}

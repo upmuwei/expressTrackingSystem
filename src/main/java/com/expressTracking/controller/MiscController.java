@@ -179,10 +179,10 @@ public class MiscController {
 	 */
     @RequestMapping(value = "/getProvinceList",method = RequestMethod.GET)
 	public ResponseEntity<List<CodeNamePair>> getProvinceList() {
-			List<Region> regionList = regionService.getProvinceList();
+    	List<Region> regionList = regionService.getProvinceList();
 		List<CodeNamePair> listCN = new ArrayList<>();
 		for(Region rg : regionList){
-			CodeNamePair cn = new CodeNamePair(rg.getORMID(),rg.getPrv());
+			CodeNamePair cn = new CodeNamePair(rg.getRegionCode(),rg.getPrv());
 			listCN.add(cn);
 		}
 		return ResponseEntity.ok().header("Type", "Select").body(listCN);
@@ -199,7 +199,7 @@ public class MiscController {
 		List<Region> regionList = regionService.getCityList(prv);
 		List<CodeNamePair> listCN = new ArrayList<>();
 		for(Region rg : regionList){
-			CodeNamePair cn = new CodeNamePair(rg.getORMID(),rg.getCty());
+			CodeNamePair cn = new CodeNamePair(rg.getRegionCode(),rg.getCty());
 			listCN.add(cn);
 		}
 		return ResponseEntity.ok().header("Type", "Select").body(listCN);
@@ -216,7 +216,7 @@ public class MiscController {
 		List<Region> regionList = regionService.getTownList(city);
 		List<CodeNamePair> listCN = new ArrayList<>();
 		for(Region rg : regionList){
-			CodeNamePair cn = new CodeNamePair(rg.getORMID(),rg.getTwn());
+			CodeNamePair cn = new CodeNamePair(rg.getRegionCode(),rg.getTwn());
 			listCN.add(cn);
 		}
 		return ResponseEntity.ok().header("Type", "Select").body(listCN);
