@@ -4,12 +4,11 @@ import com.expressTracking.entity.*;
 import com.expressTracking.service.*;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.*;
-import java.rmi.server.ExportException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -59,7 +58,7 @@ public class DomainController {
 
     /**
      * 得到快递单集合
-     * @param property 属性
+     * @param property 属性 ID or Sender or Recever or Accepter or Deliver or Status
      * @param restrictions 限定条件 eq or like
      * @param value 属性值
      * @return {@code HttpStatus=200, Header={"Type", "Select"}}快递单集合
@@ -88,8 +87,8 @@ public class DomainController {
      * @return {@code httpStatus=200, header={"Type","Save"}} 图片字节流
      */
     @RequestMapping(value = "uploadExpressImage/{expressId}", method = RequestMethod.POST)
-    public ResponseEntity<InputStream> uploadExpressImage(@PathVariable("expressId") String expressId,
-                                                          @RequestPart MultipartFile file) throws Exception {
+    public ResponseEntity<byte[]> uploadExpressImage(@RequestParam("file") MultipartFile file,
+                                                          @PathVariable("expressId") String expressId) throws Exception {
         if (file == null) {
             throw  new Exception("上传文件出错");
         } else {
@@ -98,7 +97,7 @@ public class DomainController {
                     new File("D:\\expressTracking\\images\\",
                             expressId));
         }
-        return ResponseEntity.ok().header("Type","Save").body(file.getInputStream());
+        return ResponseEntity.ok().header("Type","Save").contentType(MediaType.IMAGE_JPEG).body(file.getBytes());
     }
 
     /**
@@ -107,10 +106,14 @@ public class DomainController {
      * @return {@code httpStatus=200, header={"Type","Select"}} 图片字节流
      * @throws FileNotFoundException 文件路径错误
      */
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @RequestMapping(value = "getExpressImage/{expressId}", method = RequestMethod.GET)
-    public ResponseEntity<InputStream> getExpressImage(@PathVariable("expressId") String expressId) throws FileNotFoundException {
+    public ResponseEntity<byte[]> getExpressImage(@PathVariable("expressId") String expressId) throws IOException {
         String path = "D:\\expressTracking\\images\\" + expressId;
-        return ResponseEntity.ok().header("Type", "Select").body(new FileInputStream(path));
+        FileInputStream file = new FileInputStream(path);
+        byte[] buff = new byte[file.available()];
+        file.read(buff);
+        return ResponseEntity.ok().header("Type", "Select").contentType(MediaType.IMAGE_JPEG).body(buff);
     }
 
     /**
@@ -231,7 +234,7 @@ public class DomainController {
 
     /**
      * 得到包裹集合
-     * @param property 属性
+     * @param property 属性 ID or SourceNode or TargetNode or Status
      * @param restrictions 限定条件 eq or like
      * @param value 属性值
      * @return {@code HttpStatus=200, Header={"Type", "Select"}}包裹集合

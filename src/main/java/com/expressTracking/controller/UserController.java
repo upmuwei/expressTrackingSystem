@@ -49,7 +49,7 @@ public class UserController {
 
     /**
      * 查询用户信息
-     * @param property 属性 uId or uRull or status
+     * @param property 属性 UID or Name or TelCode or DptID or ReceivePackageID or DelivePackageID or TransPackageID
      * @param restrictions 限制条件 eq or like
      * @param value 属性值
      * @return {@code HttpStatus=200, Header={"Type", "Select"}}用户信息集合
