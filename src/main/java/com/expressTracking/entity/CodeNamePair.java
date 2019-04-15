@@ -11,8 +11,8 @@ public class CodeNamePair {
 	public CodeNamePair(){}
 	
 	public CodeNamePair(String code, String name){
-		code = code;
-		name = name;
+		this.code = code;
+		this.name = name;
 	}
 
 	public String getCode() {
