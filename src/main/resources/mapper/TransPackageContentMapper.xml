@@ -12,7 +12,7 @@
 
     <insert id="insert" parameterType="TransPackageContent">
       insert into transpackagecontent(ExpressID, PackageID, Status)
-      values (#{expressId}, #{packageId}, #{status} );
+      values (#{expressId}, #{packageId}, #{status} )
     </insert>
 
     <update id="update" parameterType="TransPackageContent">
@@ -22,31 +22,34 @@
             <if test="pkg.id != null"> PackageID=#{packageId}, </if>
             <if test="status != null"> Status=#{status}  </if>
         </set>
-            where SN = #{sn};
+            where SN = #{sn}
     </update>
 
     <select id="findByPackageIdAndStatus" resultMap="transPackageContentMap" >
          select SN, ExpressID, PackageID, Status
          from transpackagecontent
-         where PackageID = #{packageId} and Status = #{status};
+         where PackageID = #{packageId} and Status = #{status}
     </select>
 
     <select id="getPackageId" parameterType="string" resultType="string">
         select PackageID
         from transpackagecontent
-        where ExpressID=#{expressId} ;
+        where ExpressID=#{expressId}
     </select>
 
     <select id="getByPackageId" parameterType="string" resultMap="transPackageContentMap">
         select SN, ExpressID, PackageID, Status
         from transpackagecontent
-        where PackageID = #{packageId} and  Status = 0;
+        where Status = 0
+        <if test="packageId != null and packageId != ''">
+            and PackageID = #{packageId}
+        </if>
     </select>
 
     <select id="getExpressId" parameterType="string" resultType="string">
         select ExpressID
         from transpackagecontent
-        where PackageID=#{packageId};
+        where PackageID=#{packageId}
     </select>
 
     <select id="findByExpressIdAndStatus" resultMap="transPackageContentMap">

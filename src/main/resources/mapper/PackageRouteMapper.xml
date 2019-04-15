@@ -3,7 +3,6 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.expressTracking.dao.PackageRouteDao">
-    <!--有问题，等待解决-->
     <resultMap id="packageRouteMap" type="PackageRoute">
          <id  column="SN" property="sn"/>
          <result column="tm" property="tm"/>
@@ -13,7 +12,7 @@
     </resultMap>
 
     <insert id="insert" parameterType="PackageRoute">
-        insert into packageroute(PackageID, x, y, tm) values(#{pkg.packageid},#{x},#{y},#{tm});
+        insert into packageroute(PackageID, x, y, tm) values(#{packageId},#{x},#{y},#{tm});
     </insert>
 
     <update id="update" parameterType="PackageRoute"  >
@@ -23,10 +22,19 @@
                 <if test="y != null"> y=#{y}, </if>
                 <if test="tm != null"> tm=#{tm} </if>
             </set>
-            where PackageID=#{pkg.packageid};
+        <where>
+            <if test="packageId != null and packageId != ''">
+                PackageID=#{packageId};
+            </if>
+        </where>
     </update>
 
     <select id="getByPackageId" parameterType="String" resultMap="packageRouteMap" >
-         select SN,PackageID,x,y,tm from packageroute where PackageID=#{packageId};
+         select SN,PackageID,x,y,tm from packageroute
+         <where>
+             <if test="packageId != null and packageId != ''">
+                 PackageID=#{packageId};
+             </if>
+         </where>
     </select>
 </mapper>

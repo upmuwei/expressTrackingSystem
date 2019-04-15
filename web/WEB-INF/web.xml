@@ -6,7 +6,10 @@
     <!-- 配置Spring IoC配置文件路径 -->
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>/WEB-INF/applicationContext.xml</param-value>
+        <param-value>
+            /WEB-INF/applicationContext.xml
+            /WEB-INF/dispatcher-servlet.xml
+        </param-value>
     </context-param>
     <!-- 配置ContextLoaderListener用以初始化Spring IoC容器 -->
     <listener>

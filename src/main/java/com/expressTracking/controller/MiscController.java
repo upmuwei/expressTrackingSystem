@@ -281,17 +281,17 @@ public class MiscController {
 	@RequestMapping(value = "/appointTransPorter/{packageId}/{nodeUId}/{userId}" , method = RequestMethod.GET)
 	public ResponseEntity<String> appointTransPorter(@PathVariable("packageId")String packageId,
 									 @PathVariable("nodeUId")int nodeUId,@PathVariable("userId")int userId) throws Exception {
-		TransHistory transHistory = new TransHistory();
-		UsersPackage usersPackage = userPackageService.findByPackageId(packageId);
-		TransPackage transPackage = transPackageService.get(packageId);
-		Set<TransPackageContent> transPackageContents = transPackage.getContent();
-		if (usersPackage == null) {
-			throw new Exception("Unavailable packageID");
-		}else{
-			for (TransPackageContent transPackageContent : transPackageContents) {
-				ExpressSheet expressSheet = expressSheetService.get(transPackageContent.getExpressId());
-				expressSheet.setStatus(ExpressSheet.STATUS.STATUS_TRANSPORT);
-				expressSheetService.update(expressSheet);
+        UsersPackage usersPackage = userPackageService.findByPackageId(packageId);
+        if (usersPackage == null) {
+            throw new Exception("包裹id不存在");
+        }else{
+            TransHistory transHistory = new TransHistory();
+            TransPackage transPackage = transPackageService.get(packageId);
+            Set<TransPackageContent> transPackageContents = transPackage.getContent();
+            for (TransPackageContent transPackageContent : transPackageContents) {
+                ExpressSheet expressSheet = expressSheetService.get(transPackageContent.getExpressId());
+                expressSheet.setStatus(ExpressSheet.STATUS.STATUS_TRANSPORT);
+                expressSheetService.update(expressSheet);
 			}
 			userPackageService.remove(usersPackage.getSn());
 			usersPackage.setUserUid(userId);

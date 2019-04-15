@@ -47,7 +47,7 @@
                 <if test="address != null and address != ''"> Address=#{address},  </if>
                 <if test="postCode != null"> PostCode=#{postCode}  </if>
             </set>
-                where id=#{id};
+        where id=#{id};
     </update>
 
 </mapper>

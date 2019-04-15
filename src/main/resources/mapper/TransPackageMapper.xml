@@ -21,7 +21,7 @@
     </resultMap>
 
     <select id="get" parameterType="String" resultMap="transPackageMap">
-        select id, sourcenode, targetnode, createtime, status from transpackage where id=#{id};
+        select id, sourcenode, targetnode, createtime, status from transpackage where id=#{id}
     </select>
 
     <update id="update" parameterType="TransPackage">
@@ -37,15 +37,50 @@
     </update>
 
     <insert id="insert" parameterType="TransPackage">
-        insert into transpackage(id, sourcenode, targetnode, createtime, status) values (#{id},#{sourceNode} ,#{targetNode} ,#{createTime} ,#{status} );
+        insert into transpackage(id, sourcenode, targetnode, createtime, status)
+        values (#{id},#{sourceNode} ,#{targetNode} ,#{createTime} ,#{status} )
     </insert>
 
     <select id="findBy" resultMap="transPackageMap">
-
+        select id, sourcenode, targetnode, createtime, status
+        from transpackage
+        <where>
+            <choose>
+                <when test="propertyName == 'ID'">
+                    ID = #{value}
+                </when>
+                <when test="propertyName == 'SourceNode'">
+                    and SourceNode = #{value,jdbcType=VARCHAR}
+                </when>
+                <when test="propertyName == 'TargetNode'">
+                    and TargetNode = #{value,jdbcType=VARCHAR}
+                </when>
+                <when test="propertyName == 'Status'">
+                    and Status = #{value}
+                </when>
+            </choose>
+        </where>
     </select>
 
     <select id="findLike" resultMap="transPackageMap">
-
+        select id, sourcenode, targetnode, createtime, status
+        from transpackage
+        <where>
+            <choose>
+                <when test="propertyName == 'ID'">
+                    ID like #{value}
+                </when>
+                <when test="propertyName == 'SourceNode'">
+                    and SourceNode like #{value,jdbcType=VARCHAR}
+                </when>
+                <when test="propertyName == 'TargetNode'">
+                    and TargetNode like #{value,jdbcType=VARCHAR}
+                </when>
+                <when test="propertyName == 'Status'">
+                    and Status like #{value}
+                </when>
+            </choose>
+        </where>
     </select>
 
 </mapper>

@@ -46,15 +46,57 @@
     <select id="get" parameterType="String" resultMap="expressSheetMap">
         select ID, Type, Weight, TranFee, PackageFee, InsuFee, Accepter, Deliver,
                AccepteTime, DeliveTime, Acc1, Acc2, Status, Sender, Recever
-        from expresssheet where ID = #{id};
+        from expresssheet where ID = #{id}
     </select>
 
     <select id="findBy" resultMap="expressSheetMap">
-
+        select ID, Type, Weight, TranFee, PackageFee, InsuFee, Accepter, Deliver,
+        AccepteTime, DeliveTime, Acc1, Acc2, Status, Sender, Recever
+        from expresssheet
+        <where>
+            <choose>
+                <when test="propertyName == 'ID'">
+                    ID = #{value}
+                </when>
+                <when test="propertyName == 'Sender'">
+                    and Sender = #{value}
+                </when>
+                <when test="propertyName == 'Recever'">
+                    and Recever = #{value}
+                </when>
+                <when test="propertyName == 'Accepter'">
+                    and Accepter = #{value}
+                </when>
+                <when test="propertyName == 'Deliver'">
+                    and Deliver = #{value}
+                </when>
+            </choose>
+        </where>
     </select>
 
     <select id="findLike" resultMap="expressSheetMap">
-
+        select ID, Type, Weight, TranFee, PackageFee, InsuFee, Accepter, Deliver,
+               AccepteTime, DeliveTime, Acc1, Acc2, Status, Sender, Recever
+        from expresssheet
+        <where>
+            <choose>
+                <when test="propertyName == 'ID'">
+                    ID like #{value}
+                </when>
+                <when test="propertyName == 'Sender'">
+                    and Sender like #{value}
+                </when>
+                <when test="propertyName == 'Recever'">
+                    and Recever like #{value}
+                </when>
+                <when test="propertyName == 'Accepter'">
+                    and Accepter like #{value}
+                </when>
+                <when test="propertyName == 'Deliver'">
+                    and Deliver like #{value}
+                </when>
+            </choose>
+        </where>
     </select>
 
 
@@ -64,11 +106,11 @@
                                  Deliver, AccepteTime, DeliveTime, Acc1, Acc2, Status)
             values(#{id},#{type},#{sender.id},#{recever.id},#{weight},
                    #{tranFee},#{packageFee},#{insuFee},#{accepter},
-                   #{deliver},#{accepteTime},#{deliveTime},#{acc1},#{acc2},#{status});
+                   #{deliver},#{accepteTime},#{deliveTime},#{acc1},#{acc2},#{status})
     </insert>
     
     <delete id="delete" parameterType="String">
-        delete * from expresssheet where id=#{id};
+        delete * from expresssheet where id=#{id}
     </delete>
 
 </mapper>
