@@ -31,8 +31,11 @@
     </select>
 
     <select id="get" parameterType="String" resultMap="regionMap">
-         select RegionCode, Prv, Cty, Twn, Stage
-         from region where RegionCode=#{id};
+         select region1.RegionCode, region2.Prv, region3.Cty, region1.Twn, region1.Stage
+         from region as region1, region as region2, region as region3
+         where region1.RegionCode=#{id}
+           and concat(left(region1.RegionCode,2), '0000') = region2.RegionCode
+           and concat(left(region1.RegionCode,4), '00') = region3.RegionCode
     </select>
 
 </mapper>

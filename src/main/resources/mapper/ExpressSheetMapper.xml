@@ -110,7 +110,7 @@
     </insert>
     
     <delete id="delete" parameterType="String">
-        delete * from expresssheet where id=#{id}
+        delete from expresssheet where id=#{id}
     </delete>
 
 </mapper>
