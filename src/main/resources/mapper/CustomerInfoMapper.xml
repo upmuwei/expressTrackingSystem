@@ -24,7 +24,7 @@
     </select>
 
     <delete id="delete" parameterType="int">
-        delete * from customerinfo where id=#{id};
+        delete from customerinfo where id=#{id};
     </delete>
 
     <select id="findByTelCode" parameterType="String" resultMap="customerInfoMap">

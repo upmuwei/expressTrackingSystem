@@ -2,14 +2,16 @@ package com.expressTracking.controller;
 
 import com.expressTracking.entity.*;
 import com.expressTracking.service.*;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.*;
+import java.rmi.server.ExportException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author 19231
@@ -77,6 +79,38 @@ public class DomainController {
             default: throw new Exception("参数错误");
         }
         return ResponseEntity.ok().header("Type", "Select").body(list);
+    }
+
+    /**
+     * 上传快递图片
+     * @param expressId 快件单号
+     * @param file 图片文件
+     * @return {@code httpStatus=200, header={"Type","Save"}} 图片字节流
+     */
+    @RequestMapping(value = "uploadExpressImage/{expressId}", method = RequestMethod.POST)
+    public ResponseEntity<InputStream> uploadExpressImage(@PathVariable("expressId") String expressId,
+                                                          @RequestPart MultipartFile file) throws Exception {
+        if (file == null) {
+            throw  new Exception("上传文件出错");
+        } else {
+            FileUtils.copyInputStreamToFile(
+                    file.getInputStream(),
+                    new File("D:\\expressTracking\\images\\",
+                            expressId));
+        }
+        return ResponseEntity.ok().header("Type","Save").body(file.getInputStream());
+    }
+
+    /**
+     * 得到图片字节流
+     * @param expressId 快件单号
+     * @return {@code httpStatus=200, header={"Type","Select"}} 图片字节流
+     * @throws FileNotFoundException 文件路径错误
+     */
+    @RequestMapping(value = "getExpressImage/{expressId}", method = RequestMethod.GET)
+    public ResponseEntity<InputStream> getExpressImage(@PathVariable("expressId") String expressId) throws FileNotFoundException {
+        String path = "D:\\expressTracking\\images\\" + expressId;
+        return ResponseEntity.ok().header("Type", "Select").body(new FileInputStream(path));
     }
 
     /**
