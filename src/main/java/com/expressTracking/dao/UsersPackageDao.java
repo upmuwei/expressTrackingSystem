@@ -18,7 +18,5 @@ public interface UsersPackageDao {
 
     public UsersPackage getByPackageId(String packageId);
 
-    public List<UsersPackage> findBy(@Param("propertyName") String propertyName,
-                                     @Param("value") String value);
 
 }

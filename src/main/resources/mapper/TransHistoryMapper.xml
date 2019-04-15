@@ -10,8 +10,7 @@
         <result property="actTime" column="ActTime"/>
         <result property="uIdFrom" column="UIDFrom"/>
         <result property="uIdTo" column="UIDTo" />
-        <association property="pkg" column="PackageID"
-                     select="com.expressTracking.dao.TransPackageDao.get"/>
+        <result property="packageId" column="PackageID"/>
     </resultMap>
 
     <select id="get" parameterType="String" resultMap="transHistoryMap">
@@ -21,7 +20,7 @@
 
     <insert id="insert" parameterType="TransHistory">
         insert into transhistory(PackageID, ActTime, UIDFrom, UIDTo, x, y)
-        values(#{pkg.id}, #{actTime} ,#{uIdFrom} , #{uIdTo} , #{x} ,#{y} );
+        values(#{packageId} , #{actTime} ,#{uIdFrom} , #{uIdTo} , #{x} ,#{y} );
     </insert>
 
 </mapper>

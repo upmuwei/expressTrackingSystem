@@ -2,8 +2,12 @@ package com.expressTracking.entity;
 
 
 import java.io.Serializable;
+import java.util.Objects;
 
-
+/**
+ * @author 19231
+ * @date 2019/4/5
+ */
 public class TransPackageContent implements Serializable {
 
 	private static final long serialVersionUID = -2696910600791838998L;
@@ -82,6 +86,26 @@ public class TransPackageContent implements Serializable {
 			}
 			return sb.toString();
 		}
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (!(o instanceof TransPackageContent)) {
+			return false;
+		}
+		TransPackageContent that = (TransPackageContent) o;
+		return getSn() == that.getSn() &&
+				getStatus() == that.getStatus() &&
+				Objects.equals(getExpressId(), that.getExpressId()) &&
+				Objects.equals(getPackageId(), that.getPackageId());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(getSn(), getExpressId(), getPackageId(), getStatus());
 	}
 
 	/**

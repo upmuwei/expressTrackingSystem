@@ -17,7 +17,7 @@ public class TransHistory implements Serializable {
 	 */
 	private int sn;
 
-	private TransPackage pkg;
+	private String packageId;
 
 	/**
 	 * 接收时间
@@ -89,15 +89,15 @@ public class TransHistory implements Serializable {
 	public Float getY() {
 		return y;
 	}
-	
-	public void setPkg(TransPackage value) {
-		this.pkg = value;
+
+	public String getPackageId() {
+		return packageId;
 	}
-	
-	public TransPackage getPkg() {
-		return pkg;
+
+	public void setPackageId(String packageId) {
+		this.packageId = packageId;
 	}
-	
+
 	@Override
 	public String toString() {
 		return toString(false);
@@ -108,22 +108,16 @@ public class TransHistory implements Serializable {
 			return String.valueOf(getSn());
 		}
 		else {
-			StringBuilder sb = new StringBuilder();
-			sb.append("TransHistory[ ");
-			sb.append("SN=").append(getSn()).append(" ");
-			if (getPkg() != null) {
-				sb.append("Pkg.Persist_ID=").append(getPkg().toString(true)).append(" ");
-			}
-			else {
-				sb.append("Pkg=null ");
-				sb.append("ActTime=").append(getActTime()).append(" ");
-				sb.append("UIDFrom=").append(getuIdFrom()).append(" ");
-				sb.append("UIDTo=").append(getuIdTo()).append(" ");
-				sb.append("X=").append(getX()).append(" ");
-				sb.append("Y=").append(getY()).append(" ");
-				sb.append("]");
-			}
-			return sb.toString();
+			return "TransHistory[ " +
+					"SN=" + getSn() + " " +
+					"PackageId=" + getPackageId() + " " +
+					"Pkg=null " +
+					"ActTime=" + getActTime() + " " +
+					"UIDFrom=" + getuIdFrom() + " " +
+					"UIDTo=" + getuIdTo() + " " +
+					"X=" + getX() + " " +
+					"Y=" + getY() + " " +
+					"]";
 		}
 	}
 

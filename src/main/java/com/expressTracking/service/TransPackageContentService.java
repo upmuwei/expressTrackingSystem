@@ -21,6 +21,6 @@ public interface TransPackageContentService {
 
     public List<TransPackageContent> findByPackageIdAndStatus(String packageId, int status);
 
-    public List<TransPackageContent> findByPackageId(String packageId);
+
 
 }
