@@ -162,7 +162,11 @@ public class DomainController {
      * @return {@code HttpStatus=200, Header={"Type", "Update"}}快递订单
      */
     @RequestMapping(value = "/updateExpressSheet", method = RequestMethod.POST)
-    public ResponseEntity<ExpressSheet> updateExpressSheet(@RequestBody ExpressSheet obj) {
+    public ResponseEntity<ExpressSheet> updateExpressSheet(@RequestBody ExpressSheet obj) throws Exception {
+        ExpressSheet expressSheet = expressSheetService.get(obj.getId());
+        if (expressSheet.getStatus() != 0 && expressSheet.getStatus() != 1) {
+            throw new Exception("快递已发货，不能更改快递信息");
+        }
         expressSheetService.update(obj);
         return ResponseEntity.ok().header("Type", "Update").body(obj);
     }
@@ -173,7 +177,7 @@ public class DomainController {
      * @param uId 快递员id
      * @return {@code HttpStatus=200, Header={"Type", "Save"}}快递处于新建状态返回快递单，
      */
-    @RequestMapping(value = "/receiveExpressSheetId/id/{id}/uId/{uId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/receiveExpressSheetId/id/{id}/uId/{uId}", method = RequestMethod.POST)
     public ResponseEntity<ExpressSheet> receiveExpressSheetId(@PathVariable("id")String id, @PathVariable("uId")int uId) throws Exception {
         ExpressSheet nes = expressSheetService.get(id);
         if(nes.getStatus() != ExpressSheet.STATUS.STATUS_CREATED){
@@ -199,10 +203,13 @@ public class DomainController {
      * @param uId 派送人id
      * @return {@code HttpStatus=200, Header={"Type", "Update"}}快递单
      */
-    @RequestMapping(value = "/dispatchExpressSheetId/id/{id}/uId/{uId}", method = RequestMethod.GET)
-    public ResponseEntity<ExpressSheet> dispatchExpressSheet(@PathVariable("id")String id, @PathVariable("uId")int uId) {
+    @RequestMapping(value = "/dispatchExpressSheetId/id/{id}/uId/{uId}", method = RequestMethod.POST)
+    public ResponseEntity<ExpressSheet> dispatchExpressSheet(@PathVariable("id")String id, @PathVariable("uId")int uId) throws Exception {
         TransPackageContent transPackageContent = new TransPackageContent();
         ExpressSheet nes = expressSheetService.get(id);
+        if (nes.getStatus() != ExpressSheet.STATUS.STATUS_TRANSPORT) {
+            throw new Exception("快递状态信息错误");
+        }
         nes.setDeliver(String.valueOf(uId));
         nes.setDeliveTime(getCurrentDate());
         nes.setStatus(ExpressSheet.STATUS.STATUS_DISPATCHED);
@@ -220,9 +227,12 @@ public class DomainController {
      * @param uid 派送员id
      * @return {@code HttpStatus=200, Header={"Type", "Update"}}快递单
      */
-    @RequestMapping(value = "/deliveryExpressSheetId/id/{id}/uid/{uid}", method = RequestMethod.GET)
-    public ResponseEntity<ExpressSheet> deliveryExpressSheetId(@PathVariable("id")String id, @PathVariable("uid")int uid) {
+    @RequestMapping(value = "/deliveryExpressSheetId/id/{id}/uid/{uid}", method = RequestMethod.POST)
+    public ResponseEntity<ExpressSheet> deliveryExpressSheetId(@PathVariable("id")String id, @PathVariable("uid")int uid) throws Exception {
         ExpressSheet nes = expressSheetService.get(id);
+        if (nes.getStatus() != ExpressSheet.STATUS.STATUS_DISPATCHED) {
+            throw new Exception("快递未派送，不能交付");
+        }
         nes.setStatus(ExpressSheet.STATUS.STATUS_DELIVERIED);
         expressSheetService.update(nes);
         TransPackageContent transPackageContent = transPackageContentService.findByExpressIdAndStatus(id,
@@ -241,7 +251,7 @@ public class DomainController {
      */
     @RequestMapping(value = "/getTransPackageList/{Property}/{Restrictions}/{Value}", method = RequestMethod.GET)
     public ResponseEntity<List<TransPackage>> getTransPackageList(@PathVariable("Property")String property, @PathVariable("Restrictions")String restrictions, @PathVariable("Value")String value) throws Exception {
-        List<TransPackage> list = new ArrayList<>();
+        List<TransPackage> list;
         switch(restrictions.toLowerCase()){
             case "eq":
                 list = transPackageService.findBy(property, value );
@@ -288,8 +298,7 @@ public class DomainController {
      */
     @RequestMapping(value = "/openTransPackage/{uid}/{id}", method = RequestMethod.GET)
     public ResponseEntity<String> openTransPackage(@PathVariable("uid")int uId,@PathVariable("id")String id) throws Exception {
-        TransPackage transPackage = new TransPackage();
-        transPackage = transPackageService.get(id);
+        TransPackage transPackage = transPackageService.get(id);
         if(transPackage.getStatus() == 0){
             throw new Exception("包裹处于新建状态，未装入快件");
         }
@@ -312,6 +321,35 @@ public class DomainController {
         return ResponseEntity.ok().header("Type", "Update").body("打开包裹成功");
     }
 
+
+    /**
+     * 转运包裹
+     * @param transPackageId 包裹id
+     * @param uId 转运人员id
+     * @return {@code Body="Success", HttpStatus=200, Header={"Type", "Update"}} 成功消息
+     */
+    @RequestMapping(value = "/deliveryTransPackage/{transPackageId}", method = RequestMethod.POST)
+    public ResponseEntity<String> deliveryTransPackage(@PathVariable("transPackageId") String transPackageId,
+                                                       @PathVariable("uId")int uId) throws Exception {
+        UsersPackage usersPackage = userPackageService.findByPackageId(transPackageId);
+        if (usersPackage.getUserUid() != uId) {
+            throw new Exception("转运人员错误，不能转运");
+        }
+        TransPackage transPackage = transPackageService.get(transPackageId);
+        if (transPackage.getStatus() != 1) {
+            throw new Exception("包裹状态信息错误,不能转运");
+        }
+        transPackage.setStatus(2);
+        transPackageService.update(transPackage);
+        Set<TransPackageContent> transPackageContents = transPackage.getContent();
+        for(TransPackageContent transPackageContent:transPackageContents) {
+            ExpressSheet expressSheet = expressSheetService.get(transPackageContent.getExpressId());
+            expressSheet.setStatus(ExpressSheet.STATUS.STATUS_TRANSPORT);
+            expressSheetService.update(expressSheet);
+        }
+        return ResponseEntity.ok().header("Type", "Update").body("Success");
+    }
+
     /**
      * 确认包裹到达目的站点
      * @param transPackageId 转运包裹id
@@ -319,15 +357,15 @@ public class DomainController {
      * @param userId2 扫描员id
      * @return {@code Body="Success", HttpStatus=200, Header={"Type", "Update"}} 成功消息
      */
-    @RequestMapping(value = "/deliveryTransPackage/{transPackageId}/{userId1}/{userId2}", method = RequestMethod.POST)
-    public ResponseEntity<String> deliveryTransPackage(@PathVariable("transPackageId") String transPackageId,
+    @RequestMapping(value = "/arriveDestination/{transPackageId}/{userId1}/{userId2}", method = RequestMethod.POST)
+    public ResponseEntity<String> arriveDestination(@PathVariable("transPackageId") String transPackageId,
                                                @PathVariable("userId1")int userId1,
                                                @PathVariable("userId2") int userId2) throws Exception {
         UsersPackage usersPackage = userPackageService.findByPackageId(transPackageId);
         TransHistory transHistory = new TransHistory();
         if (usersPackage == null) {
-            throw new Exception("Unavailable packageID");
-        }else{
+            throw new Exception("为查到包裹Id");
+        } else{
             userPackageService.remove(usersPackage.getSn());
             usersPackage.setUserUid(userId2);
             usersPackage.setSn(0);
@@ -347,10 +385,15 @@ public class DomainController {
      * @param expressSheetId 快递id
      * @return {@code HttpStatus=200, Header={"Type", "Save"}}包裹内容
      */
-    @RequestMapping(value = "/packTransPackage/{transPackageId}/{expressSheetId}", method = RequestMethod.GET)
-    public ResponseEntity<TransPackageContent> packTransPackage(@PathVariable("transPackageId")String transPackageId, @PathVariable("expressSheetId")String expressSheetId) {
+    @RequestMapping(value = "/packTransPackage/{transPackageId}/{expressSheetId}", method = RequestMethod.POST)
+    public ResponseEntity<TransPackageContent> packTransPackage(@PathVariable("transPackageId")String transPackageId, @PathVariable("expressSheetId")String expressSheetId) throws Exception {
         TransPackage transPackage = transPackageService.get(transPackageId);
-        transPackage.setStatus(1);
+        if (transPackage.getStatus() == 1 || transPackage.getStatus() == 2) {
+            throw new Exception("包裹状态信息错误");
+        }
+        if (transPackage.getStatus() == 0) {
+            transPackage.setStatus(1);
+        }
         transPackageService.update(transPackage);
         TransPackageContent transPackageContent = new TransPackageContent();
         transPackageContent.setPackageId(transPackageId);
@@ -368,8 +411,7 @@ public class DomainController {
      */
     @RequestMapping(value = "/getUserPackage/{userUId}", method = RequestMethod.GET)
     public ResponseEntity<List<TransPackage>> getUsersPackage(@PathVariable("userUId")int userUId) {
-        List<UsersPackage> usersPackageList = new ArrayList<>();
-        usersPackageList = userPackageService.getTransPackageList(userUId);
+        List<UsersPackage> usersPackageList = userPackageService.getTransPackageList(userUId);
         List<TransPackage> transPackageList  = new ArrayList<>();
         for (UsersPackage usersPackage : usersPackageList) {
             TransPackage transPackage = transPackageService.get(usersPackage.getPackageId());
