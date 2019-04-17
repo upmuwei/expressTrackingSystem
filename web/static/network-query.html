@@ -1,0 +1,309 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<title>卓越物流管理系统</title>
+
+<style>
+#allmap{height:500px;width:100%;}
+#r-result{width:100%; font-size:14px;}
+
+
+.div1
+{
+	width:900px;
+	height:500px;
+	border:5px solid black;
+}
+</style>
+<link rel="stylesheet" href="css/bootstrap.css" />
+<link rel="stylesheet" href="css/css.css" />
+
+<!--百度地图API-->
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=8nTRAKtZXD0wQ1tzTpcT7lcV1tzgKYTx"></script>
+
+<script type="text/javascript" src="js/jquery1.9.0.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/sdmenu.js"></script>
+<script type="text/javascript" src="js/laydate/laydate.js"></script>
+
+</head>
+
+<body>
+<!-- <div class="header">
+	 <div class="logo"><img  src="img/网站大标题0.png" /></div>
+     
+				
+</div> -->
+<!-- 顶部 -->     
+            
+<div id="middle">
+     <div class="right"  id="mainFrame">
+     <div class="right_cont">
+<ul class="breadcrumb">当前位置：
+  <a href="#">网点管理</a> <span class="divider">/</span>
+  网点列表
+</ul>
+   <div class="title_right"><strong>节点查询</strong></div>  
+   <div style="width:900px; margin:auto">
+   
+<table class="table table-bordered">
+         <tr>
+     <td width="10%" align="right" bgcolor="#f1f1f1">节点ID：</td>
+     <td width="25%"><input style="width:200px" type="text" name="input18" id="nodeid" class="span1-1" /></td>
+	 <td width="10%" align="right" bgcolor="#f1f1f1">地区CODE：</td>
+     <td width="25%"><input style="width:200px" type="text" name="input18" id="regioncode"  class="span1-1" /></td>
+     <td width="10%" align="right" bgcolor="#f1f1f1">节点电话：</td>
+     <td width="25%"><input style="width:200px" type="text" name="" id="nodetel"  class="span1-1"  /></td>
+     </tr>
+    
+     
+</table>
+       <table  class="margin-bottom-20 table  no-border" >
+        <tr>
+     	<td class="text-center"><input id="btnchaxun" type="button" value="查询" class="btn btn-info " style="width:80px;" /></td>
+     </tr>
+ </table>
+ 
+
+       <table id="nodeinfo" class="table table-bordered">
+		<tr>
+		<td align="center" nowrap="nowrap" bgcolor="#f1f1f1"><strong>节点ID</strong></td>
+		<td align="center" nowrap="nowrap" bgcolor="#f1f1f1" style="width:100px"><strong>节点归属地</strong></td>
+		<td align="center" nowrap="nowrap" bgcolor="#f1f1f1" style="width:130px"><strong>节点名称</strong></td>
+		<td align="center" nowrap="nowrap" bgcolor="#f1f1f1" style="width:50px"><strong>节点类型</strong></td>
+		<td align="center" nowrap="nowrap" bgcolor="#f1f1f1"><strong>地区ID</strong></td>
+		<td align="center" nowrap="nowrap" bgcolor="#f1f1f1"><strong>电话</strong></td>
+		<td align="center" nowrap="nowrap" bgcolor="#f1f1f1"><strong>经度</strong></td>
+		<td align="center" nowrap="nowrap" bgcolor="#f1f1f1"><strong>纬度</strong></td>
+		</tr>
+		
+							<tr>
+							<td align="center">&nbsp;</td>
+							<td align="center">&nbsp;</td>
+							<td align="center"></td>
+							<td align="center"></td>
+							<td align="center"></td>
+							<td align="center"></td>
+							<td type="text" align="center"></td>
+							<td type="text" align="center"></td>
+							</tr>
+
+       </table>
+<table  class="margin-bottom-20 table  no-border" >
+       <td class="text-center">
+	   <!--<input type="button" value="增加" class="btn btn-info  margin-right-20" style="width:80px;" />
+	   <input type="button" value="修改" class="btn btn-info  margin-right-20" style="width:80px;" />-->
+	   <input type="button" value="查看位置" class="btn btn-info  " style="width:80px;" onclick="theLocation()" />
+	   </td>
+</table>
+
+   <!--地图模块-->
+    <div id="allmap" class="div1"></div>
+	
+	
+	
+<!--<iframe frameborder="1" width="900px" height="400px" marginheight="5px" marginwidth="5px" scrolling="YES" src="根据经纬度定位.html"></iframe> -->
+</div>
+<br><br><br><br><br><br><br><br>
+       
+</div>
+     
+     
+     </div>     
+     </div>
+    </div>
+    
+
+    
+
+ <script>
+!function(){
+laydate.skin('molv');
+laydate({elem: '#Calendar'});
+}();
+</script>
+</body>
+</html>
+<script type="text/javascript">
+	// 百度地图API功能
+	var map = new BMap.Map("allmap");
+	map.centerAndZoom(new BMap.Point(116.331398,39.897445),11);
+	map.enableScrollWheelZoom(true);
+	// 用经纬度设置地图中心点
+	function theLocation(){
+		//alert($('#111').text());
+		//alert(typeof($('#111').text()));
+		if($('#x').text() == "" && $('#y').text() == ""){
+			alert("请先查询网点信息");
+		}
+		
+		if($('#x').text() != "" && $('#y').text() != ""){
+			map.clearOverlays(); 
+			var new_point = new BMap.Point($('#x').text(),$('#y').text());
+			var marker = new BMap.Marker(new_point);  // 创建标注
+			map.addOverlay(marker);              // 将标注添加到地图中
+			map.panTo(new_point);      
+		}
+	}
+	
+	function GetQueryString(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null) return unescape(r[2]); return null;
+}
+var canshu = GetQueryString("NowUserId");
+$("#11").attr("href","1用户管理 - 查询与删除用户.html?NowUserId="+canshu);
+$("#11").attr("href","1用户管理 - 增加与编辑用户.html?NowUserId="+canshu);
+$("#21").attr("href","2营业网点运单 - 单个网点查询.html?NowUserId="+canshu);
+$("#31").attr("href","3快件管理 - 快件详细信息查询.html?NowUserId="+canshu);
+$("#32").attr("href","3快件管理 - 快件转运列表追踪.html?NowUserId="+canshu);
+$("#33").attr("href","3快件管理 - 快件转运地图追踪.html?NowUserId="+canshu);
+$("#41").attr("href","4包裹管理 - 包裹单查询.html?NowUserId="+canshu);
+$("#42").attr("href","4包裹管理 - 生成包裹单.html?NowUserId="+canshu);
+$("#51").attr("href","5任务分配 - 转运任务分配.html?NowUserId="+canshu);
+$("#52").attr("href","5任务分配 - 派送任务分配.html?NowUserId="+canshu);
+	function getoneNode(s){
+					$.ajax({
+				url:'http://localhost:8088/TestCxfHibernate/REST/Misc/'+s+'?_type=json',
+				type:'get',
+				data:{"flag":1},
+				dataType:"json",
+				  success:function(r){
+				  //console.log(r);
+				  
+						var oo = "";
+						var o = '<tr>'+
+								'<td align="center" nowrap="nowrap" bgcolor="#f1f1f1"><strong>节点ID</strong></td>'+
+								'<td align="center" nowrap="nowrap" bgcolor="#f1f1f1" style="width:100px"><strong>节点归属地</strong></td>'+
+								'<td align="center" nowrap="nowrap" bgcolor="#f1f1f1" style="width:130px"><strong>节点名称</strong></td>'+
+								'<td align="center" nowrap="nowrap" bgcolor="#f1f1f1" style="width:50px"><strong>节点类型</strong></td>'+
+								'<td align="center" nowrap="nowrap" bgcolor="#f1f1f1"><strong>地区ID</strong></td>'+
+								'<td align="center" nowrap="nowrap" bgcolor="#f1f1f1"><strong>电话</strong></td>'+
+								'<td align="center" nowrap="nowrap" bgcolor="#f1f1f1"><strong>经度</strong></td>'+
+								'<td align="center" nowrap="nowrap" bgcolor="#f1f1f1"><strong>纬度</strong></td>'+
+								'</tr>';
+								
+						$.ajax({//ajax 获取地区字符串	
+							url:'http://localhost:8088/TestCxfHibernate/REST/Misc/getRegion/'+r.regionCode+'?_type=json',
+							type:'get',
+							data:{"flag":1},
+							dataType:"json",
+							success:function(rr){
+								console.log(rr);	
+								oo = rr.prv+"&nbsp;"+rr.cty;
+								o = o 
+								+'<tr>'
+								+'<td align="center">'+r.ID+'</td>'
+								+'<td align="center">'+oo+'</td>'
+								+'<td align="center">'+r.nodeName+'</td>'
+								+'<td align="center">'+r.nodeType+'</td>'
+								+'<td align="center">'+r.regionCode+'</td>'
+								+'<td align="center">'+r.telCode+'</td>'
+								+'<td id="x" type="text" align="center">'+r.x+'</td>'
+								+'<td id="y" type="text" align="center">'+r.y+'</td>'
+								+'</tr>';
+								alert(o);
+								$("#nodeinfo").html("");
+								$("#nodeinfo").append(o);
+								
+								}//success	
+							});//ajax 获取地区字符串		
+							
+						  
+				  }//success	
+				});//ajax
+	
+	}
+	
+	function getmanyNodeByRegioncode(s){  //由于网点-地区一一对应 所以r[0]输出
+					$.ajax({
+				url:'http://localhost:8088/TestCxfHibernate/REST/Misc/'+s+'?_type=json',
+				type:'get',
+				data:{"flag":1},
+				dataType:"json",
+				  success:function(r){
+				  //console.log(r);
+				  
+						var oo = "";
+						var o = '<tr>'+
+								'<td align="center" nowrap="nowrap" bgcolor="#f1f1f1"><strong>节点ID</strong></td>'+
+								'<td align="center" nowrap="nowrap" bgcolor="#f1f1f1" style="width:100px"><strong>节点归属地</strong></td>'+
+								'<td align="center" nowrap="nowrap" bgcolor="#f1f1f1" style="width:130px"><strong>节点名称</strong></td>'+
+								'<td align="center" nowrap="nowrap" bgcolor="#f1f1f1" style="width:50px"><strong>节点类型</strong></td>'+
+								'<td align="center" nowrap="nowrap" bgcolor="#f1f1f1"><strong>地区ID</strong></td>'+
+								'<td align="center" nowrap="nowrap" bgcolor="#f1f1f1"><strong>电话</strong></td>'+
+								'<td align="center" nowrap="nowrap" bgcolor="#f1f1f1"><strong>经度</strong></td>'+
+								'<td align="center" nowrap="nowrap" bgcolor="#f1f1f1"><strong>纬度</strong></td>'+
+								'</tr>';
+								//alert(r[0].regionCode);
+						$.ajax({//ajax 获取地区字符串	
+							url:'http://localhost:8088/TestCxfHibernate/REST/Misc/getRegion/'+r[0].regionCode+'?_type=json',
+							type:'get',
+							data:{"flag":1},
+							dataType:"json",
+							success:function(rr){
+								console.log(rr);	
+								oo = rr.prv+"&nbsp;"+rr.cty;
+								o = o 
+								+'<tr>'
+								+'<td align="center">'+r[0].ID+'</td>'
+								+'<td align="center">'+oo+'</td>'
+								+'<td align="center">'+r[0].nodeName+'</td>'
+								+'<td align="center">'+r[0].nodeType+'</td>'
+								+'<td align="center">'+r[0].regionCode+'</td>'
+								+'<td align="center">'+r[0].telCode+'</td>'
+								+'<td id="x" type="text" align="center">'+r[0].x+'</td>'
+								+'<td id="y" type="text" align="center">'+r[0].y+'</td>'
+								+'</tr>';
+								alert(o);
+								$("#nodeinfo").html("");
+								$("#nodeinfo").append(o);
+								
+								}//success	
+							});//ajax 获取地区字符串		
+							
+						  
+				  }//success	
+				});//ajax
+	
+	}
+	
+	
+	$(function(){ //自动执行
+
+		//alert("welcome");
+		
+		$("#btnchaxun").click(function(){
+			//alert("XXX");
+			if($("#nodeid").val()!=""){ //nodeid框 有值
+				var condition = $("#nodeid").val();
+				var s = "getNode/"+condition;
+				getoneNode(s);
+			}
+			else {//
+				if($("#regioncode").val()!=""){//
+					var condition = $("#regioncode").val();
+					var s = "getNodeByRegionCode/"+condition;
+					getmanyNodeByRegioncode(s);
+				}
+				else{
+					if($("#nodetel").val()!=""){
+						var condition = $("#nodetel").val();
+						var s = "getNodeByTel/"+condition;
+						getoneNode(s);
+					}
+					else{
+						alert("输入框不能为空！");
+					}
+				}
+			}
+			
+
+		
+		});//查询按钮事件
+	});//自动执行
+		
+</script>
+
