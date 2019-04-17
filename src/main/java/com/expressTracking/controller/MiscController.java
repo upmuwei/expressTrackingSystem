@@ -282,30 +282,25 @@ public class MiscController {
 	public ResponseEntity<String> appointTransPorter(@PathVariable("packageId")String packageId,
 									 @PathVariable("nodeUId")int nodeUId,@PathVariable("userId")int userId) throws Exception {
         UsersPackage usersPackage = userPackageService.findByPackageId(packageId);
+        TransPackage transPackage = transPackageService.get(packageId);
         if (usersPackage == null) {
             throw new Exception("包裹id不存在");
-        }else{
-            TransHistory transHistory = new TransHistory();
-            TransPackage transPackage = transPackageService.get(packageId);
-            Set<TransPackageContent> transPackageContents = transPackage.getContent();
-            for (TransPackageContent transPackageContent : transPackageContents) {
-                ExpressSheet expressSheet = expressSheetService.get(transPackageContent.getExpressId());
-                expressSheet.setStatus(ExpressSheet.STATUS.STATUS_TRANSPORT);
-                expressSheetService.update(expressSheet);
-			}
-			userPackageService.remove(usersPackage.getSn());
-			usersPackage.setUserUid(userId);
-			usersPackage.setSn(0);
-			userPackageService.save(usersPackage);
-			transHistory.setuIdFrom(nodeUId);
-			transHistory.setuIdTo(userId);
-			transHistory.setActTime(getCurrentDate());
-			transHistory.setPackageId(packageId);
-			transHistoryService.save(transHistory);
-			return ResponseEntity.ok().header("Type","Update").body("Success");
+        }else if (transPackage.getStatus() == 2) {
+			throw  new Exception("包裹处于转运状态，不能为其指派转运员");
+        } else {
+        	TransHistory transHistory = new TransHistory();
+        	userPackageService.remove(usersPackage.getSn());
+        	usersPackage.setUserUid(userId);
+        	usersPackage.setSn(0);
+        	userPackageService.save(usersPackage);
+        	transHistory.setuIdFrom(nodeUId);
+        	transHistory.setuIdTo(userId);
+        	transHistory.setActTime(getCurrentDate());
+        	transHistory.setPackageId(packageId);
+        	transHistoryService.save(transHistory);
+        	return ResponseEntity.ok().header("Type","Update").body("Success");
 		}
 	}
-
 
 	/**
 	 * 获得包裹历史记录
