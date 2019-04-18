@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,9 +35,11 @@ public class UserController {
      * @return {@code HttpStatus=200, Header={"Type", "Select"}}返回用户信息
      */
     @RequestMapping(value = "/doLogin/{uId}/{pwd}", method = RequestMethod.GET)
-    public ResponseEntity<UserInfo> doLogin(@PathVariable("uId") int uId, @PathVariable("pwd") String pwd) {
+    public ResponseEntity<UserInfo> doLogin(HttpSession session, @PathVariable("uId") int uId, @PathVariable("pwd") String pwd) {
         UserInfo userInfo = userInfoService.checkLogin(uId, pwd);
-        return ResponseEntity.ok().header("Type", "Select").body(userInfo);
+        int sessionId = Integer.hashCode(uId);
+        session.setAttribute(String.valueOf(sessionId), userInfo);
+        return ResponseEntity.ok().header("session", String.valueOf(sessionId)).body(userInfo);
     }
 
     /**
@@ -43,7 +47,9 @@ public class UserController {
      * @return {@code HttpStatus=200, Header={"Type", "Select"}}退出登录成功信息
      */
     @RequestMapping(value = "/doLogout")
-    public ResponseEntity<String> doLogout() {
+    public ResponseEntity<String> doLogout(HttpSession session, HttpServletRequest request) {
+        String sessionId = request.getHeader("session");
+        session.removeAttribute(sessionId);
         return ResponseEntity.ok().header("Type", "Select").body("成功退出登录");
     }
 

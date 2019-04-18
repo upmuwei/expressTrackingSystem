@@ -14,14 +14,17 @@
         <result property="y" column="y"/>
     </resultMap>
 
-    <select id="get" parameterType="String" resultMap="transNodeMap">
+    <sql id="transNode_get">
         select ID, NodeName, NodeType, RegionCode, TelCode, x, y
-        from transnode where id=#{id};
+        from transnode
+    </sql>
+
+    <select id="get" parameterType="String" resultMap="transNodeMap">
+        <include refid="transNode_get"/> where id=#{id};
     </select>
 
     <select id="findByRegionCodeAndType" resultMap="transNodeMap">
-        select ID, NodeName, NodeType, RegionCode, TelCode, x, y
-        from transnode where RegionCode=#{regionCode}  and NodeType=#{type};
+        <include refid="transNode_get"/> where RegionCode=#{regionCode}  and NodeType=#{type};
     </select>
 
     <insert id="insert" parameterType="TransNode">

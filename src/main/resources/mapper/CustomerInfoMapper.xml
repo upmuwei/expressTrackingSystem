@@ -14,13 +14,17 @@
         <result property="postCode" column="PostCode"/>
     </resultMap>
 
+    <sql id="user_get">
+        select ID, Name, TelCode, Department, RegionCode, Address, PostCode
+        FROM customerinfo
+    </sql>
+
     <select id="get" parameterType="int" resultMap="customerInfoMap">
-        select ID, Name, TelCode, Department, RegionCode, Address, PostCode
-        FROM customerinfo where ID = #{id};
+        <include refid="user_get"/> where ID = #{id};
     </select>
+
     <select id="findByName" parameterType="String" resultMap="customerInfoMap">
-        select ID, Name, TelCode, Department, RegionCode, Address, PostCode
-        FROM customerinfo where name=#{name};
+        <include refid="user_get"/> where name=#{name};
     </select>
 
     <delete id="delete" parameterType="int">
@@ -28,8 +32,7 @@
     </delete>
 
     <select id="findByTelCode" parameterType="String" resultMap="customerInfoMap">
-        select ID, Name, TelCode, Department, RegionCode, Address, PostCode
-        FROM customerinfo where TelCode=#{telCode} ;
+        <include refid="user_get"/> where TelCode=#{telCode} ;
     </select>
 
     <insert id="insert" parameterType="CustomerInfo">

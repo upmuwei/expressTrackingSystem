@@ -43,16 +43,18 @@
         where id=#{id}
     </update>
 
-    <select id="get" parameterType="String" resultMap="expressSheetMap">
+    <sql id="express_get">
         select ID, Type, Weight, TranFee, PackageFee, InsuFee, Accepter, Deliver,
                AccepteTime, DeliveTime, Acc1, Acc2, Status, Sender, Recever
-        from expresssheet where ID = #{id}
+        from expresssheet
+    </sql>
+
+    <select id="get" parameterType="String" resultMap="expressSheetMap">
+         <include refid="express_get"/> where ID = #{id}
     </select>
 
     <select id="findBy" resultMap="expressSheetMap">
-        select ID, Type, Weight, TranFee, PackageFee, InsuFee, Accepter, Deliver,
-        AccepteTime, DeliveTime, Acc1, Acc2, Status, Sender, Recever
-        from expresssheet
+        <include refid="express_get"/>
         <where>
             <choose>
                 <when test="propertyName == 'ID'">
@@ -75,9 +77,7 @@
     </select>
 
     <select id="findLike" resultMap="expressSheetMap">
-        select ID, Type, Weight, TranFee, PackageFee, InsuFee, Accepter, Deliver,
-               AccepteTime, DeliveTime, Acc1, Acc2, Status, Sender, Recever
-        from expresssheet
+        <include refid="express_get"/>
         <where>
             <choose>
                 <when test="propertyName == 'ID'">

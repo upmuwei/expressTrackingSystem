@@ -40,10 +40,13 @@
         insert into transpackage(id, sourcenode, targetnode, createtime, status)
         values (#{id},#{sourceNode} ,#{targetNode} ,#{createTime} ,#{status} )
     </insert>
-
-    <select id="findBy" resultMap="transPackageMap">
+    <sql id="transPackage_get">
         select id, sourcenode, targetnode, createtime, status
         from transpackage
+    </sql>
+
+    <select id="findBy" resultMap="transPackageMap">
+        <include refid="transPackage_get"/>
         <where>
             <choose>
                 <when test="propertyName == 'ID'">
@@ -63,8 +66,7 @@
     </select>
 
     <select id="findLike" resultMap="transPackageMap">
-        select id, sourcenode, targetnode, createtime, status
-        from transpackage
+        <include refid="transPackage_get"/>
         <where>
             <choose>
                 <when test="propertyName == 'ID'">
