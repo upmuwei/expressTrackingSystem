@@ -3,6 +3,7 @@ package com.expressTracking.exception;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -23,7 +24,7 @@ public class MyExceptionHandler {
     public ResponseEntity<String> exp(Exception e, HttpServletRequest request) {
         LOGGER.error(request.getRequestURI() + e.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(e.getMessage());
+                .body("{\"message\":\"" + e.getMessage() + "\"}");
     }
 
 }

@@ -11,7 +11,17 @@
 
     <mvc:interceptors>
         <mvc:interceptor>
-            <mvc:mapping path="/*"/>
+            <mvc:mapping path="/misc/*"/>
+            <mvc:mapping path="/misc/*/*"/>
+            <mvc:mapping path="/misc/*/*/*"/>
+            <mvc:mapping path="/domain/*"/>
+            <mvc:mapping path="/domain/*/*"/>
+            <mvc:mapping path="/domain/*/*/*"/>
+            <mvc:mapping path="/domain/*/*/*/*"/>
+            <mvc:mapping path="/domain/*/*/*/*/*"/>
+            <mvc:mapping path="/user/*/*"/>
+            <mvc:mapping path="/user/*/*/*"/>
+            <mvc:mapping path="/user/*/*/*/*"/>
             <bean class="com.expressTracking.interceptor.MyInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
@@ -19,11 +29,17 @@
     <mvc:annotation-driven>
         <mvc:message-converters>
             <bean class="org.springframework.http.converter.StringHttpMessageConverter">
-                <property name="supportedMediaTypes" value="text/plain;charset=UTF-8" />
+                <property name="supportedMediaTypes" value="application/json;charset=UTF-8"/>
             </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
-
+<!--    <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+        <property name="interceptors">
+            <list>
+                <bean class="com.mvc.MyInteceptor"></bean>
+            </list>
+        </property>
+    </bean>-->
     <context:component-scan base-package="com.expressTracking" />
 
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">

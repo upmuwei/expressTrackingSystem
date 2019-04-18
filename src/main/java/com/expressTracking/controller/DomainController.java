@@ -318,7 +318,7 @@ public class DomainController {
             expressSheet.setStatus(ExpressSheet.STATUS.STATUS_PARTATION);
             expressSheetService.update(expressSheet);
         }
-        return ResponseEntity.ok().header("Type", "Update").body("打开包裹成功");
+        return ResponseEntity.ok().header("Type", "Update").body("{\"message\":\"打开包裹成功\"}");
     }
 
 
@@ -347,7 +347,7 @@ public class DomainController {
             expressSheet.setStatus(ExpressSheet.STATUS.STATUS_TRANSPORT);
             expressSheetService.update(expressSheet);
         }
-        return ResponseEntity.ok().header("Type", "Update").body("Success");
+        return ResponseEntity.ok().header("Type", "Update").body("{\"message\":\"Success\"}");
     }
 
     /**
@@ -364,7 +364,7 @@ public class DomainController {
         UsersPackage usersPackage = userPackageService.findByPackageId(transPackageId);
         TransHistory transHistory = new TransHistory();
         if (usersPackage == null) {
-            throw new Exception("为查到包裹Id");
+            throw new Exception("未查到包裹Id");
         } else{
             userPackageService.remove(usersPackage.getSn());
             usersPackage.setUserUid(userId2);

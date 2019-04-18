@@ -3,10 +3,12 @@ package com.expressTracking.interceptor;
 import com.expressTracking.exception.MyExceptionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
 
 public class MyInterceptor extends HandlerInterceptorAdapter {
 
@@ -17,14 +19,27 @@ public class MyInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+
         String sessionId = request.getHeader("session");
         if (sessionId == null) {
-            response.sendError(401, "非法访问,请登录");
+            PrintWriter writer = response.getWriter();
+            writer.print("{\"message\":\"非法访问,请登录\"}");
+            response.setContentType("application/json;charset=UTF-8");
+            response.setStatus(401);
             return false;
         } else if (request.getSession().getAttribute(sessionId) == null) {
+            PrintWriter writer = response.getWriter();
+            writer.print("{\"message\":\"非法访问,请登录\"}");
+            response.setContentType("application/json;charset=UTF-8");
             response.sendError(401, "非法访问,请登录");
             return false;
         }
-        return true;
+        return false;
+      //  return true;
+    }
+
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+
     }
 }

@@ -50,7 +50,7 @@ public class UserController {
     public ResponseEntity<String> doLogout(HttpSession session, HttpServletRequest request) {
         String sessionId = request.getHeader("session");
         session.removeAttribute(sessionId);
-        return ResponseEntity.ok().header("Type", "Select").body("成功退出登录");
+        return ResponseEntity.ok().header("Type", "Select").body("{\"message\":\"成功退出登录\"}");
     }
 
     /**
@@ -86,9 +86,9 @@ public class UserController {
     @RequestMapping(value = "/deleteUserInfo/{uId}", method = RequestMethod.DELETE)
     public ResponseEntity<String> deleteUserInfo(@PathVariable("uId") int uId) {
         if (userInfoService.delete(uId) == 1) {
-            return ResponseEntity.ok().header("Type", "Delete").body("删除成功");
+            return ResponseEntity.ok().header("Type", "Delete").body("{\"message\":\"删除成功\"}");
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("删除失败");
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\":\"删除失败\"}");
     }
 
     /**
