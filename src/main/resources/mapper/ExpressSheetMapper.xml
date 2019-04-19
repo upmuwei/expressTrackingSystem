@@ -25,23 +25,23 @@
 
     <update id="update" parameterType="ExpressSheet" >
         update expresssheet
-        <set>
-            <if test="type != null and type != ''"> type=#{type}, </if>
-            <if test="sender != null"> sender=#{sender},  </if>
-            <if test="recever != null">  recever =#{recever}, </if>
+        <trim prefix="set" suffixOverrides=",">
+            <if test="type != null"> type=#{type,jdbcType=INTEGER}, </if>
+            <if test="sender != 0"> sender=#{sender},  </if>
+            <if test="recever != 0">  recever =#{recever}, </if>
             <if test="weight != null"> weight=#{weight},  </if>
-            <if test="tranFee != null"> TranFee=#{tranFee} , </if>
-            <if test="packageFee != null"> PackageFee=#{packageFee} , </if>
-            <if test="insuFee != null"> InsuFee=#{insuFee} , </if>
-            <if test="accepter != null and accepter != ''"> Accepter=#{accepter} ,</if>
-            <if test="deliver != null and deliver != ''"> Deliver=#{deliver} , </if>
-            <if test="accepteTime != null"> AccepteTime=#{accepteTime} , </if>
-            <if test="deliveTime != null and deliveTime != ''"> DeliveTime=#{deliveTime} , </if>
-            <if test="acc1 != null and acc1 != ''"> acc1=#{acc1}, </if>
-            <if test="acc2 != null and acc2 != ''"> acc2=#{acc2}, </if>
+            <if test="tranFee != null"> TranFee=#{tranFee}, </if>
+            <if test="packageFee != null"> PackageFee=#{packageFee}, </if>
+            <if test="insuFee != null"> InsuFee=#{insuFee}, </if>
+            <if test="accepter != null and accepter != ''"> Accepter=#{accepter,jdbcType=VARCHAR},</if>
+            <if test="deliver != null and deliver != ''"> Deliver=#{deliver,jdbcType=VARCHAR}, </if>
+            <if test="accepteTime != null"> AccepteTime=#{accepteTime}, </if>
+            <if test="deliveTime != null and deliveTime != ''"> DeliveTime=#{deliveTime}, </if>
+            <if test="acc1 != null and acc1 != ''"> acc1=#{acc1,jdbcType=VARCHAR}, </if>
+            <if test="acc2 != null and acc2 != ''"> acc2=#{acc2,jdbcType=VARCHAR}, </if>
             <if test="status != null"> Status=#{status} </if>
-        </set>
-        where id=#{id}
+        </trim>
+        where id=#{id,jdbcType=VARCHAR}
     </update>
 
     <sql id="express_get">
@@ -59,19 +59,22 @@
         <where>
             <choose>
                 <when test="propertyName == 'ID'">
-                    ID = #{value}
+                    ID = #{value,jdbcType=VARCHAR}
                 </when>
                 <when test="propertyName == 'Sender'">
-                    and Sender = #{value}
+                    and Sender = #{value,jdbcType=INTEGER}
                 </when>
                 <when test="propertyName == 'Recever'">
-                    and Recever = #{value}
+                    and Recever = #{value,jdbcType=INTEGER}
                 </when>
                 <when test="propertyName == 'Accepter'">
-                    and Accepter = #{value}
+                    and Accepter = #{value,jdbcType=VARCHAR}
                 </when>
                 <when test="propertyName == 'Deliver'">
-                    and Deliver = #{value}
+                    and Deliver = #{value,jdbcType=VARCHAR}
+                </when>
+                <when test="propertyName == 'Status'">
+                    and Status = #{value,jdbcType=INTEGER}
                 </when>
             </choose>
         </where>
@@ -82,19 +85,22 @@
         <where>
             <choose>
                 <when test="propertyName == 'ID'">
-                    ID like #{value}
+                    ID like #{value,jdbcType=VARCHAR}
                 </when>
                 <when test="propertyName == 'Sender'">
-                    and Sender like #{value}
+                    and Sender like #{value,jdbcType=INTEGER}
                 </when>
                 <when test="propertyName == 'Recever'">
-                    and Recever like #{value}
+                    and Recever like #{value,jdbcType=INTEGER}
                 </when>
                 <when test="propertyName == 'Accepter'">
-                    and Accepter like #{value}
+                    and Accepter like #{value,jdbcType=VARCHAR}
                 </when>
                 <when test="propertyName == 'Deliver'">
-                    and Deliver like #{value}
+                    and Deliver like #{value,jdbcType=VARCHAR}
+                </when>
+                <when test="propertyName == 'Status'">
+                    and Status like #{value,jdbcType=INTEGER}
                 </when>
             </choose>
         </where>
@@ -200,7 +206,7 @@
     </insert>
     
     <delete id="delete" parameterType="String">
-        delete from expresssheet where id=#{id}
+        delete from expresssheet where id=#{id,jdbcType=VARCHAR}
     </delete>
 
 </mapper>

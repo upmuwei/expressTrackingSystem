@@ -2,6 +2,8 @@ package com.expressTracking.controller;
 
 import com.expressTracking.entity.UserInfo;
 import com.expressTracking.service.UserInfoService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,6 +22,8 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/user")
 public class UserController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
     private final UserInfoService userInfoService;
 
@@ -42,6 +46,9 @@ public class UserController {
         if (userInfo == null) {
             throw new Exception("账号或密码错误");
         }
+
+        LOGGER.info(userInfo.getuId() + userInfo.getName() + "登录");
+
         session.setAttribute(String.valueOf(uId), userInfo);
         return ResponseEntity.ok().header("session", String.valueOf(uId)).body(userInfo);
     }
@@ -53,6 +60,8 @@ public class UserController {
     @RequestMapping(value = "/doLogout")
     public ResponseEntity<String> doLogout(HttpSession session, HttpServletRequest request) {
         String sessionId = request.getHeader("session");
+        UserInfo userInfo = (UserInfo) session.getAttribute(sessionId);
+        LOGGER.info(userInfo.getuId() + userInfo.getName() + "退出登录");
         session.removeAttribute(sessionId);
         return ResponseEntity.ok().header("Type", "Select")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)

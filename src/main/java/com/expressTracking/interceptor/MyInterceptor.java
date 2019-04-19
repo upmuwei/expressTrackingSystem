@@ -25,15 +25,16 @@ public class MyInterceptor extends HandlerInterceptorAdapter {
             writer.print("{\"message\":\"非法访问,请登录\"}");
             response.setContentType("application/json;charset=UTF-8");
             response.setStatus(401);
+            LOGGER.error(request.getRequestURI() + "非法访问");
             return false;
         } else if (request.getSession().getAttribute(sessionId) == null) {
             PrintWriter writer = response.getWriter();
             writer.print("{\"message\":\"非法访问,请登录\"}");
             response.setContentType("application/json;charset=UTF-8");
             response.sendError(401, "非法访问,请登录");
+            LOGGER.error(request.getRequestURI() + "非法访问");
             return false;
-        }
-        return false;*/
+        }*/
         return true;
     }
 

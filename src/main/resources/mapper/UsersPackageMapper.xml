@@ -15,19 +15,19 @@
     </sql>
 
     <select id="getByUserUId" parameterType="int" resultMap="userPackageMap">
-         <include refid="usersPackage_get"/> where UserUID=#{userUId};
+         <include refid="usersPackage_get"/> where UserUID=#{userUId,jdbcType=INTEGER} ;
     </select>
 
     <select id="getByPackageId" parameterType="string" resultMap="userPackageMap">
-        <include refid="usersPackage_get"/> where PackageID = #{packageId} ;
+        <include refid="usersPackage_get"/> where PackageID = #{packageId,jdbcType=VARCHAR}  ;
     </select>
     <insert id="insert" parameterType="UsersPackage" >
         insert into userspackage(UserUID, PackageID)
-        values (#{userUid},#{packageId} );
+        values (#{userUid,jdbcType=INTEGER} ,#{packageId,jdbcType=VARCHAR}  );
     </insert>
 
     <delete id="delete" parameterType="int">
-        delete from userspackage where sn=#{sn};
+        delete from userspackage where sn=#{sn,jdbcType=INTEGER} ;
     </delete>
 
 </mapper>

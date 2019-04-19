@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
@@ -97,7 +96,7 @@ public class MiscController {
      * @return {@code HttpStatus=200, Header={"Type", "Save"}}节点信息
      */
 	@RequestMapping(value = "/saveNode",method = RequestMethod.POST)
-	public ResponseEntity<TransNode> saveNodesList(@Validated @RequestBody TransNode transNode) {
+	public ResponseEntity<TransNode> saveNodesList(@RequestBody TransNode transNode) {
 		transNodeService.save(transNode);
 		return ResponseEntity.ok().header("Type", "Save").body(transNode);
 
