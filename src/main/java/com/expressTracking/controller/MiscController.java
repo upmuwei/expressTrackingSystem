@@ -32,23 +32,19 @@ public class MiscController {
 
 	private final UserPackageService userPackageService;
 
-
-	private final ExpressSheetService expressSheetService;
-
 	private final TransPackageService transPackageService;
 
 	@Autowired
 	public MiscController(TransNodeService transNodeService, CustomerInfoService customerInfoService,
 						  RegionService regionService, PackageRouteService packageRouteService,
 						  TransHistoryService transHistoryService, UserPackageService userPackageService,
-						  ExpressSheetService expressSheetService, TransPackageService transPackageService) {
+						  TransPackageService transPackageService) {
 		this.transNodeService = transNodeService;
 		this.customerInfoService = customerInfoService;
 		this.regionService = regionService;
 		this.packageRouteService = packageRouteService;
 		this.transHistoryService = transHistoryService;
 		this.userPackageService = userPackageService;
-		this.expressSheetService = expressSheetService;
 		this.transPackageService = transPackageService;
 	}
 
@@ -159,6 +155,7 @@ public class MiscController {
 	public ResponseEntity<String> deleteCustomerInfo(@PathVariable("id") int id) {
 		//customerInfoService.removeById(id);
 		return ResponseEntity.ok().header("Type", "Delete")
+				.contentType(MediaType.APPLICATION_JSON_UTF8)
 				.body("{\"message\":\"删除成功\"}");
 	}
 
@@ -302,7 +299,9 @@ public class MiscController {
         	transHistory.setActTime(getCurrentDate());
         	transHistory.setPackageId(packageId);
         	transHistoryService.save(transHistory);
-        	return ResponseEntity.ok().header("Type","Update").body("{\"message\":\"Success\"}");
+        	return ResponseEntity.ok().header("Type","Update")
+					.contentType(MediaType.APPLICATION_JSON_UTF8)
+					.body("{\"message\":\"Success\"}");
 		}
 	}
 

@@ -24,6 +24,7 @@ public class MyExceptionHandler {
     public ResponseEntity<String> exp(Exception e, HttpServletRequest request) {
         LOGGER.error(request.getRequestURI() + e.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body("{\"message\":\"" + e.getMessage() + "\"}");
     }
 

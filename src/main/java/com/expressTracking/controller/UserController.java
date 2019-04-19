@@ -4,9 +4,9 @@ import com.expressTracking.entity.UserInfo;
 import com.expressTracking.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sun.security.provider.MD5;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -42,7 +42,6 @@ public class UserController {
             throw new Exception("账号或密码错误");
         }
 
-//       int sessionId = Integer.hashCode(uId);
         session.setAttribute(String.valueOf(uId), userInfo);
         return ResponseEntity.ok().header("session", String.valueOf(uId)).body(userInfo);
     }
@@ -55,7 +54,9 @@ public class UserController {
     public ResponseEntity<String> doLogout(HttpSession session, HttpServletRequest request) {
         String sessionId = request.getHeader("session");
         session.removeAttribute(sessionId);
-        return ResponseEntity.ok().header("Type", "Select").body("{\"message\":\"成功退出登录\"}");
+        return ResponseEntity.ok().header("Type", "Select")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .body("{\"message\":\"成功退出登录\"}");
     }
 
     /**

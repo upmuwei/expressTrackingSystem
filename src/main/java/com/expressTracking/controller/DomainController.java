@@ -98,7 +98,7 @@ public class DomainController {
                     new File("D:\\expressTracking\\images\\",
                             expressId));
         }
-        return ResponseEntity.ok().header("Type","Save").contentType(MediaType.IMAGE_JPEG).body(file.getBytes());
+        return ResponseEntity.ok().header("Type","Save").body(file.getBytes());
     }
 
     /**
@@ -114,7 +114,7 @@ public class DomainController {
         FileInputStream file = new FileInputStream(path);
         byte[] buff = new byte[file.available()];
         file.read(buff);
-        return ResponseEntity.ok().header("Type", "Select").contentType(MediaType.IMAGE_JPEG).body(buff);
+        return ResponseEntity.ok().header("Type", "Select").body(buff);
     }
 
     /**
@@ -319,7 +319,9 @@ public class DomainController {
             expressSheet.setStatus(ExpressSheet.STATUS.STATUS_PARTATION);
             expressSheetService.update(expressSheet);
         }
-        return ResponseEntity.ok().header("Type", "Update").body("{\"message\":\"打开包裹成功\"}");
+        return ResponseEntity.ok().header("Type", "Update")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .body("{\"message\":\"打开包裹成功\"}");
     }
 
 
@@ -348,7 +350,9 @@ public class DomainController {
             expressSheet.setStatus(ExpressSheet.STATUS.STATUS_TRANSPORT);
             expressSheetService.update(expressSheet);
         }
-        return ResponseEntity.ok().header("Type", "Update").body("{\"message\":\"Success\"}");
+        return ResponseEntity.ok().header("Type", "Update")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .body("{\"message\":\"Success\"}");
     }
 
     /**
@@ -376,7 +380,9 @@ public class DomainController {
             transHistory.setuIdTo(userId2);
             transHistory.setPackageId(transPackageId);
             transHistoryService.save(transHistory);
-            return ResponseEntity.ok().header("Type", "Update").body("Success");
+            return ResponseEntity.ok().header("Type", "Update")
+                    .contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .body("{\"message\":\"Success\"}");
         }
     }
 

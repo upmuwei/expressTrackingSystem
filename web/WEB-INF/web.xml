@@ -17,7 +17,6 @@
     </listener>
     <!-- 配置DispatcherServlet -->
     <servlet>
-        <!-- 注意：Spring MVC框架会根据servlet-name配置，找到/WEB-INF/dispatcher-servlet.xml作为配置文件载入Web工程中 -->
         <servlet-name>dispatcher</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
         <init-param>
@@ -45,6 +44,12 @@
             <param-value>true</param-value>
         </init-param>
     </filter>
+
+    <filter-mapping>
+        <filter-name>setCharacterEncoding</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
     <!--CORS 跨域资源访问-->
     <filter>
         <filter-name>CORS</filter-name>
@@ -72,14 +77,6 @@
     </filter>
     <filter-mapping>
         <filter-name>CORS</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-
-
-
-
-    <filter-mapping>
-        <filter-name>setCharacterEncoding</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
