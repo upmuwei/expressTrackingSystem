@@ -7,8 +7,9 @@
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
         http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd ">
 
-    <mvc:default-servlet-handler/>
+    <!--<mvc:default-servlet-handler/>-->
 
+    <mvc:resources mapping="/**" location="static/"/>
     <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/misc/*"/>

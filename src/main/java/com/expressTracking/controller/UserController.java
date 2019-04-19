@@ -33,7 +33,7 @@ public class UserController {
      * 登录
      * @param uId 用户id
      * @param pwd 密码
-     * @return {@code HttpStatus=200, Header={"Type", "Select"}}返回用户信息
+     * @return {@code HttpStatus=200, Header={"session", "String.valueOf(uId)"}}返回用户信息
      */
     @RequestMapping(value = "/doLogin/{uId}/{pwd}", method = RequestMethod.GET)
     public ResponseEntity<UserInfo> doLogin(HttpSession session, @PathVariable("uId") int uId, @PathVariable("pwd") String pwd) throws Exception {
@@ -41,7 +41,6 @@ public class UserController {
         if (userInfo == null) {
             throw new Exception("账号或密码错误");
         }
-
         session.setAttribute(String.valueOf(uId), userInfo);
         return ResponseEntity.ok().header("session", String.valueOf(uId)).body(userInfo);
     }
