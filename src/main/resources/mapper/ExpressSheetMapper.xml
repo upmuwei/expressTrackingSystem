@@ -22,6 +22,7 @@
         <association property="recever" column="recever"
                      select="com.expressTracking.dao.CustomerInfoDao.get" />
     </resultMap>
+
     <update id="update" parameterType="ExpressSheet" >
         update expresssheet
         <set>
@@ -101,12 +102,101 @@
 
 
     <insert id="insert" parameterType="ExpressSheet">
-        insert into expresssheet(ID, Type, Sender, Recever, Weight,
-                                 TranFee, PackageFee, InsuFee, Accepter,
-                                 Deliver, AccepteTime, DeliveTime, Acc1, Acc2, Status)
-            values(#{id},#{type},#{sender.id},#{recever.id},#{weight},
-                   #{tranFee},#{packageFee},#{insuFee},#{accepter},
-                   #{deliver},#{accepteTime},#{deliveTime},#{acc1},#{acc2},#{status})
+        insert into expresssheet
+          <trim prefix="(" suffix=")" suffixOverrides=",">
+              <if test="id != null and id != ''">
+                  ID,
+              </if>
+              <if test="type != null">
+                  Type,
+              </if>
+              <if test="sender != null">
+                  Sender,
+              </if>
+              <if test="recever != null">
+                  Recever,
+              </if>
+              <if test="weight != null">
+                  Weight,
+              </if>
+              <if test="tranFee != null">
+                  TranFee,
+              </if>
+              <if test="packageFee != null">
+                  PackageFee,
+              </if>
+              <if test="insuFee != null">
+                  InsuFee,
+              </if>
+              <if test="accepter != null and accepter != ''">
+                  Accepter,
+              </if>
+              <if test="deliver != null and deliver != ''">
+                  Deliver,
+              </if>
+              <if test="accepteTime != null">
+                  AccepteTime,
+              </if>
+              <if test="deliveTime != null">
+                  DeliveTime,
+              </if>
+              <if test="acc1 != null and acc1 != ''">
+                  Acc1,
+              </if>
+              <if test="acc2 != null and acc2 != ''">
+                  Acc2,
+              </if>
+              <if test="status != null">
+                  Status,
+              </if>
+          </trim>
+          <trim prefix="values(" suffix=")" suffixOverrides=",">
+              <if test="id != null and id != ''">
+                  #{id},
+              </if>
+              <if test="type != null">
+                  #{type},
+              </if>
+              <if test="sender != null">
+                  #{sender.id},
+              </if>
+              <if test="recever != null">
+                  #{recever.id},
+              </if>
+              <if test="weight != null">
+                  #{weight},
+              </if>
+              <if test="tranFee != null">
+                  #{tranFee},
+              </if>
+              <if test="packageFee != null">
+                  #{packageFee},
+              </if>
+              <if test="insuFee != null">
+                  #{insuFee},
+              </if>
+              <if test="accepter != null and accepter != ''">
+                  #{accepter},
+              </if>
+              <if test="deliver != null and deliver != ''">
+                  #{deliver},
+              </if>
+              <if test="accepteTime != null">
+                  #{accepteTime},
+              </if>
+              <if test="deliveTime != null">
+                  #{deliveTime},
+              </if>
+              <if test="acc1 != null and acc1 != ''">
+                  #{acc1},
+              </if>
+              <if test="acc2 != null and acc2 != ''">
+                  #{acc2},
+              </if>
+              <if test="status != null">
+                  #{status},
+              </if>
+          </trim>
     </insert>
     
     <delete id="delete" parameterType="String">

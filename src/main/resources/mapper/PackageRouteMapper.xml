@@ -12,7 +12,8 @@
     </resultMap>
 
     <insert id="insert" parameterType="PackageRoute">
-        insert into packageroute(PackageID, x, y, tm) values(#{packageId},#{x},#{y},#{tm});
+        insert into packageroute
+        (PackageID, x, y, tm) values(#{packageId},#{x},#{y},#{tm});
     </insert>
 
     <update id="update" parameterType="PackageRoute"  >

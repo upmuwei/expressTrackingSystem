@@ -6,15 +6,15 @@ import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * @author 19231
+ * @author muwei
  * @date 2019/4/5
  */
 @RequestMapping("/domain")
@@ -178,8 +178,9 @@ public class DomainController {
      * @param uId 快递员id
      * @return {@code HttpStatus=200, Header={"Type", "Save"}}快递处于新建状态返回快递单，
      */
-    @RequestMapping(value = "/receiveExpressSheetId/id/{id}/uId/{uId}", method = RequestMethod.POST)
-    public ResponseEntity<ExpressSheet> receiveExpressSheetId(@PathVariable("id")String id, @PathVariable("uId")int uId) throws Exception {
+    @RequestMapping(value = "/receiveExpressSheetId/{id}/{uId}", method = RequestMethod.POST)
+    public ResponseEntity<ExpressSheet> receiveExpressSheetId(@PathVariable("id")String id,
+                                                              @PathVariable("uId")int uId) throws Exception {
         ExpressSheet nes = expressSheetService.get(id);
         if(nes.getStatus() != ExpressSheet.STATUS.STATUS_CREATED){
             throw new Exception("快件运单状态错误!无法收件!");
@@ -204,8 +205,9 @@ public class DomainController {
      * @param uId 派送人id
      * @return {@code HttpStatus=200, Header={"Type", "Update"}}快递单
      */
-    @RequestMapping(value = "/dispatchExpressSheetId/id/{id}/uId/{uId}", method = RequestMethod.POST)
-    public ResponseEntity<ExpressSheet> dispatchExpressSheet(@PathVariable("id")String id, @PathVariable("uId")int uId) throws Exception {
+    @RequestMapping(value = "/dispatchExpressSheetId/{id}/{uId}", method = RequestMethod.POST)
+    public ResponseEntity<ExpressSheet> dispatchExpressSheet(@PathVariable("id")String id,
+                                                             @PathVariable("uId")int uId) throws Exception {
         TransPackageContent transPackageContent = new TransPackageContent();
         ExpressSheet nes = expressSheetService.get(id);
         if (nes.getStatus() != ExpressSheet.STATUS.STATUS_TRANSPORT) {
@@ -225,11 +227,12 @@ public class DomainController {
     /**
      * 交付快递
      * @param id 快递单id
-     * @param uid 派送员id
+     * @param uId 派送员id
      * @return {@code HttpStatus=200, Header={"Type", "Update"}}快递单
      */
-    @RequestMapping(value = "/deliveryExpressSheetId/id/{id}/uid/{uid}", method = RequestMethod.POST)
-    public ResponseEntity<ExpressSheet> deliveryExpressSheetId(@PathVariable("id")String id, @PathVariable("uid")int uid) throws Exception {
+    @RequestMapping(value = "/deliveryExpressSheetId/{id}/{uId}", method = RequestMethod.POST)
+    public ResponseEntity<ExpressSheet> deliveryExpressSheetId(@PathVariable("id")String id,
+                                                               @PathVariable("uId")int uId) throws Exception {
         ExpressSheet nes = expressSheetService.get(id);
         if (nes.getStatus() != ExpressSheet.STATUS.STATUS_DISPATCHED) {
             throw new Exception("快递未派送，不能交付");
@@ -279,11 +282,11 @@ public class DomainController {
     /**
      * 创建包裹
      * @param transPackage 包裹单
-     * @param uid 工作人员id
+     * @param uId 工作人员id
      * @return {@code HttpStatus=200, Header={"Type", "Save"}}包裹信息
      */
-    @RequestMapping(value = "/newTransPackage", method = RequestMethod.POST)
-    public ResponseEntity<TransPackage> newTransPackage(@RequestBody TransPackage transPackage, @RequestBody int uid){
+    @RequestMapping(value = "/newTransPackage/{uId}", method = RequestMethod.POST)
+    public ResponseEntity<TransPackage> newTransPackage(@RequestBody TransPackage transPackage, @PathVariable("uId") int uId){
         transPackage.setCreateTime(getCurrentDate());
         transPackageService.save(transPackage);
         return ResponseEntity.ok().header("Type", "Save").body(transPackage);
@@ -297,8 +300,8 @@ public class DomainController {
      * @param id 包裹id
      * @return {@code HttpStatus=200, Header={"Type", "Update"}} "成功信息"
      */
-    @RequestMapping(value = "/openTransPackage/{uid}/{id}", method = RequestMethod.GET)
-    public ResponseEntity<String> openTransPackage(@PathVariable("uid")int uId,@PathVariable("id")String id) throws Exception {
+    @RequestMapping(value = "/openTransPackage/{uId}/{id}", method = RequestMethod.GET)
+    public ResponseEntity<String> openTransPackage(@PathVariable("uId")int uId,@PathVariable("id")String id) throws Exception {
         TransPackage transPackage = transPackageService.get(id);
         if(transPackage.getStatus() == 0){
             throw new Exception("包裹处于新建状态，未装入快件");

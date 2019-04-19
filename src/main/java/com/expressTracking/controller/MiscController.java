@@ -3,17 +3,19 @@ package com.expressTracking.controller;
 import com.expressTracking.entity.*;
 import com.expressTracking.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 /**
- * @author 19231
+ * @author muwei
  * @date 2019/4/5
  */
 @RestController
@@ -83,7 +85,8 @@ public class MiscController {
 	 * @return {@code HttpStatus=200, Header={"Type", "Select"}}节点信息集合
 	 */
     @RequestMapping(value = "/getNodesList/{RegionCode}/{Type}",method = RequestMethod.GET)
-	public ResponseEntity<List<TransNode>> getNodesList(@PathVariable("RegionCode") String regionCode, @PathVariable("Type") int type) {
+	public ResponseEntity<List<TransNode>> getNodesList(@PathVariable("RegionCode") String regionCode,
+														@PathVariable("Type") int type) {
 		List<TransNode> transNodeList = transNodeService.findByRegionCodeAndType(regionCode, type);
     	return ResponseEntity.ok().header("Type", "Select").body(transNodeList);
 	}
@@ -94,7 +97,7 @@ public class MiscController {
      * @return {@code HttpStatus=200, Header={"Type", "Save"}}节点信息
      */
 	@RequestMapping(value = "/saveNode",method = RequestMethod.POST)
-	public ResponseEntity<TransNode> saveNodesList(@RequestBody TransNode transNode) {
+	public ResponseEntity<TransNode> saveNodesList(@Validated @RequestBody TransNode transNode) {
 		transNodeService.save(transNode);
 		return ResponseEntity.ok().header("Type", "Save").body(transNode);
 
@@ -153,7 +156,12 @@ public class MiscController {
 	 */
     @RequestMapping(value = "/deleteCustomerInfo/{id}",method = RequestMethod.GET)
 	public ResponseEntity<String> deleteCustomerInfo(@PathVariable("id") int id) {
-		//customerInfoService.removeById(id);
+    	int count = customerInfoService.removeById(id);
+    	if (count == 0) {
+    		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.contentType(MediaType.APPLICATION_JSON_UTF8)
+					.body("{\"message\":\"删除失败\"}");
+		}
 		return ResponseEntity.ok().header("Type", "Delete")
 				.contentType(MediaType.APPLICATION_JSON_UTF8)
 				.body("{\"message\":\"删除成功\"}");
@@ -166,7 +174,7 @@ public class MiscController {
 	 * @see CustomerInfo
 	 */
     @RequestMapping(value = "/saveCustomerInfo",method = RequestMethod.POST)
-	public ResponseEntity<CustomerInfo> saveCustomerInfo(@RequestBody CustomerInfo obj) {
+	public ResponseEntity<CustomerInfo> saveCustomerInfo( @RequestBody CustomerInfo obj) {
     	customerInfoService.save(obj);
     	return ResponseEntity.ok().header("Type", "Save").body(obj);
 	}
@@ -307,12 +315,12 @@ public class MiscController {
 
 	/**
 	 * 获得包裹历史记录
-	 * @param expressSheetID 快递id
+	 * @param expressSheetId 快递id
 	 * @return {@code HttpStatus=200, Header={"Type", "Select"}}包裹历史记录集合
 	 */
-	@RequestMapping(value = "/getTransHistory/{expressSheetID}" , method = RequestMethod.GET)
-	public ResponseEntity<List<TransHistory>> getTransHistory(@PathVariable("expressSheetID") String expressSheetID) {
-		List<TransHistory> transHistoryList = transHistoryService.getTransHistory(expressSheetID);
+	@RequestMapping(value = "/getTransHistory/{expressSheetId}" , method = RequestMethod.GET)
+	public ResponseEntity<List<TransHistory>> getTransHistory(@PathVariable("expressSheetId") String expressSheetId) {
+		List<TransHistory> transHistoryList = transHistoryService.getTransHistory(expressSheetId);
 		return ResponseEntity.ok().header("Type", "Select").body(transHistoryList);
 	}
 }

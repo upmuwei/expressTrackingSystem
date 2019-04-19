@@ -20,11 +20,11 @@
     </sql>
 
     <select id="get" parameterType="int" resultMap="customerInfoMap">
-        <include refid="user_get"/> where ID = #{id};
+        <include refid="user_get"/> where ID = #{id,jdbcType=INTEGER} ;
     </select>
 
     <select id="findByName" parameterType="String" resultMap="customerInfoMap">
-        <include refid="user_get"/> where name=#{name};
+        <include refid="user_get"/> where name=#{name,jdbcType=VARCHAR} ;
     </select>
 
     <delete id="delete" parameterType="int">
@@ -32,22 +32,61 @@
     </delete>
 
     <select id="findByTelCode" parameterType="String" resultMap="customerInfoMap">
-        <include refid="user_get"/> where TelCode=#{telCode} ;
+        <include refid="user_get"/> where TelCode=#{telCode,jdbcType=VARCHAR}  ;
     </select>
 
     <insert id="insert" parameterType="CustomerInfo">
-        insert into customerinfo(Name, TelCode, Department, RegionCode, Address, PostCode)
-        values(#{name},#{telCode},#{department},#{regionCode},#{address},#{postCode});
+        insert into customerinfo
+          <trim prefix="(" suffix=")" suffixOverrides=",">
+              <if test="name != null and name != ''">
+                  Name,
+              </if>
+              <if test="telCode != null and telCode != ''">
+                  TelCode,
+              </if>
+              <if test="department != null and department != ''">
+                  Department,
+              </if>
+              <if test="regionCode != null and regionCode != ''">
+                  RegionCode,
+              </if>
+              <if test="address != null and address != ''">
+                  Address,
+              </if>
+              <if test="postCode != 0">
+                  PostCode,
+              </if>
+          </trim>
+          <trim prefix="values(" suffix=")" suffixOverrides=",">
+              <if test="name != null and name != ''">
+                  #{name,jdbcType=VARCHAR},
+              </if>
+              <if test="telCode != null and telCode != ''">
+                  #{telCode,jdbcType=VARCHAR},
+              </if>
+              <if test="department != null and department != ''">
+                  #{department,jdbcType=VARCHAR},
+              </if>
+              <if test="regionCode != null and regionCode != ''">
+                  #{regionCode,jdbcType=VARCHAR} ,
+              </if>
+              <if test="address != null and address != ''">
+                  #{address,jdbcType=VARCHAR},
+              </if>
+              <if test="postCode != 0">
+                  #{postCode,jdbcType=INTEGER},
+              </if>
+          </trim>
     </insert>
 
     <update id="update" parameterType="CustomerInfo">
         update customerinfo
             <set>
-                <if test="name != null and name != ''"> Name=#{name}, </if>
-                <if test="telCode != null and telCode != ''"> TelCode=#{telCode}, </if>
-                <if test="department != null and department != ''"> Department=#{department},  </if>
-                <if test="regionCode != null and regionCode != ''"> RegionCode=#{regionCode},  </if>
-                <if test="address != null and address != ''"> Address=#{address},  </if>
+                <if test="name != null and name != ''"> Name=#{name,jdbcType=VARCHAR} , </if>
+                <if test="telCode != null and telCode != ''"> TelCode=#{telCode,jdbcType=VARCHAR} , </if>
+                <if test="department != null and department != ''"> Department=#{department,jdbcType=VARCHAR} ,  </if>
+                <if test="regionCode != null and regionCode != ''"> RegionCode=#{regionCode,jdbcType=VARCHAR} ,  </if>
+                <if test="address != null and address != ''"> Address=#{address,jdbcType=VARCHAR} ,  </if>
                 <if test="postCode != null"> PostCode=#{postCode}  </if>
             </set>
         where id=#{id};

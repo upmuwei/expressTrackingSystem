@@ -10,6 +10,7 @@
     <!--<mvc:default-servlet-handler/>-->
 
     <mvc:resources mapping="/**" location="static/"/>
+
     <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/misc/*"/>

@@ -1,9 +1,14 @@
 package com.expressTracking.entity;
 
+
 import java.io.Serializable;
 import java.util.Date;
 
-
+/**
+ * 快件实体
+ * @author muwei
+ * @date
+ */
 public class ExpressSheet implements Serializable {
 
 	private static final long serialVersionUID = 4941503468986892397L;
@@ -11,7 +16,9 @@ public class ExpressSheet implements Serializable {
 	public ExpressSheet() {
 	}
 
-
+	/**
+	 * 快件开头字符不能为1
+	 */
 	private String id;
 
 	/**
@@ -32,22 +39,22 @@ public class ExpressSheet implements Serializable {
 	/**
 	 * 重量
 	 */
-	private Float weight;
+	private float weight;
 
 	/**
 	 * 运费
 	 */
-	private Float tranFee;
+	private float tranFee;
 
 	/**
 	 * 包装费
 	 */
-	private Float packageFee;
+	private float packageFee;
 
 	/**
 	 * 保险费
 	 */
-	private Float insuFee;
+	private float insuFee;
 
 	/**
 	 * 揽收人
@@ -82,7 +89,7 @@ public class ExpressSheet implements Serializable {
 	/**
 	 * 快递状态
 	 */
-	private Integer status;
+	private int status;
 	
 	public void setId(String value) {
 		this.id = value;
@@ -104,35 +111,35 @@ public class ExpressSheet implements Serializable {
 		return type;
 	}
 	
-	public void setWeight(Float value) {
+	public void setWeight(float value) {
 		this.weight = value;
 	}
 	
-	public Float getWeight() {
+	public float getWeight() {
 		return weight;
 	}
 	
-	public void setTranFee(Float value) {
+	public void setTranFee(float value) {
 		this.tranFee = value;
 	}
 	
-	public Float getTranFee() {
+	public float getTranFee() {
 		return tranFee;
 	}
 	
-	public void setPackageFee(Float value) {
+	public void setPackageFee(float value) {
 		this.packageFee = value;
 	}
 	
-	public Float getPackageFee() {
+	public float getPackageFee() {
 		return packageFee;
 	}
 	
-	public void setInsuFee(Float value) {
+	public void setInsuFee(float value) {
 		this.insuFee = value;
 	}
 	
-	public Float getInsuFee() {
+	public float getInsuFee() {
 		return insuFee;
 	}
 	
@@ -184,11 +191,11 @@ public class ExpressSheet implements Serializable {
 		return acc2;
 	}
 	
-	public void setStatus(Integer value) {
+	public void setStatus(int value) {
 		this.status = value;
 	}
 	
-	public Integer getStatus() {
+	public int getStatus() {
 		return status;
 	}
 	

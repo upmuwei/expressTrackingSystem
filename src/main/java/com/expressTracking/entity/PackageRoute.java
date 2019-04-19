@@ -5,6 +5,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
+ * @author muwei
+ * @date 2019/4/5
  * 包裹路线
  */
 public class PackageRoute implements Serializable {
@@ -30,10 +32,6 @@ public class PackageRoute implements Serializable {
 	
 	public int getSn() {
 		return sn;
-	}
-	
-	public int getORMID() {
-		return getSn();
 	}
 	
 	public void setX(float value) {

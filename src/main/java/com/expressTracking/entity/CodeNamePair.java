@@ -1,14 +1,20 @@
 package com.expressTracking.entity;
 
+/**
+ * @author muwei
+ * @date 2019/4/5
+ */
 public class CodeNamePair {
 
 	/**
 	 * 地区编码
 	 */
 	private String code;
+
+	/**
+	 * 省、市或者乡镇名称
+	 */
 	private String name;
-	
-	public CodeNamePair(){}
 	
 	public CodeNamePair(String code, String name){
 		this.code = code;

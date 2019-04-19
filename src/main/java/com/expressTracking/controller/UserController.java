@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author 19231
+ * @author muwei
  * @date 2019/4/5
  */
 @RestController
@@ -36,7 +36,8 @@ public class UserController {
      * @return {@code HttpStatus=200, Header={"session", "String.valueOf(uId)"}}返回用户信息
      */
     @RequestMapping(value = "/doLogin/{uId}/{pwd}", method = RequestMethod.GET)
-    public ResponseEntity<UserInfo> doLogin(HttpSession session, @PathVariable("uId") int uId, @PathVariable("pwd") String pwd) throws Exception {
+    public ResponseEntity<UserInfo> doLogin(HttpSession session, @PathVariable("uId") int uId,
+                                            @PathVariable("pwd") String pwd) throws Exception {
         UserInfo userInfo = userInfoService.checkLogin(uId, pwd);
         if (userInfo == null) {
             throw new Exception("账号或密码错误");

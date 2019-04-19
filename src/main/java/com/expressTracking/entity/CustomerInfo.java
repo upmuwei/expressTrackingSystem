@@ -1,7 +1,13 @@
 package com.expressTracking.entity;
 
+
 import java.io.Serializable;
 
+/**
+ * 顾客实体类
+ * @author muwei
+ * @date 2019/4/5
+ */
 public class CustomerInfo implements Serializable {
 
 	private static final long serialVersionUID = -3267943602377867497L;
@@ -19,7 +25,7 @@ public class CustomerInfo implements Serializable {
 	private String telCode;
 
 	/**
-	 * 单位
+	 * 工作单位
 	 */
 	private String department;
 
@@ -45,11 +51,7 @@ public class CustomerInfo implements Serializable {
 	public int getId() {
 		return id;
 	}
-	
-	public int getORMID() {
-		return getId();
-	}
-	
+
 	public void setName(String value) {
 		this.name = value;
 	}

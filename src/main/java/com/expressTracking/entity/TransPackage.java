@@ -13,6 +13,9 @@ public class TransPackage implements Serializable {
 	public TransPackage() {
 	}
 
+	/**
+	 * 包裹开头字符必须为1
+	 */
 	private String id;
 
 	/**

@@ -5,7 +5,8 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * @author 19231
+ * 包裹内容实体类
+ * @author muwei
  * @date 2019/4/5
  */
 public class TransPackageContent implements Serializable {

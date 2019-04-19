@@ -1,5 +1,7 @@
 package com.expressTracking.entity;
 
+import org.springframework.lang.NonNull;
+
 import java.io.Serializable;
 
 /**
@@ -12,18 +14,25 @@ public class TransNode implements Serializable {
 	public TransNode() {
 	}
 
+	@NonNull
 	private String id;
 
+	@NonNull
 	private String nodeName;
 
+	@NonNull
 	private Integer nodeType;
 
+	@NonNull
 	private String regionCode;
 
+	@NonNull
 	private String telCode;
 
+	@NonNull
 	private Float x;
 
+	@NonNull
 	private Float y;
 	
 	public void setId(String value) {
