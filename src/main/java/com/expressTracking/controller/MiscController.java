@@ -113,6 +113,7 @@ public class MiscController {
     @RequestMapping(value = "/getCustomerListByName/{name}",method = RequestMethod.GET)
 	public ResponseEntity<List<CustomerInfo>> getCustomerListByName(@PathVariable("name") String name) {
 		List<CustomerInfo> customerInfoList = customerInfoService.findByName(name);
+		System.out.println("name="+name);
     	return ResponseEntity.ok().header("Type", "Select").body(customerInfoList);
 	}
 
@@ -187,6 +188,7 @@ public class MiscController {
 			CodeNamePair cn = new CodeNamePair(rg.getRegionCode(),rg.getPrv());
 			listCN.add(cn);
 		}
+		System.out.println("测试code和name"+listCN.get(0).getCode()+listCN.get(0).getName());
 		return ResponseEntity.ok().header("Type", "Select").body(listCN);
 	}
 
@@ -314,5 +316,4 @@ public class MiscController {
 		List<TransHistory> transHistoryList = transHistoryService.getTransHistory(expressSheetID);
 		return ResponseEntity.ok().header("Type", "Select").body(transHistoryList);
 	}
-
 }

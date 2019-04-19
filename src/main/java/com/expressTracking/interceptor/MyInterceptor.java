@@ -20,21 +20,21 @@ public class MyInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        String sessionId = request.getHeader("session");
-        if (sessionId == null) {
-            PrintWriter writer = response.getWriter();
-            writer.print("{\"message\":\"非法访问,请登录\"}");
-            response.setContentType("application/json;charset=UTF-8");
-            response.setStatus(401);
-            return false;
-        } else if (request.getSession().getAttribute(sessionId) == null) {
-            PrintWriter writer = response.getWriter();
-            writer.print("{\"message\":\"非法访问,请登录\"}");
-            response.setContentType("application/json;charset=UTF-8");
-            response.sendError(401, "非法访问,请登录");
-            return false;
-        }
-        return false;
+//        String sessionId = request.getHeader("session");
+//        if (sessionId == null) {
+//            PrintWriter writer = response.getWriter();
+//            writer.print("{\"message\":\"非法访问,请登录\"}");
+//            response.setContentType("application/json;charset=UTF-8");
+//            response.setStatus(401);
+//            return false;
+//        } else if (request.getSession().getAttribute(sessionId) == null) {
+//            PrintWriter writer = response.getWriter();
+//            writer.print("{\"message\":\"非法访问,请登录\"}");
+//            response.setContentType("application/json;charset=UTF-8");
+//            response.sendError(401, "非法访问,请登录");
+//            return false;
+//        }
+        return true;
       //  return true;
     }
 
