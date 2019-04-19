@@ -3,6 +3,7 @@ package com.expressTracking.controller;
 import com.expressTracking.entity.*;
 import com.expressTracking.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.text.SimpleDateFormat;
@@ -155,8 +156,9 @@ public class MiscController {
 	 */
     @RequestMapping(value = "/deleteCustomerInfo/{id}",method = RequestMethod.GET)
 	public ResponseEntity<String> deleteCustomerInfo(@PathVariable("id") int id) {
-		customerInfoService.removeById(id);
-		return ResponseEntity.ok().header("Type", "Delete").body("删除成功");
+		//customerInfoService.removeById(id);
+		return ResponseEntity.ok().header("Type", "Delete")
+				.body("{\"message\":\"删除成功\"}");
 	}
 
 	/**
@@ -298,7 +300,7 @@ public class MiscController {
         	transHistory.setActTime(getCurrentDate());
         	transHistory.setPackageId(packageId);
         	transHistoryService.save(transHistory);
-        	return ResponseEntity.ok().header("Type","Update").body("Success");
+        	return ResponseEntity.ok().header("Type","Update").body("{\"message\":\"Success\"}");
 		}
 	}
 

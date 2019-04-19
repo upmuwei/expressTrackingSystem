@@ -9,14 +9,17 @@
         <result property="packageId" column="PackageID"/>
     </resultMap>
 
-    <select id="getByUserUId" parameterType="int" resultMap="userPackageMap">
+    <sql id="usersPackage_get">
         select SN, UserUID, PackageID
-        from userspackage where UserUID=#{userUId};
+        from userspackage
+    </sql>
+
+    <select id="getByUserUId" parameterType="int" resultMap="userPackageMap">
+         <include refid="usersPackage_get"/> where UserUID=#{userUId};
     </select>
 
     <select id="getByPackageId" parameterType="string" resultMap="userPackageMap">
-        select SN, UserUID, PackageID
-        from userspackage where PackageID = #{packageId} ;
+        <include refid="usersPackage_get"/> where PackageID = #{packageId} ;
     </select>
     <insert id="insert" parameterType="UsersPackage" >
         insert into userspackage(UserUID, PackageID)

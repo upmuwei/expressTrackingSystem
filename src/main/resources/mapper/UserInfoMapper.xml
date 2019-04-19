@@ -19,11 +19,15 @@
                     select="com.expressTracking.dao.UsersPackageDao.getByUserUId"/>
     </resultMap>
 
-    <select id="get" parameterType="int" resultMap="userInfoMap">
+    <sql id="userInfo_get">
         select UID, PWD, Name, URull, TelCode,
                Status, DptID, ReceivePackageID,
                DelivePackageID, TransPackageID
-        from userinfo where UID = #{id};
+        from userinfo
+    </sql>
+
+    <select id="get" parameterType="int" resultMap="userInfoMap">
+         <include refid="userInfo_get"/> where UID = #{id};
     </select>
 
     <insert id="insert" parameterType="UserInfo">
@@ -55,15 +59,11 @@
     </delete>
 
     <select id="checkLogin" resultMap="userInfoMap">
-        select UID, PWD, Name, URull, TelCode, Status,
-               DptID, ReceivePackageID, DelivePackageID, TransPackageID
-        from userinfo where uid = #{uId} and PWD = #{password};
+        <include refid="userInfo_get"/> where uid = #{uId} and PWD = #{password};
     </select>
 
     <select id="findLike" resultMap="userInfoMap">
-        select UID, PWD, Name, URull, TelCode, Status,
-               DptID, ReceivePackageID, DelivePackageID, TransPackageID
-        from userinfo where 1 = 1
+        <include refid="userInfo_get"/> where 1 = 1
         <choose>
             <when test="propertyName == null or propertyName == ''"/>
             <when test="propertyName == 'UID'" >
@@ -92,9 +92,7 @@
     </select>
 
     <select id="findBy" resultMap="userInfoMap">
-        select UID, PWD, Name, URull, TelCode, Status,
-        DptID, ReceivePackageID, DelivePackageID, TransPackageID
-        from userinfo where 1 = 1
+        <include refid="userInfo_get"/> where 1 = 1
         <choose>
             <when test="propertyName == null or propertyName == ''"/>
             <when test="propertyName == 'UID'" >
