@@ -253,7 +253,9 @@ public class DomainController {
      * @return {@code HttpStatus=200, Header={"Type", "Select"}}包裹集合
      */
     @RequestMapping(value = "/getTransPackageList/{Property}/{Restrictions}/{Value}", method = RequestMethod.GET)
-    public ResponseEntity<List<TransPackage>> getTransPackageList(@PathVariable("Property")String property, @PathVariable("Restrictions")String restrictions, @PathVariable("Value")String value) throws Exception {
+    public ResponseEntity<List<TransPackage>> getTransPackageList(@PathVariable("Property")String property,
+                                                                  @PathVariable("Restrictions")String restrictions,
+                                                                  @PathVariable("Value")String value) throws Exception {
         List<TransPackage> list;
         switch(restrictions.toLowerCase()){
             case "eq":
@@ -285,7 +287,8 @@ public class DomainController {
      * @return {@code HttpStatus=200, Header={"Type", "Save"}}包裹信息
      */
     @RequestMapping(value = "/newTransPackage/{uId}", method = RequestMethod.POST)
-    public ResponseEntity<TransPackage> newTransPackage(@RequestBody TransPackage transPackage, @PathVariable("uId") int uId){
+    public ResponseEntity<TransPackage> newTransPackage(@RequestBody TransPackage transPackage,
+                                                        @PathVariable("uId") int uId){
         transPackage.setCreateTime(getCurrentDate());
         transPackageService.save(transPackage);
         return ResponseEntity.ok().header("Type", "Save").body(transPackage);
@@ -300,7 +303,8 @@ public class DomainController {
      * @return {@code HttpStatus=200, Header={"Type", "Update"}} "成功信息"
      */
     @RequestMapping(value = "/openTransPackage/{uId}/{id}", method = RequestMethod.GET)
-    public ResponseEntity<String> openTransPackage(@PathVariable("uId")int uId,@PathVariable("id")String id) throws Exception {
+    public ResponseEntity<String> openTransPackage(@PathVariable("uId")int uId,
+                                                   @PathVariable("id")String id) throws Exception {
         TransPackage transPackage = transPackageService.get(id);
         if(transPackage.getStatus() == 0){
             throw new Exception("包裹处于新建状态，未装入快件");
@@ -395,7 +399,8 @@ public class DomainController {
      * @return {@code HttpStatus=200, Header={"Type", "Save"}}包裹内容
      */
     @RequestMapping(value = "/packTransPackage/{transPackageId}/{expressSheetId}", method = RequestMethod.POST)
-    public ResponseEntity<TransPackageContent> packTransPackage(@PathVariable("transPackageId")String transPackageId, @PathVariable("expressSheetId")String expressSheetId) throws Exception {
+    public ResponseEntity<TransPackageContent> packTransPackage(@PathVariable("transPackageId")String transPackageId,
+                                                                @PathVariable("expressSheetId")String expressSheetId) throws Exception {
         TransPackage transPackage = transPackageService.get(transPackageId);
         if (transPackage.getStatus() == 1 || transPackage.getStatus() == 2) {
             throw new Exception("包裹状态信息错误");

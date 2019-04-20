@@ -21,7 +21,7 @@
         <div class="message">后台登录</div>
         <div id="darkbannerwrap"></div>
         
-        <form method="post" class="layui-form" >
+        <form method="post" class="layui-form">
             <input name="username" placeholder="用户名"  type="text" lay-verify="required" class="layui-input" >
             <hr class="hr15">
             <input name="password" lay-verify="required" placeholder="密码"  type="password" class="layui-input">
@@ -36,14 +36,15 @@
             layui.use('form', function(){
               var form = layui.form;
               var $ = layui.$;
-              $.post();
               form.on('submit(login)', function(data){
-                alert(data.field);
-                var url = "user/doLogin/" +
-                $.post();
-               /* layer.msg(JSON.stringify(data.field),function(){
+                var url = "http://localhost:8080/user/doLogin/"
+                    + data.field.username + "/" + data.field.password;
+                $.post(url,null,function (data) {
                     location.href='index.html'
-                });*/
+                    }
+                ).fail(function (jqXHR) {
+                    layer.msg(jqXHR.responseText);
+                });
                 return false;
               });
             });

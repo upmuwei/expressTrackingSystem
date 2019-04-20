@@ -39,7 +39,7 @@ public class UserController {
      * @param pwd 密码
      * @return {@code HttpStatus=200, Header={"session", "String.valueOf(uId)"}}返回用户信息
      */
-    @RequestMapping(value = "/doLogin/{uId}/{pwd}", method = RequestMethod.GET)
+    @RequestMapping(value = "/doLogin/{uId}/{pwd}", method = RequestMethod.POST)
     public ResponseEntity<UserInfo> doLogin(HttpSession session, @PathVariable("uId") int uId,
                                             @PathVariable("pwd") String pwd) throws Exception {
         UserInfo userInfo = userInfoService.checkLogin(uId, pwd);
@@ -57,7 +57,7 @@ public class UserController {
      * 退出登录
      * @return {@code HttpStatus=200, Header={"Type", "Select"}}退出登录成功信息
      */
-    @RequestMapping(value = "/doLogout")
+    @RequestMapping(value = "/doLogout", method = RequestMethod.GET)
     public ResponseEntity<String> doLogout(HttpSession session, HttpServletRequest request) {
         String sessionId = request.getHeader("session");
         UserInfo userInfo = (UserInfo) session.getAttribute(sessionId);
