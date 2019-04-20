@@ -17,6 +17,36 @@
   </head>
   
   <body>
+    <script>
+        $(function () {
+            $("#add").click(function (){
+                 var name=$("#L_name").val();
+                 var telcode=$("#L_telCode").val()
+                 var department=$("#L_department").val();
+                 var regioncode=$("#L_regionCode").val();
+                 var address=$("#L_address").val();
+                 var postcode=$("#L_postCode").val();
+                 //alert(postcode);
+                 $.ajax({
+                     url: "http://localhost:8080/misc/saveCustomerInfo",
+                     type: "post",
+                     dataType: "JSON",
+                     contentType : "application/json; charset=utf-8",
+                     data: JSON.stringify({"name":name,"telCode":telcode,"department":department,
+                           "regionCode":regioncode,"address":address,"postCode":parseInt(postcode)}),
+                     success : function(data) {
+                         console.log(typeof(JSON.stringify({"Name":name,"TelCode":telcode,"Department":department,
+                             "RegionCode":regioncode,"Address":address,"PostCode":parseInt(postcode)})));
+                         alert(data);
+                     },
+                     error : function(error) {
+                         alert(error);
+                     }
+
+                 });
+            });
+        });
+    </script>
     <div class="x-body">
         <form class="layui-form">
           <div class="layui-form-item">
@@ -76,7 +106,7 @@
           <div class="layui-form-item">
               <label class="layui-form-label">
               </label>
-              <button  class="layui-btn" lay-filter="add" lay-submit="">
+              <button  class="layui-btn" id="add" lay-filter="add" lay-submit="">
                   添加
               </button>
           </div>
