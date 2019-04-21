@@ -31,22 +31,40 @@
                   contentType : "application/json; charset=utf-8",
                   success:function(data){
                       for(var i=0;i<data.length;i++){
-                          $("#numspan").text("共有数据："+(data.length).toString()+"条");
-                          $("#firsttbody").html("<tr> <td> <div class='layui-unselect layui-form-checkbox' lay-skin='primary' data-id='2'>" +
-                              "<i class='layui-icon'>&#xe605;</i></div> </td> <td>"+data[i].id +"</td> <td>" + data[i].name +"</td>" +
-                              "<td>"+data[i].telCode +"</td><td>"+data[i].department +" </td><td>"+data[i].regionCode +"</td>" +
-                              "<td>"+data[i].address +"</td><td>"+data[i].postCode +"</td> <td class='td-status'> " +
-                              "<span class='layui-btn layui-btn-normal layui-btn-mini'>已启用</span></td> " +
-                              "<td class='td-manage'> " +
-                              "<a onclick='customer_stop(this,'10001')' href='javascript:;'  title='启用'> " + "<i class='layui-icon'>&#xe601;</i> </a> " +
-                              "<a title='编辑' onclick='x_admin_show('编辑','customer-edit.html',600,400)'  href='javascript:;'>" + "<i class='layui-icon'>&#xe642;</i> </a>" +
-                              "<a onclick='x_admin_show('修改密码','customer-password.html',600,400)' title='修改密码' href='javascript:;'> " + "<i class='layui-icon'>&#xe631;</i> </a>" +
-                              "<a title='删除' onclick='customer_del(this,'要删除的id')' href='javascript:;'> " + "<i class='layui-icon'>&#xe640;</i> </a> </td> </tr> </tr>");
-                          //$("#firsttbody").html("<a href='http://www.baidu.com'>http://www.baidu.com</a>");
+                          var str="<td class='td-manage'>"+
+                              "<a title='编辑'  href=\"javascript:;? data=1\" onclick='x_admin_show( \"编辑\",\"customer-edit.html\",600,400)'>" +
+                              "<i class=\"layui-icon\">&#xe642;</i>" +
+                              "</a>" +
+                              "<a title='修改密码' href='javascript:;' onclick='x_admin_show(\"修改密码\",\"customer-password.html\",600,400)'> " +
+                              "<i class='layui-icon'>&#xe631;</i> " +
+                              "</a>" +
+                              '<a title="删除" href="javascript:;" onclick="customer_del(this,'+data[i].id+')">'+
+                              "<i class='layui-icon'>&#xe640;</i> " +
+                              "</a> " +
+                              "</td>"
+                          $("#numspan").text("显示数据："+(data.length).toString()+"条");
+                          $("#firsttbody").html(
+                              "<tr> " +
+
+                              "<td> " +
+                                  "<div class='layui-unselect layui-form-checkbox' lay-skin='primary' data-id='2'>" +
+                                     "<i class='layui-icon'>&#xe605;</i>" +
+                                  "</div> " +
+                              "</td> " +
+
+                              "<td>"+data[i].id +"</td> " +
+                              "<td>"+data[i].name +"</td>" +
+                              "<td>"+data[i].telCode +"</td>" +
+                              "<td>"+data[i].department +" </td>" +
+                              "<td>"+data[i].regionCode +"</td>" +
+                              "<td>"+data[i].address +"</td>" +
+                              "<td>"+data[i].postCode +"</td> " +str+
+
+                              "</tr>");
                       }
                   },
                   error:function(error){
-                      alert("error");
+                      alert(error);
                   }
               });
           });
@@ -79,7 +97,7 @@
       <xblock>
         <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
         <button class="layui-btn" onclick="x_admin_show('添加用户','./customer-add.html',600,400)"><i class="layui-icon"></i>添加</button>
-        <span class="x-right" id="numspan" style="line-height:40px" type="text">共有数据：0条</span>
+        <span class="x-right" id="numspan" style="line-height:40px" type="text">显示数据：0条</span>
       </xblock>
       <table class="layui-table x-admin" id="maintable" onclick="">
         <thead>
@@ -111,49 +129,35 @@
     </div>
     <script>
       layui.use('laydate', function(){
-        var laydate = layui.laydate;
-
-        //执行一个laydate实例
-        laydate.render({
-          elem: '#start' //指定元素
-        });
-
-        //执行一个laydate实例
-        laydate.render({
-          elem: '#end' //指定元素
-        });
-      });
-
-       /*用户-停用*/
-      function customer_stop(obj,id){
-          layer.confirm('确认要停用吗？',function(index){
-
-              if($(obj).attr('title')=='启用'){
-
-                //发异步把用户状态进行更改
-                $(obj).attr('title','停用');
-                $(obj).find('i').html('&#xe62f;');
-
-                $(obj).parents("tr").find(".td-status").find('span').addClass('layui-btn-disabled').html('已停用');
-                layer.msg('已停用!',{icon: 5,time:1000});
-
-              }else{
-                $(obj).attr('title','启用');
-                $(obj).find('i').html('&#xe601;');
-
-                $(obj).parents("tr").find(".td-status").find('span').removeClass('layui-btn-disabled').html('已启用');
-                layer.msg('已启用!',{icon: 5,time:1000});
-              }
-
+          var laydate = layui.laydate;
+          //执行一个laydate实例
+          laydate.render({
+              elem: '#start' //指定元素
           });
-      }
+          //执行一个laydate实例
+          laydate.render({
+              elem: '#end' //指定元素
+          });
+      });
 
       /*用户-删除*/
       function customer_del(obj,id){
-          layer.confirm('确认要删除吗？',function(index){
+          layer.confirm('确认要删除吗？',function(){
               //发异步删除数据
+              var str="http://localhost:8080/misc/deleteCustomerInfo/"+id;
+              $.ajax({
+                  url:str,
+                  type:"GET",
+                  dataType:'JSON',
+                  contentType : "application/json; charset=utf-8",
+                  success:function(data){
+                      layer.msg('已删除!',{icon:1,time:1000});
+                  },
+                  error:function(){
+                      alert("error");
+                  }
+              });
               $(obj).parents("tr").remove();
-              layer.msg('已删除!',{icon:1,time:1000});
           });
       }
       // 删除全部
