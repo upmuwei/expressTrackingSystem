@@ -82,12 +82,13 @@
     <update id="update" parameterType="CustomerInfo">
         update customerinfo
             <set>
+                <!--<if test="id != null "> ID =#{id,jdbcType=INTEGER}, </if>-->
                 <if test="name != null and name != ''"> Name=#{name,jdbcType=VARCHAR} , </if>
                 <if test="telCode != null and telCode != ''"> TelCode=#{telCode,jdbcType=VARCHAR} , </if>
                 <if test="department != null and department != ''"> Department=#{department,jdbcType=VARCHAR} ,  </if>
                 <if test="regionCode != null and regionCode != ''"> RegionCode=#{regionCode,jdbcType=VARCHAR} ,  </if>
                 <if test="address != null and address != ''"> Address=#{address,jdbcType=VARCHAR} ,  </if>
-                <if test="postCode != null"> PostCode=#{postCode}  </if>
+                <if test="postCode != null"> PostCode=#{postCode,jdbcType=INTEGER}   </if>
             </set>
         where id=#{id};
     </update>
