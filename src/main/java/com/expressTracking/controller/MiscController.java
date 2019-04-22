@@ -131,6 +131,7 @@ public class MiscController {
 	 * @return {@code HttpStatus=200, Header={"Type", "Select"}}用户信息
 	 */
     @RequestMapping(value = "/getCustomerInfo/{id}",method = RequestMethod.GET)
+	@ResponseBody
 	public ResponseEntity<CustomerInfo> getCustomerInfo(@PathVariable("id") int id) {
 		CustomerInfo customerInfo = customerInfoService.get(id);
 		return ResponseEntity.ok().header("Type", "Select").body(customerInfo);
@@ -142,6 +143,7 @@ public class MiscController {
 	 * @return {@code HttpStatus=200, Header={"Type", "Update"}}用户信息
 	 */
 	@RequestMapping(value = "/updateCustomerInfo", method = RequestMethod.POST)
+	@ResponseBody
 	public ResponseEntity<CustomerInfo> updateCustomerInfo(@RequestBody CustomerInfo customerInfo) {
 		customerInfoService.update(customerInfo);
 		return ResponseEntity.ok().header("Type", "Update").body(customerInfo);
