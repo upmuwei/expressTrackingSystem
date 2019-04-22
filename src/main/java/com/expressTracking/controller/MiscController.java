@@ -145,7 +145,9 @@ public class MiscController {
 	@RequestMapping(value = "/updateCustomerInfo", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<CustomerInfo> updateCustomerInfo(@RequestBody CustomerInfo customerInfo) {
+		System.out.println(customerInfo);
 		customerInfoService.update(customerInfo);
+
 		return ResponseEntity.ok().header("Type", "Update").body(customerInfo);
 	}
 
