@@ -30,6 +30,7 @@
                   dataType:'JSON',
                   contentType : "application/json; charset=utf-8",
                   success:function(data){
+
                       $("#numspan").text("显示数据："+(data.length).toString()+"条");
                       for(var i=0;i<data.length;i++){
                           var str="<td class='td-manage'>"+
@@ -43,7 +44,6 @@
                               "<i class='layui-icon'>&#xe640;</i> " +
                               "</a> "+
                               "</td>"
-
                           $("#firsttbody").append(
                               "<tr> " +
 
@@ -57,6 +57,7 @@
 
                               "</tr>");
                       }
+
                   },
                   error:function(error){
                       alert(error);
@@ -78,7 +79,7 @@
           <div class="layui-row">
 
               <form class="layui-form layui-col-md12 x-so" method="#">
-              <div class="layui-inline" style="margin-left: 630px">
+              <div class="layui-inline" style="margin-left: 530px">
                   <select id="select">
                       <option value="name">姓名</option>
                       <option value="telCode">电话号码</option>

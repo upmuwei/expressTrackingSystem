@@ -33,8 +33,8 @@
                 document.getElementById("L_address").value=data.address;
                 document.getElementById("L_postCode").value=data.postCode;
             },
-            error:function () {
-                alert("error");
+            error:function (error) {
+                alert(error);
             }
         });
         $("#edit").click(function () {
@@ -54,8 +54,11 @@
                     "regionCode": regioncode, "address": address, "postCode": postcode
                 }),
                 success: function () {
+                    x_admin_close();
+                    alert("即将关闭");
                     layer.msg('已更新!', {icon: 1, time: 1000});
                     x_admin_father_reload();
+                    open(location, '_self').close();
                 },
                 error: function () {
                     alert("error");
