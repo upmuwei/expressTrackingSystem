@@ -4,7 +4,6 @@
       <title>客户管理</title>
       <meta name="renderer" content="webkit">
       <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-      <!--<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />-->
       <link rel="stylesheet" href="css/font.css">
       <link rel="stylesheet" href="css/xadmin.css">
       <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
@@ -72,22 +71,23 @@
       <span class="layui-breadcrumb">
           <a href="">首页</a>
       </span>
-    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
-        <i class="layui-icon" style="line-height:30px">刷新</i></a>
+      <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+          <i class="layui-icon" style="line-height:30px">刷新</i>
+      </a>
   </div>
-      <div class="x-body">
-          <div class="layui-row">
+  <div class="x-body">
+      <div class="layui-row">
 
-              <form class="layui-form layui-col-md12 x-so" method="#">
+          <form class="layui-form layui-col-md12 x-so" method="#">
               <div class="layui-inline" style="margin-left: 530px">
                   <select id="select">
                       <option value="name">姓名</option>
                       <option value="telCode">电话号码</option>
                   </select>
-                <input id="input" class="layui-input" type="text" name="customername" placeholder="请输入..." autocomplete="off" value="">
-                <button class="layui-btn" id="submit" type="button"><i class="layui-icon">&#xe615;</i></button>
-            </div>
-        </form>
+                  <input id="input" class="layui-input" type="text" name="customername" placeholder="请输入..." autocomplete="off" value="">
+                  <button class="layui-btn" id="submit" type="button"><i class="layui-icon">&#xe615;</i></button>
+              </div>
+          </form>
 
       </div>
 
@@ -121,7 +121,7 @@
           </div>
       </div>
 
-      </div>
+  </div>
       <script>
            layui.use('laydate', function(){
            var laydate = layui.laydate;
@@ -153,8 +153,9 @@
                   }
               });
               $(obj).parents("tr").remove();
+              layer.msg('已删除!',{icon:1,time:1000});
           });
       }
-    </script>
+      </script>
   </body>
 </html>
