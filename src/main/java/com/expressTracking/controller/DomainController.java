@@ -32,16 +32,19 @@ public class DomainController {
 
     private final TransHistoryService transHistoryService;
 
+    private final TransNodeService transNodeService;
+
     @Autowired
     public DomainController(ExpressSheetService expressSheetService, TransPackageService transPackageService,
                             TransPackageContentService transPackageContentService, UserInfoService userInfoService,
-                            UserPackageService userPackageService, TransHistoryService transHistoryService) {
+                            UserPackageService userPackageService, TransHistoryService transHistoryService, TransNodeService transNodeService) {
         this.expressSheetService = expressSheetService;
         this.transPackageService = transPackageService;
         this.transPackageContentService = transPackageContentService;
         this.userInfoService = userInfoService;
         this.userPackageService = userPackageService;
         this.transHistoryService = transHistoryService;
+        this.transNodeService = transNodeService;
     }
 
     private Date getCurrentDate() {
@@ -373,6 +376,8 @@ public class DomainController {
                                                @PathVariable("userId1")int userId1,
                                                @PathVariable("userId2") int userId2) throws Exception {
         UsersPackage usersPackage = userPackageService.findByPackageId(transPackageId);
+        UserInfo userInfo = userInfoService.get(userId2);
+        TransNode transNode = transNodeService.get(userInfo.getDptId());
         TransHistory transHistory = new TransHistory();
         if (usersPackage == null) {
             throw new Exception("未查到包裹Id");
@@ -384,6 +389,8 @@ public class DomainController {
             transHistory.setActTime(getCurrentDate());
             transHistory.setuIdFrom(userId1);
             transHistory.setuIdTo(userId2);
+            transHistory.setX(transNode.getX());
+            transHistory.setY(transNode.getY());
             transHistory.setPackageId(transPackageId);
             transHistoryService.save(transHistory);
             return ResponseEntity.ok().header("Type", "Update")

@@ -27,6 +27,9 @@ public class UserInfo implements Serializable {
 	 */
 	private Integer status;
 
+	/**
+	 * 所属转运节点
+	 */
 	private String dptId;
 
 	/**
