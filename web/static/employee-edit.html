@@ -22,22 +22,22 @@
     $(function () {
         var url = location.search;
         var uId=url.split("=")[1];
-        var str="http://localhost:8080/user/getUserList/"+"uId/"+"eq/"+uId;
+        var str="http://localhost:8080/user/getUserList/"+"UID/"+"eq/"+uId;
         $.ajax({
             url:str,
             type:"GET",
             dataType:'JSON',
             contentType : "application/json; charset=utf-8",
             success:function(data){
-                document.getElementById("L_pwd").value=data.password;
-                document.getElementById("L_name").value=data.name;
-                document.getElementById("L_urull").value=data.uRull;
-                document.getElementById("L_telCode").value=data.telCode;
-                document.getElementById("L_status").value=data.status;
-                document.getElementById("L_dptid").value=data.dptId;
-                document.getElementById("L_receivepackageid").value=data.receivePackageId;
-                document.getElementById("L_delivepackageid").value=data.delivePackageId;
-                document.getElementById("L_transpackageid").value=data.transPackageId;
+                document.getElementById("L_pwd").value=data[0].password;
+                document.getElementById("L_name").value=data[0].name;
+                document.getElementById("L_urull").value=data[0].uRull;
+                document.getElementById("L_telCode").value=data[0].telCode;
+                document.getElementById("L_status").value=data[0].status;
+                document.getElementById("L_dptid").value=data[0].dptId;
+                document.getElementById("L_receivepackageid").value=data[0].receivePackageId;
+                document.getElementById("L_delivepackageid").value=data[0].delivePackageId;
+                document.getElementById("L_transpackageid").value=data[0].transPackageId;
             },
             error:function (error) {
                 alert(error);
@@ -58,10 +58,15 @@
                 type: "post",
                 dataType: "JSON",
                 contentType : "application/json; charset=utf-8",
-                data: JSON.stringify({"password":password,"name":name,"uRull":urull,"telCode":telcode,"status":status,"dptId":dptid,
+                data: JSON.stringify({"uId":uId,"password":password,"name":name,"uRull":urull,"telCode":telcode,"status":status,"dptId":dptid,
                     "receivePackageId":receivepackageid,"delivePackageId":delivepackageid,"transPackageId":transpackageid}),
                 success : function(data) {
-                    layer.msg('已修改!',{icon:1,time:1000});
+                    x_admin_close();
+                    alert("即将关闭");
+                    layer.msg('已更新!', {icon: 1, time: 1000});
+                    x_admin_father_reload();
+                    open(location, '_self').close();
+
                 },
                 error : function(error) {
                     alert(error);
@@ -105,7 +110,7 @@
                 <span class="x-red">*</span>电话号码
             </label>
             <div class="layui-input-inline">
-                <input type="text" id="L_telcode" name="telCode" required="" lay-verify="telCode"
+                <input type="text" id="L_telCode" name="telCode" required="" lay-verify="telCode"
                        autocomplete="off" class="layui-input">
             </div>
         </div>
@@ -169,6 +174,12 @@
 
         //自定义验证规则
         form.verify({
+            uId: function(value){
+                if(value === '' || value === null){
+                    return 'ID不能为空';
+                }
+            }
+            ,
             password: function(value){
                 if(value === '' || value === null){
                     return '密码不能为空';
@@ -184,7 +195,7 @@
                     return 'uRull不能为空';
                 }
             }
-            ,telcode: function(value){
+            ,telCode: function(value){
                 if(value === '' || value === null){
                     return '电话号码不能为空';
                 }

@@ -41,7 +41,7 @@
     <update id="update" parameterType="UserInfo">
         update userinfo
         <set>
-            <if test="pwd != null"> pwd=#{password} ,</if>
+            <if test="password != null"> PWD=#{password} ,</if>
             <if test="name != null and name != ''"> name=#{name},</if>
             <if test="uRull != null"> urull=#{uRull} , </if>
             <if test="telCode != null and telCode != ''"> TelCode=#{telCode}, </if>
@@ -51,11 +51,11 @@
             <if test="delivePackageId != null and delivePackageId != ''"> DelivePackageID=#{delivePackageId} , </if>
             <if test="transPackageId != null and transPackageId != ''"> TransPackageID=#{transPackageId}   </if>
         </set>
-            where uid=#{uId} ;
+            where UID=#{uId} ;
     </update>
 
     <delete id="delete" parameterType="int">
-        delete * from userinfo where uid=#{uId};
+        delete from userinfo where uid=#{uId};
     </delete>
 
     <select id="checkLogin" resultMap="userInfoMap">
@@ -74,6 +74,9 @@
             </when>
             <when test="propertyName == 'TelCode'">
                 and TelCode like #{value,jdbcType=VARCHAR}
+            </when>
+            <when test="propertyName == 'Status'">
+                and Status like #{value,jdbcType=VARCHAR}
             </when>
             <when test="propertyName == 'DptID'">
                 and DptID like #{value,jdbcType=VARCHAR}

@@ -112,6 +112,7 @@ public class UserController {
      */
     @RequestMapping(value = "/addUserInfo", method = RequestMethod.POST)
     public ResponseEntity<UserInfo> addUserInfo(@RequestBody UserInfo userInfo) {
+        System.out.println("addUserInfo="+userInfo);
         userInfoService.save(userInfo);
         return ResponseEntity.ok().header("Type", "Save").body(userInfo);
     }

@@ -13,11 +13,8 @@
         <script type="text/javascript" src="lib/layui/layui.js" charset="utf-8"></script>
         <script type="text/javascript" src="js/xadmin.js"></script>
         <script type="text/javascript" src="js/cookie.js"></script>
-        <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
-        <!--[if lt IE 9]>
-          <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
-          <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
+        <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+        <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
    </head>
   
    <body>
@@ -41,9 +38,11 @@
                    data: JSON.stringify({"password":password,"name":name,"uRull":urull,"telCode":telcode,"status":status,"dptId":dptid,
                        "receivePackageId":receivepackageid,"delivePackageId":delivepackageid,"transPackageId":transpackageid}),
                    success : function(data) {
-                       console.log(JSON.stringify({"password":pwd,"name":name,"uRull":urull,"telCode":telcode,"status":status,"dptId":dptid,
+                       console.log(JSON.stringify({"password":password,"name":name,"uRull":urull,"telCode":telcode,"status":status,"dptId":dptid,
                            "receivePackageId":receivepackageid,"delivePackageId":delivepackageid,"transPackageId":transpackageid}));
                        layer.msg('已添加!',{icon:1,time:1000});
+                       alert("关闭该页面");
+                       x_admin_close();
                    },
                    error : function(error) {
                        alert(error);
@@ -83,11 +82,11 @@
                       </div>
                   </div>
                  <div class="layui-form-item">
-                     <label for="L_telcode" class="layui-form-label">
+                     <label for="L_telCode" class="layui-form-label">
                          <span class="x-red">*</span>电话号码
                      </label>
                      <div class="layui-input-inline">
-                         <input type="text" id="L_telcode" name="telCode" required="" lay-verify="telCode"
+                         <input type="text" id="L_telCode" name="telCode" required="" lay-verify="telCode"
                                 autocomplete="off" class="layui-input">
                      </div>
                  </div>
@@ -166,7 +165,7 @@
                             return 'uRull不能为空';
                         }
                     }
-                    ,telcode: function(value){
+                    ,telCode: function(value){
                         if(value === '' || value === null){
                             return '电话号码不能为空';
                         }

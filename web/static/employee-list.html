@@ -42,6 +42,7 @@
                             "<tr> " +
 
                             "<td>"+data[i].uId +"</td> " +
+                            "<td>"+data[i].password +"</td> " +
                             "<td>"+data[i].name +"</td>" +
                             "<td>"+data[i].uRull +"</td>" +
                             "<td>"+data[i].telCode +" </td>" +
@@ -77,15 +78,15 @@
                <div class="layui-inline" style="margin-left: 530px">
                    <xblock>
                    <select id="select">
-                       <option value="uId">用户ID</option>
-                       <option value="name">姓名</option>
-                       <option value="uRull">Urull</option>
-                       <option value="telCode">电话号码</option>
-                       <option value="status">状态</option>
-                       <option value="dptId">部门编号</option>
-                       <option value="receivePackageId">揽收包裹编号</option>
-                       <option value="delivePackageId">派送包裹编号</option>
-                       <option value="transPackageId">传送包裹编号</option>
+                       <option value="UID">用户ID</option>
+                       <option value="Name">姓名</option>
+                       <option value="URull">Urull</option>
+                       <option value="TelCode">电话号码</option>
+                       <option value="Status">状态</option>
+                       <option value="DptID">部门编号</option>
+                       <option value="ReceivePackageID">揽收包裹编号</option>
+                       <option value="DelivePackageID">派送包裹编号</option>
+                       <option value="TransPackageID">传送包裹编号</option>
                    </select>
                    <select id="selectway">
                        <option value="eq">等值查找</option>
@@ -145,7 +146,6 @@
 
     /*用户-删除*/
     function employee_del(obj,uId){
-        alert(uId);
         layer.confirm('确认要删除吗？',function(index){
             //发异步删除数据
             var str="http://localhost:8080/user/deleteUserInfo/"+uId;
