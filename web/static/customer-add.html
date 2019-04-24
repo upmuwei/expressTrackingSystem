@@ -19,13 +19,13 @@
         <script>
              $(function () {
                   $("#add").click(function (){
-                  var name=$("#L_name").val();
-                  var telcode=$("#L_telCode").val();
-                  var department=$("#L_department").val();
-                  var regioncode=$("#L_regionCode").val();
-                  var address=$("#L_address").val();
-                  var postcode=$("#L_postCode").val();
-                  //alert(postcode);
+                       var name=$("#L_name").val();
+                       var telcode=$("#L_telCode").val();
+                       var department=$("#L_department").val();
+                       var regioncode=$("#L_regionCode").val();
+                       var address=$("#L_address").val();
+                       var postcode=$("#L_postCode").val();
+                       //alert(postcode);
                   $.ajax({
                        url: "http://localhost:8080/misc/saveCustomerInfo",
                        type: "post",
@@ -102,43 +102,43 @@
         </div>
         <script>
             layui.use(['form','layer'], function(){
-            $ = layui.jquery;
-            var form = layui.form
-            ,layer = layui.layer;
-        
-            //自定义验证规则
-            form.verify({
-                name: function(value){
-                if(value === '' || value === null){
-                    return '姓名不能为空';
-                }
-            }
-            ,telCode: function(value){
-                 if(value === '' || value === null){
-                     return '电话不能为空';
-                 }
-              }
-            ,department: function(value){
-                  if(value === '' || value === null){
-                      return '工作单位不能为空';
-                  }
-              }
-            ,regionCode: function(value){
-                  if(value === '' || value === null){
-                      return '地区不能为空';
-                  }
-              }
-            ,address: function(value){
-                  if(value === '' || value === null){
-                      return '地址不能为空';
-                  }
-              }
-            ,postCode: function(value){
-                  if(value === '' || value === null){
-                      return '邮政编码不能为空';
-                  }
-                }
-            });
+                 $ = layui.jquery;
+                 var form = layui.form
+                 ,layer = layui.layer;
+
+                 //自定义验证规则
+                 form.verify({
+                      name: function(value){
+                          if(value === '' || value === null){
+                              return '姓名不能为空';
+                          }
+                       }
+                      ,telCode: function(value){
+                           if(value === '' || value === null){
+                               return '电话不能为空';
+                           }
+                        }
+                      ,department: function(value){
+                            if(value === '' || value === null){
+                                return '工作单位不能为空';
+                            }
+                        }
+                      ,regionCode: function(value){
+                            if(value === '' || value === null){
+                                return '地区不能为空';
+                            }
+                        }
+                      ,address: function(value){
+                            if(value === '' || value === null){
+                                return '地址不能为空';
+                            }
+                        }
+                      ,postCode: function(value){
+                            if(value === '' || value === null){
+                                return '邮政编码不能为空';
+                            }
+                       }
+                 });
             //监听提交
             form.on('submit(add)', function(data){
                 console.log(data);

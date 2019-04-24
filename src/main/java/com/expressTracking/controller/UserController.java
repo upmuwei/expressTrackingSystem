@@ -89,7 +89,6 @@ public class UserController {
                 break;
             default: throw new Exception("参数错误");
             }
-
         return ResponseEntity.ok().header("Type", "Select").body(userInfoList);
     }
 
@@ -98,7 +97,7 @@ public class UserController {
      * @param uId 用户id
      * @return {@code HttpStatus=200, Header={"Type", "Delete"}}"删除成功"
      */
-    @RequestMapping(value = "/deleteUserInfo/{uId}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/deleteUserInfo/{uId}", method = RequestMethod.GET)
     public ResponseEntity<String> deleteUserInfo(@PathVariable("uId") int uId) {
         if (userInfoService.delete(uId) == 1) {
             return ResponseEntity.ok().header("Type", "Delete").body("{\"message\":\"删除成功\"}");
@@ -113,6 +112,7 @@ public class UserController {
      */
     @RequestMapping(value = "/addUserInfo", method = RequestMethod.POST)
     public ResponseEntity<UserInfo> addUserInfo(@RequestBody UserInfo userInfo) {
+        System.out.println("addUserInfo="+userInfo);
         userInfoService.save(userInfo);
         return ResponseEntity.ok().header("Type", "Save").body(userInfo);
     }

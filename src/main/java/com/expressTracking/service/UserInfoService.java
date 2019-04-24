@@ -1,7 +1,6 @@
 package com.expressTracking.service;
 
 import com.expressTracking.entity.UserInfo;
-
 import java.util.List;
 
 public interface UserInfoService {
@@ -19,4 +18,5 @@ public interface UserInfoService {
     public List<UserInfo> findLike(String propertyName, String value);
 
     public List<UserInfo> findBy(String propertyName, String value);
+
 }
