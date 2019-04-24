@@ -53,7 +53,7 @@
                     "id":id, "name": name, "telCode": telcode, "department": department,
                     "regionCode": regioncode, "address": address, "postCode": postcode
                 }),
-                success: function () {
+                success: function (data) {
                     x_admin_close();
                     alert("即将关闭");
                     layer.msg('已更新!', {icon: 1, time: 1000});
@@ -70,14 +70,6 @@
 </script>
 <div class="x-body">
     <form class="layui-form">
-        <!--<div class="layui-form-item">-->
-            <!--<label for="L_id" class="layui-form-label">-->
-                <!--<span class="x-red">*</span>编号-->
-            <!--</label>-->
-            <!--<div class="layui-input-inline">-->
-                <!--<input type="text" id="L_id" value="" name="id" required="" lay-verify="id" autocomplete="off" class="layui-input">-->
-            <!--</div>-->
-        <!--</div>-->
         <div class="layui-form-item">
             <label for="L_name" class="layui-form-label">
                 <span class="x-red">*</span>姓名
