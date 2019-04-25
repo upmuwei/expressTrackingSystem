@@ -2,6 +2,8 @@ package com.expressTracking.controller;
 
 import com.expressTracking.entity.*;
 import com.expressTracking.service.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,6 +23,8 @@ import java.util.List;
 @RequestMapping("/misc")
 public class MiscController {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(MiscController.class);
+
 	private final TransNodeService transNodeService;
 
 	private final CustomerInfoService customerInfoService;
@@ -33,20 +37,23 @@ public class MiscController {
 
 	private final UserPackageService userPackageService;
 
+	private final UserInfoService userInfoService;
+
 	private final TransPackageService transPackageService;
 
 	@Autowired
 	public MiscController(TransNodeService transNodeService, CustomerInfoService customerInfoService,
-						  RegionService regionService, PackageRouteService packageRouteService,
-						  TransHistoryService transHistoryService, UserPackageService userPackageService,
-						  TransPackageService transPackageService) {
+                          RegionService regionService, PackageRouteService packageRouteService,
+                          TransHistoryService transHistoryService, UserPackageService userPackageService,
+                          UserInfoService userInfoService, TransPackageService transPackageService) {
 		this.transNodeService = transNodeService;
 		this.customerInfoService = customerInfoService;
 		this.regionService = regionService;
 		this.packageRouteService = packageRouteService;
 		this.transHistoryService = transHistoryService;
 		this.userPackageService = userPackageService;
-		this.transPackageService = transPackageService;
+        this.userInfoService = userInfoService;
+        this.transPackageService = transPackageService;
 	}
 
 	/**
@@ -147,8 +154,7 @@ public class MiscController {
 	@RequestMapping(value = "/updateCustomerInfo", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<CustomerInfo> updateCustomerInfo(@RequestBody CustomerInfo customerInfo) {
-		//System.out.println(customerInfo);
-		customerInfoService.update(customerInfo);
+	    customerInfoService.update(customerInfo);
 		return ResponseEntity.ok().header("Type", "Update").body(customerInfo);
 	}
 
@@ -196,7 +202,6 @@ public class MiscController {
 			CodeNamePair cn = new CodeNamePair(rg.getRegionCode(),rg.getPrv());
 			listCN.add(cn);
 		}
-		System.out.println("测试code和name"+listCN.get(0).getCode()+listCN.get(0).getName());
 		return ResponseEntity.ok().header("Type", "Select").body(listCN);
 	}
 
@@ -295,6 +300,8 @@ public class MiscController {
 									 @PathVariable("nodeUId")int nodeUId,@PathVariable("userId")int userId) throws Exception {
         UsersPackage usersPackage = userPackageService.findByPackageId(packageId);
         TransPackage transPackage = transPackageService.get(packageId);
+        UserInfo userInfo = userInfoService.get(nodeUId);
+        TransNode transNode = transNodeService.get(userInfo.getDptId());
         if (usersPackage == null) {
             throw new Exception("包裹id不存在");
         }else if (transPackage.getStatus() == 2) {
@@ -305,6 +312,8 @@ public class MiscController {
         	usersPackage.setUserUid(userId);
         	usersPackage.setSn(0);
         	userPackageService.save(usersPackage);
+        	transHistory.setX(transNode.getX());
+        	transHistory.setY(transNode.getY());
         	transHistory.setuIdFrom(nodeUId);
         	transHistory.setuIdTo(userId);
         	transHistory.setActTime(getCurrentDate());

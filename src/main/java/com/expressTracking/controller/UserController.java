@@ -2,6 +2,7 @@ package com.expressTracking.controller;
 
 import com.expressTracking.entity.UserInfo;
 import com.expressTracking.service.UserInfoService;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +10,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -126,5 +131,40 @@ public class UserController {
     public ResponseEntity<UserInfo> updateUserInfo(@RequestBody UserInfo userInfo) {
         userInfoService.update(userInfo);
         return ResponseEntity.ok().header("Type", "Update").body(userInfo);
+    }
+
+    /**
+     * 上传员工头像图片
+     * @param uId 员工Id
+     * @param file 图片文件
+     * @return {@code httpStatus=200, header={"Type","Save"}} 图片字节流
+     */
+    @RequestMapping(value = "uploadUserInfoImage/{uId}", method = RequestMethod.POST)
+    public ResponseEntity<byte[]> uploadExpressImage(@RequestParam("file") MultipartFile file,
+                                                     @PathVariable("uId") String uId) throws Exception {
+        if (file == null) {
+            throw  new Exception("上传文件出错");
+        } else {
+            FileUtils.copyInputStreamToFile(
+                    file.getInputStream(),
+                    new File("D:\\expressTracking\\userInfo\\images\\",
+                            uId));
+        }
+        return ResponseEntity.ok().header("Type","Save").body(file.getBytes());
+    }
+
+    /**
+     * 得到员工头像图片字节流
+     * @param uId 员工Id
+     * @return {@code httpStatus=200, header={"Type","Select"}} 图片字节流
+     */
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    @RequestMapping(value = "getCustomInfoImage/{expressId}", method = RequestMethod.GET)
+    public ResponseEntity<byte[]> getExpressImage(@PathVariable("uId") String uId) throws IOException {
+        String path = "D:\\expressTracking\\userInfo\\images\\" + uId;
+        FileInputStream file = new FileInputStream(path);
+        byte[] buff = new byte[file.available()];
+        file.read(buff);
+        return ResponseEntity.ok().header("Type", "Select").body(buff);
     }
 }
