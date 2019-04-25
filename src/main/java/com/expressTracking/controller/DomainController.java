@@ -3,6 +3,8 @@ package com.expressTracking.controller;
 import com.expressTracking.entity.*;
 import com.expressTracking.service.*;
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,8 @@ import java.util.*;
 @RequestMapping("/domain")
 @RestController
 public class DomainController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(DomainController.class);
 
     private final ExpressSheetService expressSheetService;
 
@@ -47,7 +51,7 @@ public class DomainController {
         this.transNodeService = transNodeService;
     }
 
-    private Date getCurrentDate() {
+    private Date getCurrentDate() throws Exception {
 
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         Date tm = new Date();
@@ -55,6 +59,7 @@ public class DomainController {
             tm= sdf.parse(sdf.format(new Date()));
         } catch (java.text.ParseException e) {
             e.printStackTrace();
+            throw new Exception("获取时间出错");
         }
         return tm;
     }
@@ -97,22 +102,22 @@ public class DomainController {
         } else {
             FileUtils.copyInputStreamToFile(
                     file.getInputStream(),
-                    new File("D:\\expressTracking\\images\\",
+                    new File("D:\\expressTracking\\expressSheet\\images\\",
                             expressId));
         }
         return ResponseEntity.ok().header("Type","Save").body(file.getBytes());
     }
 
     /**
-     * 得到图片字节流
+     * 得到快递图片字节流
      * @param expressId 快件单号
      * @return {@code httpStatus=200, header={"Type","Select"}} 图片字节流
-     * @throws FileNotFoundException 文件路径错误
+     * @throws IOException
      */
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @RequestMapping(value = "getExpressImage/{expressId}", method = RequestMethod.GET)
     public ResponseEntity<byte[]> getExpressImage(@PathVariable("expressId") String expressId) throws IOException {
-        String path = "D:\\expressTracking\\images\\" + expressId;
+        String path = "D:\\expressTracking\\expressSheet\\" + expressId;
         FileInputStream file = new FileInputStream(path);
         byte[] buff = new byte[file.available()];
         file.read(buff);
@@ -147,7 +152,7 @@ public class DomainController {
      * @return {@code HttpStatus=200, Header={"Type", "Save"}}快递订单
      */
     @RequestMapping(value = "/createExpressSheet", method = RequestMethod.POST)
-    public ResponseEntity<ExpressSheet> createExpressSheet(@RequestBody ExpressSheet expressSheet) {
+    public ResponseEntity<ExpressSheet> createExpressSheet(@RequestBody ExpressSheet expressSheet) throws Exception {
         SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddHHmmss");
         Date tm = getCurrentDate();
         String s = sdf.format(tm);
@@ -291,7 +296,7 @@ public class DomainController {
      */
     @RequestMapping(value = "/newTransPackage/{uId}", method = RequestMethod.POST)
     public ResponseEntity<TransPackage> newTransPackage(@RequestBody TransPackage transPackage,
-                                                        @PathVariable("uId") int uId){
+                                                        @PathVariable("uId") int uId) throws Exception {
         transPackage.setCreateTime(getCurrentDate());
         transPackageService.save(transPackage);
         return ResponseEntity.ok().header("Type", "Save").body(transPackage);

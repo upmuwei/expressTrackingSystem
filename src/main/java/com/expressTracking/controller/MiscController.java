@@ -2,6 +2,8 @@ package com.expressTracking.controller;
 
 import com.expressTracking.entity.*;
 import com.expressTracking.service.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,6 +22,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/misc")
 public class MiscController {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(MiscController.class);
 
 	private final TransNodeService transNodeService;
 
