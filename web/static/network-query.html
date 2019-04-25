@@ -8,64 +8,133 @@
     #allmap{
         height:500px;width:100%;
     }
-    #r-result{
-        width:100%; font-size:14px;
-    }
     .div1 {
         width:900px;
         height:500px;
         border:5px solid black;
     }
-    #firstul{
-        margin-top: 20px;
-        margin-bottom: 10px;
-    }
     .title_right{
+        margin-top: 20px;
         margin-bottom: 20px;
     }
 </style>
-<link rel="stylesheet" href="css/bootstrap.css" />
-<link rel="stylesheet" href="css/css.css" />
 <link rel="stylesheet" href="./css/font.css">
 <link rel="stylesheet" href="./css/xadmin.css">
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript" src="lib/layui/layui.js" charset="utf-8"></script>
+<script type="text/javascript" src="js/xadmin.js"></script>
+<script type="text/javascript" src="js/cookie.js"></script>
 <!--百度地图API-->
 <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=8nTRAKtZXD0wQ1tzTpcT7lcV1tzgKYTx"></script>
-<script type="text/javascript" src="js/jquery1.9.0.min.js"></script>
-<script type="text/javascript" src="js/bootstrap.min.js"></script>
-<script type="text/javascript" src="js/sdmenu.js"></script>
-<script type="text/javascript" src="js/laydate/laydate.js"></script>
 </head>
 
 <body>
-<!-- 顶部 -->
+<script>
+    $(function(){
+        $("#submit").click(function () {
+            var str;
+            switch ($("#select").val()){
+                case 'ID':
+                    str="http://localhost:8080/misc/getNode/"+$("#input1").val();
+                    break;
+                case 'CodeAndType':
+                    str="http://localhost:8080/misc/getNodesList/"+$("#input1").val()+"/"+$("#input2").val();
+                    break;
+                default:
+            }
+            $.ajax({
+                url: str,
+                type: "GET",
+                dataType: "JSON",
+                contentType : "application/json; charset=utf-8",
+                success:function(data){
+                    //$("#numspan").text("显示数据："+data.length+"条");
+                    for(var i=0;i<data.length;i++) {
+                            alert(data[i].id);
+                            // for(var i=0;i<data.length;i++){
+                            // var str="<td class='td-manage'>"+
+                            //     '<a title="编辑"  href="javascript:;"  onclick="x_admin_show( \'编辑\',\'customer-edit.html?Data='+data[i].id+'\',600,400)">'+
+                            //     "<i class=\"layui-icon\">&#xe642;</i>" +
+                            //     "</a>" +
+                            //     "<a title='修改密码' href='javascript:;' onclick='x_admin_show(\"修改密码\",\"customer-password.html\",600,400)'> " +
+                            //     "<i class='layui-icon'>&#xe631;</i> " +
+                            //     "</a>" +
+                            //     '<a title="删除" href="javascript:;" onclick="customer_del(this,'+data[i].id+')">'+
+                            //     "<i class='layui-icon'>&#xe640;</i> " +
+                            //     "</a> "+
+                            //     "</td>"
+                            $("#firsttbody").append(
+                                "<tr> " +
+                                // "<td><checkbox /></td>" +
+                                "<td>" + data[i].id + "</td> " +
+                                "<td>" + data[i].nodeName + "</td>" +
+                                "<td>" + data[i].nodeType + "</td>" +
+                                "<td>" + data[i].regionCode + " </td>" +
+                                "<td>" + data[i].telCode + "</td>" +
+                                "<td>" + data[i].x + "</td>" +
+                                "<td>" + data[i].y + "</td> " +
+                                "</tr>");
+                    }
+                },
+                error:function(error){
+                    alert(error);
+                }
+            });
+        });
+    });
+</script>
+    <div class="x-nav">
+        <span class="layui-breadcrumb">
+              <a href="">首页</a>
+        </span>
+        <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+            <i class="layui-icon" style="line-height:30px">刷新</i>
+        </a>
+    </div>
+    <div class="x-body">
+        <div class="layui-row" style="margon:auto;width: 1200px">
+
+            <form class="layui-form layui-col-md12 x-so" method="#" >
+                <div class="layui-inline" style="margin-left: 580px" >
+                    <select id="select">
+                        <option value="ID">ID查询</option>
+                        <option value="CodeAndType">地区编码和类型查询</option>
+                    </select>
+                    <input id="input1" class="layui-input" type="text" name="customername" placeholder="请输入..." autocomplete="off" value="">
+                    <button class="layui-btn" id="submit" type="button"><i class="layui-icon">&#xe615;</i></button><br>
+                    <input id="input2" class="layui-input" type="text" name="customername" placeholder="第二种方式请输入类型" autocomplete="off" value="">
+                </div>
+            </form>
+
+        </div>
+
+        <xblock style=" margin:auto;width: 1200px">
+            <button class="layui-btn" onclick="x_admin_show('添加网点信息','./network-add.html',600,400)"><i class="layui-icon"></i>添加</button>
+            <span class="x-right" id="numspan" style="line-height:40px" type="text">显示数据：0条</span>
+        </xblock>
+    </div>
     <div id="middle">
          <div class="right"  id="mainFrame">
              <div class="right_cont">
-                 <ul id="firstul"  class="breadcrumb" align="center">当前位置：
-                     <a href="#">网点管理</a>
-                     <span class="divider">/</span>
-                      网点列表
-                 </ul>
-                 <div class="title_right" align="center"><strong>节点查询</strong></div>
-                 <div style="width:900px; margin:auto">
-
-                     <table class="layui-table x-admin">
-                         <tr>
-                             <td width="20%" align="right" bgcolor="#f1f1f1">节点ID：</td>
-                             <td width="25%"><input style=" width:150px" type="text" name="input18" id="nodeid" class="span1-1" /></td>
-                             <td width="20%" align="right" bgcolor="#f1f1f1">地区CODE：</td>
-                             <td width="25%"><input style=" width:150px" type="text" name="input18" id="regioncode" class="span1-1" /></td>
-                             <td width="20%" align="right" bgcolor="#f1f1f1">节点电话：</td>
-                             <td width="25%"><input style="width:150px" type="text" name="" id="nodetel"  class="span1-1" /></td>
-                         </tr>
-                     </table>
-                     <table  class="layui-table x-admin" >
-                         <tr>
-                             <td class="text-center">
-                                 <button id="btnchaxun" type="button"  align="center" style="width:80px;height: 35px" align="center" >查询</button>
-                             </td>
-                         </tr>
-                     </table>
+                 <!--<div class="title_right" align="center" style="font-size: 16px"><strong>节点查询</strong></div>-->
+                 <div style=" margin: auto;width: 1200px;">
+                     <!--<table class="layui-table x-admin">-->
+                         <!--<tr>-->
+                             <!--<td width="10%" align="left" bgcolor="#f1f1f1">节点ID：</td>-->
+                             <!--<td width="25%"> <input style=" width:200px" type="text" name="input18" id="nodeid" class="span1-1" /></td>-->
+                             <!--<td width="10%" align="left" bgcolor="#f1f1f1">地区编号：</td>-->
+                             <!--<td width="25%"> <input style=" width:200px" type="text" name="input18" id="regioncode" class="span1-1" /></td>-->
+                             <!--<td width="10%" align="left" bgcolor="#f1f1f1">节点电话：</td>-->
+                             <!--<td width="25%"> <input style="width:200px" type="text" name="" id="nodetel"  class="span1-1" /></td>-->
+                         <!--</tr>-->
+                     <!--</table>-->
+                     <!--<table  class="layui-table x-admin" >-->
+                         <!--<tr>-->
+                             <!--<td class="text-center" align="center">-->
+                                 <!--<button id="btnchaxun" type="button"  style="width:80px;height: 35px" align="center" >查询</button>-->
+                             <!--</td>-->
+                         <!--</tr>-->
+                     <!--</table>-->
 
                      <table id="nodeinfo" class="layui-table x-admin">
                          <tr>
@@ -79,62 +148,50 @@
                              <td align="center" nowrap="nowrap" bgcolor="#f1f1f1"><strong>纬度</strong></td>
                          </tr>
                          <!--动态添加-->
-                         <tr>
-                             <td align="center">&nbsp;</td>
-                             <td align="center">&nbsp;</td>
-                             <td align="center"></td>
-                             <td align="center"></td>
-                             <td align="center"></td>
-                             <td type="text" align="center"></td>
-                             <td type="text" align="center"></td>
-                         </tr>
+                         <tbody id="firsttbody">
+
+                         </tbody>
                      </table>
+                     <div align="center" class="x-admin-backlog" style="margin-top: 20px;margin-bottom: 20px">
+                         <p style="font-style: normal;margin-bottom: 20px">请输入经度和纬度</p>
+                         <input id="specialx" placeholder="经度" type="text" style="width:120px; height: 20px"/>
+                         <input id="specialy" placeholder="纬度" type="text" style="width:120px; height: 20px"/>
+                     </div>
                      <table  class="margin-bottom-20 table  no-border" >
                          <td class="text-center">
                              <!--<input type="button" value="增加" class="btn btn-info  margin-right-20" style="width:80px;" />-->
                              <!--<input type="button" value="修改" class="btn btn-info  margin-right-20" style="width:80px;" />-->
-                             <input type="button" value="查看位置" class="btn btn-info  " style="width:80px;" onclick="theLocation()" />
+                             <input type="button" value="查看位置" class="btn btn-info  " style="width:80px; height: 30px" onclick="theLocation()" />
                          </td>
                      </table>
                      <!--地图模块-->
                      <div id="allmap" class="div1"></div>
-                     <!--<iframe frameborder="1" width="900px" height="400px" marginheight="5px" marginwidth="5px" scrolling="YES" src="根据经纬度定位.html"></iframe> -->
                  </div>
                  <br><br><br><br><br><br><br><br>
               </div>
          </div>
     </div>
-<script>
-    //？？？？
-    !function(){
-        laydate.skin('molv');
-        laydate({elem: '#Calendar'});
-    }();
-</script>
 <script type="text/javascript">
-    // 百度地图API功能
+   //百度地图API功能
     var map = new BMap.Map("allmap");
-    map.centerAndZoom(new BMap.Point(116.331398,39.897445),11);
+    map.centerAndZoom(new BMap.Point(113.542879,34.824115),12);
+    map.setCurrentCity("郑州");
     map.enableScrollWheelZoom(true);
     // 用经纬度设置地图中心点
     function theLocation(){
-        //alert($('#111').text());
-        //alert(typeof($('#111').text()));
-        if($('#x').text() == ""&&$('#y').text() == ""){
+        if($("#specialx").val()==null &&$('#specialy').val()==null){
             alert("请先查询网点信息");
         }
-        if($('#x').text() != "" && $('#y').text() != ""){
-            //清除地图上生成的信息
+        if($('#specialx').val()!=null && $('#specialy').val()!=null){
+            //清除地图上生成的信息113.824444  36.190519
             map.clearOverlays();
-            var new_point = new BMap.Point($('#x').text(),$('#y').text());
-            // 创建标注
-            var marker = new BMap.Marker(new_point);
-            // 将标注添加到地图中
-            map.addOverlay(marker);
+            var new_point = new BMap.Point($("#specialx").val(),$('#specialy').val());
+            // 将创建的标注添加到地图中
+            map.addOverlay(new BMap.Marker(new_point));
+            //地图中心
             map.panTo(new_point);
         }
     }
-
     function GetQueryString(name) {
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
         var r = window.location.search.substr(1).match(reg);
@@ -160,8 +217,6 @@
             data:{"flag":1},
             dataType:"json",
             success:function(r){
-                //console.log(r);
-
                 var oo = "";
                 var o = '<tr>'+
                     '<td align="center" nowrap="nowrap" bgcolor="#f1f1f1"><strong>节点ID</strong></td>'+
@@ -190,8 +245,8 @@
                             +'<td align="center">'+r.nodeType+'</td>'
                             +'<td align="center">'+r.regionCode+'</td>'
                             +'<td align="center">'+r.telCode+'</td>'
-                            +'<td id="x" type="text" align="center">'+r.x+'</td>'
-                            +'<td id="y" type="text" align="center">'+r.y+'</td>'
+                            +'<td type="text" align="center">'+r.x+'</td>'
+                            +'<td type="text" align="center">'+r.x+'</td>'
                             +'</tr>';
                         alert(o);
                         $("#nodeinfo").html("");
@@ -249,9 +304,6 @@
         });//ajax
     }
     $(function(){ //自动执行
-
-        //alert("welcome");
-
         $("#btnchaxun").click(function(){
             //alert("XXX");
             if($("#nodeid").val()!=""){ //nodeid框 有值
@@ -281,4 +333,3 @@
 </script>
 </body>
 </html>
-

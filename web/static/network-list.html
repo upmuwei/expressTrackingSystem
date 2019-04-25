@@ -1,45 +1,161 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html class="x-admin-sm" lang="ch">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-<title>卓越物流管理系统</title>
-
-<style>
-#allmap{height:500px;width:100%;}
-#r-result{width:100%; font-size:14px;}
-
-.div1
-{
-	width:900px;
-	height:500px;
-	border:5px solid black;
-}
-</style>
-<link rel="stylesheet" href="css/bootstrap.css" />
-<link rel="stylesheet" href="css/css.css" />
-
-<script type="text/javascript" src="js/jquery1.9.0.min.js"></script>
-<script type="text/javascript" src="js/bootstrap.min.js"></script>
-<script type="text/javascript" src="js/sdmenu.js"></script>
-<script type="text/javascript" src="js/laydate/laydate.js"></script>
-
+	<meta charset="UTF-8">
+	<title>网点管理</title>
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<link rel="stylesheet" href="css/font.css">
+	<link rel="stylesheet" href="css/xadmin.css">
+	<script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+	<script type="text/javascript" src="lib/layui/layui.js" charset="utf-8"></script>
+	<script type="text/javascript" src="js/xadmin.js"></script>
+	<script type="text/javascript" src="js/cookie.js"></script>
 </head>
-
-<body>            
-	<div id="middle">
-    
-	</div>
 <script>
-	!function(){
-	laydate.skin('molv');
-	laydate({elem: '#Calendar'});
-	}();
+    $(function(){
+        $("#submit").click(function () {
+            switch ($("#select").val()){
+                case 'name':
+                    var str="http://localhost:8080/misc/getCustomerListByName/"+$("#input").val();
+                    break;
+                case 'telCode':
+                    var str="http://localhost:8080/misc/getCustomerListByTelCode/"+$("#input").val();
+                    break;
+                default:
+            }
+            $.ajax({
+                url:str,
+                type:"GET",
+                dataType:'JSON',
+                contentType : "application/json; charset=utf-8",
+                success:function(data){
+
+                    $("#numspan").text("显示数据："+(data.length).toString()+"条");
+                    for(var i=0;i<data.length;i++){
+                        var str="<td class='td-manage'>"+
+                            '<a title="编辑"  href="javascript:;"  onclick="x_admin_show( \'编辑\',\'customer-edit.html?Data='+data[i].id+'\',600,400)">'+
+                            "<i class=\"layui-icon\">&#xe642;</i>" +
+                            "</a>" +
+                            "<a title='修改密码' href='javascript:;' onclick='x_admin_show(\"修改密码\",\"customer-password.html\",600,400)'> " +
+                            "<i class='layui-icon'>&#xe631;</i> " +
+                            "</a>" +
+                            '<a title="删除" href="javascript:;" onclick="customer_del(this,'+data[i].id+')">'+
+                            "<i class='layui-icon'>&#xe640;</i> " +
+                            "</a> "+
+                            "</td>"
+                        $("#firsttbody").append(
+                            "<tr> " +
+
+                            "<td>"+data[i].id +"</td> " +
+                            "<td>"+data[i].nodeName +"</td>" +
+                            "<td>"+data[i].nodeType +"</td>" +
+                            "<td>"+data[i].regionCode +" </td>" +
+                            "<td>"+data[i].telCode +"</td>" +
+                            "<td>"+data[i].x +"</td>" +
+                            "<td>"+data[i].y +"</td> " +str+
+
+                            "</tr>");
+                    }
+
+                },
+                error:function(error){
+                    alert(error);
+                }
+            });
+        });
+    });
+</script>
+
+<body>
+<div class="x-nav">
+      <span class="layui-breadcrumb">
+          <a href="">首页</a>
+      </span>
+	<a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+		<i class="layui-icon" style="line-height:30px">刷新</i>
+	</a>
+</div>
+<div class="x-body">
+	<div class="layui-row">
+
+		<form class="layui-form layui-col-md12 x-so" method="#">
+			<div class="layui-inline" style="margin-left: 530px">
+				<!--<select id="select">-->
+					<!--<option value="name">姓名</option>-->
+					<!--<option value="telCode">电话号码</option>-->
+				<!--</select>-->
+				<input id="input" class="layui-input" type="text" name="customername" placeholder="请输入..." autocomplete="off" value="">
+				<button class="layui-btn" id="submit" type="button"><i class="layui-icon">&#xe615;</i></button>
+			</div>
+		</form>
+
+	</div>
+
+	<xblock>
+		<button class="layui-btn" onclick="x_admin_show('添加网点信息','./customer-add.html',600,400)"><i class="layui-icon"></i>添加</button>
+		<span class="x-right" id="numspan" style="line-height:40px" type="text">显示数据：0条</span>
+	</xblock>
+
+	<table class="layui-table x-admin">
+		<thead>
+		<tr>
+			<th>ID</th>
+			<th>节点名称</th>
+			<th>节点类型</th>
+			<th>地区编码</th>
+			<th>电话号码</th>
+			<th>经度</th>
+			<th>纬度</th>
+		</tr>
+		</thead>
+
+		<tbody id="firsttbody"></tbody>
+
+	</table>
+
+	<div class="page">
+		<div>
+			<a class="prev">&lt;&lt;</a>
+			<a class="num">1</a>
+			<a class="next">&gt;&gt;</a>
+		</div>
+	</div>
+
+</div>
+<script>
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#start' //指定元素
+        });
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#end' //指定元素
+        });
+    });
+
+    /*用户-删除*/
+    function customer_del(obj,id){
+        layer.confirm('确认要删除吗？',function(){
+            //发异步删除数据
+            var str="http://localhost:8080/misc/deleteCustomerInfo/"+id;
+            $.ajax({
+                url:str,
+                type:"GET",
+                dataType:'JSON',
+                contentType : "application/json; charset=utf-8",
+                success:function(data){
+                    layer.msg('已删除!',{icon:1,time:1000});
+                },
+                error:function(){
+                    alert("error");
+                }
+            });
+            $(obj).parents("tr").remove();
+            layer.msg('已删除!',{icon:1,time:1000});
+        });
+    }
 </script>
 </body>
-<script type="text/javascript">
-	
-</script>
 </html>
-
-

@@ -73,6 +73,7 @@ public class MiscController {
 	 */
 	@RequestMapping(value = "/getNode/{ID}",method = RequestMethod.GET)
 	public ResponseEntity<TransNode> getNode(@PathVariable("ID") String id) {
+		System.out.println(id);
 		TransNode transNode = transNodeService.get(id);
 		return ResponseEntity.ok().header("Type", "Select").body(transNode);
 	}
@@ -86,6 +87,7 @@ public class MiscController {
     @RequestMapping(value = "/getNodesList/{RegionCode}/{Type}",method = RequestMethod.GET)
 	public ResponseEntity<List<TransNode>> getNodesList(@PathVariable("RegionCode") String regionCode,
 														@PathVariable("Type") int type) {
+		System.out.println("regionCode+type"+regionCode+type);
 		List<TransNode> transNodeList = transNodeService.findByRegionCodeAndType(regionCode, type);
     	return ResponseEntity.ok().header("Type", "Select").body(transNodeList);
 	}
