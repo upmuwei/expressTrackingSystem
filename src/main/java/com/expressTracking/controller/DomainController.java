@@ -38,10 +38,12 @@ public class DomainController {
 
     private final TransNodeService transNodeService;
 
+    private final PackageRecordService packageRecordService;
+
     @Autowired
     public DomainController(ExpressSheetService expressSheetService, TransPackageService transPackageService,
                             TransPackageContentService transPackageContentService, UserInfoService userInfoService,
-                            UserPackageService userPackageService, TransHistoryService transHistoryService, TransNodeService transNodeService) {
+                            UserPackageService userPackageService, TransHistoryService transHistoryService, TransNodeService transNodeService, PackageRecordService packageRecordService) {
         this.expressSheetService = expressSheetService;
         this.transPackageService = transPackageService;
         this.transPackageContentService = transPackageContentService;
@@ -49,6 +51,7 @@ public class DomainController {
         this.userPackageService = userPackageService;
         this.transHistoryService = transHistoryService;
         this.transNodeService = transNodeService;
+        this.packageRecordService = packageRecordService;
     }
 
     private Date getCurrentDate() throws Exception {
@@ -291,13 +294,18 @@ public class DomainController {
     /**
      * 创建包裹
      * @param transPackage 包裹单
-     * @param uId 工作人员id
+     * @param uId 员工id
      * @return {@code HttpStatus=200, Header={"Type", "Save"}}包裹信息
      */
     @RequestMapping(value = "/newTransPackage/{uId}", method = RequestMethod.POST)
     public ResponseEntity<TransPackage> newTransPackage(@RequestBody TransPackage transPackage,
                                                         @PathVariable("uId") int uId) throws Exception {
         transPackage.setCreateTime(getCurrentDate());
+        PackageRecord packageRecord = new PackageRecord();
+        packageRecord.setuId(uId);
+        packageRecord.setPackageId(transPackage.getId());
+        packageRecord.setOperation(0);
+        packageRecordService.save(packageRecord);
         transPackageService.save(transPackage);
         return ResponseEntity.ok().header("Type", "Save").body(transPackage);
     }
@@ -305,7 +313,7 @@ public class DomainController {
 
 
     /**
-     * 打开包裹
+     * 拆开包裹
      * @param uId 工作人员id
      * @param id 包裹id
      * @return {@code HttpStatus=200, Header={"Type", "Update"}} "成功信息"
@@ -323,6 +331,11 @@ public class DomainController {
         }
         transPackage.setStatus(0);
         transPackageService.update(transPackage);
+        PackageRecord packageRecord = new PackageRecord();
+        packageRecord.setPackageId(transPackage.getId());
+        packageRecord.setuId(uId);
+        packageRecord.setOperation(3);
+        packageRecordService.save(packageRecord);
         for (TransPackageContent transPackageContent : transPackageContents) {
             if (transPackageContent.getStatus() == 1) {
                 continue;
@@ -345,7 +358,7 @@ public class DomainController {
      * @param uId 转运人员id
      * @return {@code Body="Success", HttpStatus=200, Header={"Type", "Update"}} 成功消息
      */
-    @RequestMapping(value = "/deliveryTransPackage/{transPackageId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/deliveryTransPackage/{transPackageId}/{uId}", method = RequestMethod.POST)
     public ResponseEntity<String> deliveryTransPackage(@PathVariable("transPackageId") String transPackageId,
                                                        @PathVariable("uId")int uId) throws Exception {
         UsersPackage usersPackage = userPackageService.findByPackageId(transPackageId);
@@ -358,6 +371,11 @@ public class DomainController {
         }
         transPackage.setStatus(2);
         transPackageService.update(transPackage);
+        PackageRecord packageRecord = new PackageRecord();
+        packageRecord.setuId(uId);
+        packageRecord.setPackageId(transPackage.getId());
+        packageRecord.setOperation(2);
+        packageRecordService.save(packageRecord);
         Set<TransPackageContent> transPackageContents = transPackage.getContent();
         for(TransPackageContent transPackageContent:transPackageContents) {
             ExpressSheet expressSheet = expressSheetService.get(transPackageContent.getExpressId());
@@ -404,6 +422,7 @@ public class DomainController {
         }
     }
 
+
     /**
      * 把快递装进包裹中
      * @param transPackageId 包裹id
@@ -445,4 +464,27 @@ public class DomainController {
         }
         return ResponseEntity.ok().header("Type", "Select").body(transPackageList);
     }
+
+    /**
+     * 得到包裹操作记录
+     * @param packageId 包裹Id
+     * @return {@code HttpStatus=200, Header={"Type","Select"}} 包裹操作记录集合
+     */
+    @RequestMapping(value = "getPackageRecordByPackageId/{packageId}", method = RequestMethod.GET)
+    public ResponseEntity<List<PackageRecord>> getPackageRecordByPackageId(@PathVariable("packageId")String packageId) {
+        List<PackageRecord> packageRecords = packageRecordService.findByPackageId(packageId);
+        return ResponseEntity.ok().header("Type", "Select").body(packageRecords);
+    }
+
+    /**
+     * 得到包裹操作记录
+     * @param uId 员工Id
+     * @return {@code HttpStatus=200, Header={"Type","Select"}} 包裹操作记录集合
+     */
+    @RequestMapping(value = "getPackageRecordByuId/{uId}", method = RequestMethod.GET)
+    public ResponseEntity<List<PackageRecord>> getPackageRecordByuId(@PathVariable("uId") int uId) {
+        List<PackageRecord> packageRecords = packageRecordService.findByuId(uId);
+        return ResponseEntity.ok().header("Type", "Select").body(packageRecords);
+    }
+
 }

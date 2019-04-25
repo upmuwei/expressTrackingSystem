@@ -200,7 +200,6 @@ public class MiscController {
 			CodeNamePair cn = new CodeNamePair(rg.getRegionCode(),rg.getPrv());
 			listCN.add(cn);
 		}
-		System.out.println("测试code和name"+listCN.get(0).getCode()+listCN.get(0).getName());
 		return ResponseEntity.ok().header("Type", "Select").body(listCN);
 	}
 
