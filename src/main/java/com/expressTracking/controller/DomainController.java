@@ -424,7 +424,24 @@ public class DomainController {
 
 
     /**
-     * 把快递装进包裹中
+     * 确认打包完成
+     * @param transPackageId 包裹id
+     * @param uId 员工Id
+     * @return {@code HttpStatus=200, Header={"Type", "Save"}}包裹内容
+     */
+    @RequestMapping(value = "/packTransPackage/{transPackageId}/{uId}", method = RequestMethod.POST)
+    public ResponseEntity<PackageRecord> packOk(@PathVariable("transPackageId")String transPackageId,
+                                                                @PathVariable("uId")int uId) throws Exception {
+        PackageRecord packageRecord = new PackageRecord();
+        packageRecord.setPackageId(transPackageId);
+        packageRecord.setuId(uId);
+        packageRecord.setOperation(1);
+        return ResponseEntity.ok().header("Type", "Save")
+                .body(packageRecord);
+    }
+
+    /**
+     * 打包
      * @param transPackageId 包裹id
      * @param expressSheetId 快递id
      * @return {@code HttpStatus=200, Header={"Type", "Save"}}包裹内容
