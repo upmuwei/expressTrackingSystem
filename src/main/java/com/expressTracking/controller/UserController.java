@@ -15,8 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,9 +49,7 @@ public class UserController {
         if (userInfo == null) {
             throw new Exception("账号或密码错误");
         }
-
         LOGGER.info(userInfo.getuId() + userInfo.getName() + "登录");
-
         session.setAttribute(String.valueOf(uId), userInfo);
         return ResponseEntity.ok().header("session", String.valueOf(uId)).body(userInfo);
     }
@@ -128,8 +124,10 @@ public class UserController {
      * @return {@code HttpStatus=200, Header={"Type", "Update"}}用户信息
      */
     @RequestMapping(value = "/updateUserInfo", method = RequestMethod.POST)
-    public ResponseEntity<UserInfo> updateUserInfo(@RequestBody UserInfo userInfo) {
-        userInfoService.update(userInfo);
+    public ResponseEntity<UserInfo> updateUserInfo(@RequestBody UserInfo userInfo) throws Exception {
+        if(userInfoService.update(userInfo) == 0) {
+            throw new Exception("更新失败");
+        }
         return ResponseEntity.ok().header("Type", "Update").body(userInfo);
     }
 
@@ -137,7 +135,7 @@ public class UserController {
      * 上传员工头像图片
      * @param uId 员工Id
      * @param file 图片文件
-     * @return {@code httpStatus=200, header={"Type","Save"}} 图片字节流
+     * @return {@code httpStatus=200, header={"Type","Save"}} 图片地址
      */
     @RequestMapping(value = "uploadUserInfoImage/{uId}", method = RequestMethod.POST)
     public ResponseEntity<byte[]> uploadExpressImage(@RequestParam("file") MultipartFile file,
@@ -147,24 +145,24 @@ public class UserController {
         } else {
             FileUtils.copyInputStreamToFile(
                     file.getInputStream(),
-                    new File("D:\\expressTracking\\userInfo\\images\\",
+                    new File("D:\\expressTracking\\images\\userInfo\\",
                             uId));
         }
         return ResponseEntity.ok().header("Type","Save").body(file.getBytes());
     }
 
     /**
-     * 得到员工头像图片字节流
+     * 得到图片地址
      * @param uId 员工Id
      * @return {@code httpStatus=200, header={"Type","Select"}} 图片字节流
      */
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    @RequestMapping(value = "getCustomInfoImage/{expressId}", method = RequestMethod.GET)
-    public ResponseEntity<byte[]> getExpressImage(@PathVariable("uId") String uId) throws IOException {
+    @RequestMapping(value = "getCustomInfoImage/{uId}", method = RequestMethod.GET)
+    public ResponseEntity<String> getExpressImage(@PathVariable("uId") String uId) {
         String path = "D:\\expressTracking\\userInfo\\images\\" + uId;
-        FileInputStream file = new FileInputStream(path);
-        byte[] buff = new byte[file.available()];
-        file.read(buff);
-        return ResponseEntity.ok().header("Type", "Select").body(buff);
+        File file = new File(path);
+        if (!file.exists()) {
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body("{\"message\":\"资源不存在\"}");
+        }
+        return ResponseEntity.ok().header("Type", "Select").body(path);
     }
 }

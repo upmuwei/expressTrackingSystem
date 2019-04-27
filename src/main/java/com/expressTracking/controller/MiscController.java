@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -79,8 +80,11 @@ public class MiscController {
 	 * @return {@code HttpStatus=200, Header={"Type", "Select"}}节点信息
 	 */
 	@RequestMapping(value = "/getNode/{ID}",method = RequestMethod.GET)
-	public ResponseEntity<TransNode> getNode(@PathVariable("ID") String id) {
+	public ResponseEntity<TransNode> getNode(@PathVariable("ID") String id) throws Exception {
 		TransNode transNode = transNodeService.get(id);
+		if (transNode == null) {
+			throw new Exception("获取失败");
+		}
 		return ResponseEntity.ok().header("Type", "Select").body(transNode);
 	}
 
@@ -139,8 +143,11 @@ public class MiscController {
 	 */
     @RequestMapping(value = "/getCustomerInfo/{id}",method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseEntity<CustomerInfo> getCustomerInfo(@PathVariable("id") int id) {
+	public ResponseEntity<CustomerInfo> getCustomerInfo(@PathVariable("id") int id) throws Exception {
 		CustomerInfo customerInfo = customerInfoService.get(id);
+		if (customerInfo == null) {
+			throw new Exception("获取失败");
+		}
 		return ResponseEntity.ok().header("Type", "Select").body(customerInfo);
 	}
 
@@ -151,8 +158,10 @@ public class MiscController {
 	 */
 	@RequestMapping(value = "/updateCustomerInfo", method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<CustomerInfo> updateCustomerInfo(@RequestBody CustomerInfo customerInfo) {
-	    customerInfoService.update(customerInfo);
+	public ResponseEntity<CustomerInfo> updateCustomerInfo(@RequestBody CustomerInfo customerInfo) throws Exception {
+	    if (customerInfoService.update(customerInfo) == 0) {
+	    	throw new Exception("更新失败");
+		}
 		return ResponseEntity.ok().header("Type", "Update").body(customerInfo);
 	}
 
@@ -181,9 +190,9 @@ public class MiscController {
 	 * @see CustomerInfo
 	 */
     @RequestMapping(value = "/saveCustomerInfo",method = RequestMethod.POST)
-	public ResponseEntity<CustomerInfo> saveCustomerInfo( @RequestBody CustomerInfo obj) {
+	public ResponseEntity<CustomerInfo> saveCustomerInfo( @RequestBody CustomerInfo obj)  throws Exception{
     	customerInfoService.save(obj);
-    	return ResponseEntity.ok().header("Type", "Save").body(obj);
+		return ResponseEntity.ok().header("Type", "Save").body(obj);
 	}
 
 
@@ -296,7 +305,7 @@ public class MiscController {
 	@RequestMapping(value = "/appointTransPorter/{packageId}/{nodeUId}/{userId}" , method = RequestMethod.GET)
 	public ResponseEntity<String> appointTransPorter(@PathVariable("packageId")String packageId,
 									 @PathVariable("nodeUId")int nodeUId,@PathVariable("userId")int userId) throws Exception {
-        UsersPackage usersPackage = userPackageService.findByPackageId(packageId);
+		UsersPackage usersPackage = userPackageService.findByPackageId(packageId);
         TransPackage transPackage = transPackageService.get(packageId);
         UserInfo userInfo = userInfoService.get(nodeUId);
         TransNode transNode = transNodeService.get(userInfo.getDptId());
@@ -305,18 +314,13 @@ public class MiscController {
         }else if (transPackage.getStatus() == 2) {
 			throw  new Exception("包裹处于转运状态，不能为其指派转运员");
         } else {
-        	TransHistory transHistory = new TransHistory();
+        	TransHistory transHistory = new TransHistory(packageId, getCurrentDate(), nodeUId,
+					userId, transNode.getX(), transNode.getY());
         	userPackageService.remove(usersPackage.getSn());
-        	usersPackage.setUserUid(userId);
-        	usersPackage.setSn(0);
-        	userPackageService.save(usersPackage);
-        	transHistory.setX(transNode.getX());
-        	transHistory.setY(transNode.getY());
-        	transHistory.setuIdFrom(nodeUId);
-        	transHistory.setuIdTo(userId);
-        	transHistory.setActTime(getCurrentDate());
-        	transHistory.setPackageId(packageId);
-        	transHistoryService.save(transHistory);
+			transHistoryService.save(transHistory);
+			usersPackage.setUserUid(userId);
+			usersPackage.setSn(0);
+			userPackageService.save(usersPackage);
         	return ResponseEntity.ok().header("Type","Update")
 					.contentType(MediaType.APPLICATION_JSON_UTF8)
 					.body("{\"message\":\"Success\"}");

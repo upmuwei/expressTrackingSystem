@@ -6,6 +6,7 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -95,36 +96,35 @@ public class DomainController {
      * 上传快递图片
      * @param expressId 快件单号
      * @param file 图片文件
-     * @return {@code httpStatus=200, header={"Type","Save"}} 图片字节流
+     * @return {@code httpStatus=200, header={"Type","Save"}} 图片地址
      */
     @RequestMapping(value = "uploadExpressImage/{expressId}", method = RequestMethod.POST)
-    public ResponseEntity<byte[]> uploadExpressImage(@RequestParam("file") MultipartFile file,
+    public ResponseEntity<String> uploadExpressImage(@RequestParam("file") MultipartFile file,
                                                           @PathVariable("expressId") String expressId) throws Exception {
+        String path = "D:\\expressTracking\\images\\expressSheet\\" + expressId;
         if (file == null) {
             throw  new Exception("上传文件出错");
         } else {
             FileUtils.copyInputStreamToFile(
                     file.getInputStream(),
-                    new File("D:\\expressTracking\\expressSheet\\images\\",
-                            expressId));
+                    new File(path));
         }
-        return ResponseEntity.ok().header("Type","Save").body(file.getBytes());
+        return ResponseEntity.ok().header("Type","Save").body("{\"message\":\"" + path + "\"}");
     }
 
     /**
-     * 得到快递图片字节流
+     * 得到快递图片地址
      * @param expressId 快件单号
-     * @return {@code httpStatus=200, header={"Type","Select"}} 图片字节流
-     * @throws IOException
+     * @return {@code httpStatus=200, header={"Type","Select"}} 图片地址
      */
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    @RequestMapping(value = "getExpressImage/{expressId}", method = RequestMethod.GET)
-    public ResponseEntity<byte[]> getExpressImage(@PathVariable("expressId") String expressId) throws IOException {
-        String path = "D:\\expressTracking\\expressSheet\\" + expressId;
-        FileInputStream file = new FileInputStream(path);
-        byte[] buff = new byte[file.available()];
-        file.read(buff);
-        return ResponseEntity.ok().header("Type", "Select").body(buff);
+    @RequestMapping(value = "getCustomInfoImage/{expressId}", method = RequestMethod.GET)
+    public ResponseEntity<String> getExpressImage(@PathVariable("expressId") String expressId){
+        String path = "D:\\expressTracking\\userInfo\\images\\" + expressId;
+        File file = new File(path);
+        if (!file.exists()) {
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body("{\"message\":\"资源不存在\"}");
+        }
+        return ResponseEntity.ok().header("Type", "Select").body("{\"message\":\"" + path + "\"}");
     }
 
     /**

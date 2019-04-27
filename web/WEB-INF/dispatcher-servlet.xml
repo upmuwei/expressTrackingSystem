@@ -10,6 +10,7 @@
     <!--<mvc:default-servlet-handler/>-->
 
     <mvc:resources mapping="/**" location="static/"/>
+    <mvc:resources mapping="/expressSheet/images/**" location="D:/expressTracking/expressSheet/images/"/>
 
     <mvc:interceptors>
         <mvc:interceptor>
@@ -29,7 +30,7 @@
         </mvc:interceptor>
     </mvc:interceptors>
 
- <!--   <mvc:annotation-driven>
+    <mvc:annotation-driven>
         <mvc:message-converters>
             <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
                 <property name="supportedMediaTypes">
@@ -38,11 +39,10 @@
                     </list>
                 </property>
                 <property name="prettyPrint" value="true"/>
-                &lt;!&ndash;<property name="objectMapper" ref="objectMapper"/>&ndash;&gt;
+                <!--<property name="objectMapper" ref="objectMapper"/>-->
             </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
--->
     <mvc:annotation-driven>
         <mvc:message-converters>
             <bean class="org.springframework.http.converter.StringHttpMessageConverter">

@@ -12,6 +12,15 @@ public class TransHistory implements Serializable {
 	public TransHistory() {
 	}
 
+	public TransHistory(String packageId, Date actTime, int uIdFrom, int uIdTo, Float x, Float y) {
+		this.packageId = packageId;
+		this.actTime = actTime;
+		this.uIdFrom = uIdFrom;
+		this.uIdTo = uIdTo;
+		this.x = x;
+		this.y = y;
+	}
+
 	/**
 	 * 主键，自动生成
 	 */
