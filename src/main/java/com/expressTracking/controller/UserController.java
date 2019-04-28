@@ -112,8 +112,7 @@ public class UserController {
      * @return {@code HttpStatus=200, Header={"Type", "Save"}}"添加成功"
      */
     @RequestMapping(value = "/addUserInfo", method = RequestMethod.POST)
-    public ResponseEntity<UserInfo> addUserInfo(@RequestBody UserInfo userInfo) {
-        System.out.println("addUserInfo="+userInfo);
+    public ResponseEntity<UserInfo> addUserInfo(@RequestBody UserInfo userInfo) throws Exception{
         userInfoService.save(userInfo);
         return ResponseEntity.ok().header("Type", "Save").body(userInfo);
     }
@@ -138,17 +137,17 @@ public class UserController {
      * @return {@code httpStatus=200, header={"Type","Save"}} 图片地址
      */
     @RequestMapping(value = "uploadUserInfoImage/{uId}", method = RequestMethod.POST)
-    public ResponseEntity<byte[]> uploadExpressImage(@RequestParam("file") MultipartFile file,
+    public ResponseEntity<String> uploadExpressImage(@RequestParam("file") MultipartFile file,
                                                      @PathVariable("uId") String uId) throws Exception {
+        String path = "D:\\expressTracking\\images\\userInfo\\" + uId;
         if (file == null) {
             throw  new Exception("上传文件出错");
         } else {
             FileUtils.copyInputStreamToFile(
                     file.getInputStream(),
-                    new File("D:\\expressTracking\\images\\userInfo\\",
-                            uId));
+                    new File(path));
         }
-        return ResponseEntity.ok().header("Type","Save").body(file.getBytes());
+        return ResponseEntity.ok().header("Type","Save").body(path);
     }
 
     /**

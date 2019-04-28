@@ -1,6 +1,7 @@
 package com.expressTracking.service;
 
 import com.expressTracking.entity.TransPackage;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -15,4 +16,6 @@ public interface TransPackageService {
     public void save(TransPackage transPackage);
 
     public void update(TransPackage transPackage);
+
+    public int newTransPackage(TransPackage transPackage, int uId) throws Exception;
 }

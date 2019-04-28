@@ -10,7 +10,7 @@
         <result property="targetNode" column="TargetNode"/>
         <result property="createTime" column="CreateTime"/>
         <result property="status" column="Status"/>
-        <collection property="user" column="id"
+        <association property="user" column="id"
                     select="com.expressTracking.dao.UsersPackageDao.getByPackageId"/>
         <collection property="route" column="id"
                     select="com.expressTracking.dao.PackageRouteDao.getByPackageId"/>
@@ -50,7 +50,7 @@
         <where>
             <choose>
                 <when test="propertyName == 'ID'">
-                    ID = #{value}
+                    ID = #{value,jdbcType=VARCHAR}
                 </when>
                 <when test="propertyName == 'SourceNode'">
                     and SourceNode = #{value,jdbcType=VARCHAR}

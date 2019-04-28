@@ -7,7 +7,7 @@ public interface UserInfoService {
 
     public UserInfo get(int uId);
 
-    public void save(UserInfo userInfo);
+    public void save(UserInfo userInfo) throws Exception;
 
     public int update(UserInfo userInfo);
 

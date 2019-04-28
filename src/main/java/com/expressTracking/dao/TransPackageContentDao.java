@@ -17,7 +17,7 @@ public interface TransPackageContentDao {
 
     public List<TransPackageContent> findByPackageIdAndStatus(@Param("packageId")String packageId,@Param("status") int status);
 
-    public List<TransPackageContent> getByPackageId(String packageId);
+    public List<TransPackageContent> getByPackageId(@Param("packageId") String packageId);
 
     public TransPackageContent findByExpressIdAndStatus(@Param("expressId") String expressId,
                                                         @Param("status")int status);

@@ -30,19 +30,7 @@
         </mvc:interceptor>
     </mvc:interceptors>
 
-    <mvc:annotation-driven>
-        <mvc:message-converters>
-            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
-                <property name="supportedMediaTypes">
-                    <list>
-                        <value>application/json; charset=UTF-8</value>
-                    </list>
-                </property>
-                <property name="prettyPrint" value="true"/>
-                <!--<property name="objectMapper" ref="objectMapper"/>-->
-            </bean>
-        </mvc:message-converters>
-    </mvc:annotation-driven>
+
     <mvc:annotation-driven>
         <mvc:message-converters>
             <bean class="org.springframework.http.converter.StringHttpMessageConverter">

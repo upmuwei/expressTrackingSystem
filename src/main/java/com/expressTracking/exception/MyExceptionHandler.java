@@ -23,7 +23,7 @@ public class MyExceptionHandler {
     @ExceptionHandler(value={Exception.class})
     public ResponseEntity<String> exp(Exception e, HttpServletRequest request) {
         LOGGER.error(request.getRequestURI() + e.getMessage());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).header("Type", "Error")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body("{\"message\":\"" + e.getMessage() + "\"}");
     }

@@ -1,14 +1,21 @@
 package com.expressTracking.service.impl;
 
+import com.expressTracking.dao.TransPackageDao;
 import com.expressTracking.dao.UserInfoDao;
+import com.expressTracking.entity.ExpressSheet;
+import com.expressTracking.entity.TransPackage;
 import com.expressTracking.entity.UserInfo;
+import com.expressTracking.service.TransPackageService;
 import com.expressTracking.service.UserInfoService;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,10 +28,14 @@ import java.util.List;
 public class UserInfoServiceImpl implements UserInfoService {
     private final UserInfoDao userInfoDao;
 
+    private final TransPackageDao transPackageDao;
+
     @Autowired
-    public UserInfoServiceImpl(UserInfoDao userInfoDao) {
+    public UserInfoServiceImpl(UserInfoDao userInfoDao, TransPackageDao transPackageDao) {
         this.userInfoDao = userInfoDao;
+        this.transPackageDao = transPackageDao;
     }
+
 
     @Override
     public UserInfo get(int uId) {
@@ -32,8 +43,27 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
-    public void save(UserInfo userInfo) {
-        userInfoDao.insert(userInfo);
+    public void save(UserInfo userInfo) throws Exception {
+        if (userInfoDao.checkByTelCode(userInfo.getTelCode()) == 0) {
+            String receivePackageId = '3' + System.currentTimeMillis() + userInfo.getTelCode();
+            String delivePackageId = '5' + System.currentTimeMillis() + userInfo.getTelCode();
+            String transPackageId = '4' + System.currentTimeMillis() + userInfo.getTelCode();
+            userInfo.setReceivePackageId(receivePackageId);
+            userInfo.setDelivePackageId(delivePackageId);
+            userInfo.setTransPackageId(transPackageId);
+            userInfoDao.insert(userInfo);
+            TransPackage receivePackage = new TransPackage(receivePackageId, "0",
+                    "0", new Date(), 3);
+            TransPackage delivePackage = new TransPackage(delivePackageId, "0",
+                    "0", new Date(), 5);
+            TransPackage transPackage = new TransPackage(transPackageId, "0",
+                    "0", new Date(), 4);
+            transPackageDao.insert(receivePackage);
+            transPackageDao.insert(delivePackage);
+            transPackageDao.insert(transPackage);
+            return;
+        }
+        throw new Exception("此用户已存在");
     }
 
     @Override

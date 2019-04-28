@@ -1,9 +1,7 @@
 package com.expressTracking.entity;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 
 public class TransPackage implements Serializable {
@@ -11,6 +9,14 @@ public class TransPackage implements Serializable {
 	private static final long serialVersionUID = 3050390478904210174L;
 
 	public TransPackage() {
+	}
+
+	public TransPackage(String id, String sourceNode, String targetNode, Date createTime, Integer status) {
+		this.id = id;
+		this.sourceNode = sourceNode;
+		this.targetNode = targetNode;
+		this.createTime = createTime;
+		this.status = status;
 	}
 
 	/**
@@ -43,13 +49,13 @@ public class TransPackage implements Serializable {
 	 */
 	private Integer status;
 
-	private Set<PackageRoute> route = new HashSet<>();
+	private List<PackageRoute> route = new ArrayList<>();
 
 	private UsersPackage user;
 
-	private Set<TransPackageContent> content = new HashSet<>();
+	private List<TransPackageContent> content = new ArrayList<>();
 
-	private Set<TransHistory> history = new HashSet<>();
+	private List<TransHistory> history = new ArrayList<>();
 	
 	public void setId(String value) {
 		this.id = value;
@@ -95,11 +101,11 @@ public class TransPackage implements Serializable {
 		return status;
 	}
 	
-	public void setRoute(java.util.Set<PackageRoute> value) {
+	public void setRoute(List<PackageRoute> value) {
 		this.route = value;
 	}
 	
-	public java.util.Set<PackageRoute> getRoute() {
+	public List<PackageRoute> getRoute() {
 		return route;
 	}
 	
@@ -112,20 +118,20 @@ public class TransPackage implements Serializable {
 		return user;
 	}
 	
-	public void setContent(Set<TransPackageContent> value) {
+	public void setContent(List<TransPackageContent> value) {
 		this.content = value;
 	}
 	
-	public Set<TransPackageContent> getContent() {
+	public List<TransPackageContent> getContent() {
 		return content;
 	}
 	
 	
-	public void setHistory(Set<TransHistory> value) {
+	public void setHistory(List<TransHistory> value) {
 		this.history = value;
 	}
 	
-	public Set<TransHistory> getHistory() {
+	public List<TransHistory> getHistory() {
 		return history;
 	}
 	

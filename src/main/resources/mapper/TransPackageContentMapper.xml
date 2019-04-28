@@ -44,7 +44,7 @@
     <select id="getByPackageId" parameterType="string" resultMap="transPackageContentMap">
         <include refid="transPackageContent_get"/>
         where Status = 0
-        <if test="packageId != null and packageId != ''">
+        <if test="_parameter != null and _parameter != ''">
             and PackageID = #{packageId}
         </if>
     </select>

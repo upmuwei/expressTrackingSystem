@@ -33,7 +33,7 @@
     <select id="getByPackageId" parameterType="String" resultMap="packageRouteMap" >
          select SN,PackageID,x,y,tm from packageroute
          <where>
-             <if test="packageId != null and packageId != ''">
+             <if test="_parameter != null and _parameter != ''">
                  PackageID=#{packageId};
              </if>
          </where>

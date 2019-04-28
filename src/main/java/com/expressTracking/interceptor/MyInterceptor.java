@@ -24,6 +24,7 @@ public class MyInterceptor extends HandlerInterceptorAdapter {
             PrintWriter writer = response.getWriter();
             writer.print("{\"message\":\"非法访问,请登录\"}");
             response.setContentType("application/json;charset=UTF-8");
+            response.setHeader("Type", "Error");
             response.setStatus(401);
             LOGGER.error(request.getRequestURI() + "非法访问");
             return false;
@@ -32,6 +33,7 @@ public class MyInterceptor extends HandlerInterceptorAdapter {
             writer.print("{\"message\":\"非法访问,请登录\"}");
             response.setContentType("application/json;charset=UTF-8");
             response.sendError(401, "非法访问,请登录");
+            response.setHeader("Type", "Error");
             LOGGER.error(request.getRequestURI() + "非法访问");
             return false;
         }*/

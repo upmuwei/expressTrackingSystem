@@ -17,6 +17,8 @@ public interface UserInfoDao {
 
     public UserInfo get(int uId);
 
+    public int checkByTelCode(String telCode);
+
     public UserInfo checkLogin(@Param("uId") int uId, @Param("password") String password);
 
     /**
