@@ -1,3 +1,100 @@
+GET http://localhost:8080/domain/getTransPackageList/ID/eq/1111112222
+Accept: application/json
+
+<> 2019-04-28T022810.200.json
+
+###
+
+GET http://localhost:8080/domain/getTransPackageList/ID/eq/1111112222
+Accept: application/json
+
+<> 2019-04-28T022806.200.json
+
+###
+
+GET http://localhost:8080/domain/getTransPackageList/ID/eq/1111112222
+Accept: application/json
+
+<> 2019-04-28T022604.500.json
+
+###
+
+POST http://127.0.0.1:8080/misc/saveCustomerInfo
+Content-Type: application/json
+
+{"id": 1,
+  "name": "张明阳",
+  "telCode": "13144774477",
+  "department": "国务院办公厅",
+  "regionCode": "110105",
+  "address": "绿色高层饭店",
+  "postCode": 100008,
+  "regionString": null,
+  "ormid": 1
+}
+
+<> 2019-04-28T022451.500.json
+
+###
+
+GET http://localhost:8080/domain/getTransPackageList/ID/eq/1111112222
+Accept: application/json
+
+<> 2019-04-28T113246.200.json
+
+###
+
+GET http://localhost:8080/domain/getTransPackageList/ID/eq/1111112222
+Accept: application/json
+
+<> 2019-04-28T113121.200.json
+
+###
+
+GET http://localhost:8080/domain/getTransPackageList/ID/eq/1111112222
+Accept: application/json
+
+<> 2019-04-28T113027.200.json
+
+###
+
+GET http://localhost:8080/domain/getTransPackageList/ID/eq/1111113333
+Accept: */*
+Cache-Control: no-cache
+
+<> 2019-04-28T112449.200.json
+
+###
+
+GET http://localhost:80/api/item?id=99
+Accept: application/json
+
+###
+
+GET http://localhost:8080/misc/getCustomerInfo/1
+Accept: */*
+Cache-Control: no-cache
+
+<> 2019-04-28T112246.200.json
+
+###
+
+GET http://localhost:8080/misc/getCustomerInfo/1
+Accept: */*
+Cache-Control: no-cache
+
+<> 2019-04-28T112137.200.json
+
+###
+
+GET http://localhost:8080/misc/getCustomerInfo/1
+Accept: */*
+Cache-Control: no-cache
+
+<> 2019-04-28T112123.200.json
+
+###
+
 GET http://localhost:8080/domain/getTransPackageList/ID/eq/1111113333
 Accept: */*
 Cache-Control: no-cache
@@ -273,68 +370,6 @@ Cache-Control: no-cache
 GET http://localhost:8080/misc/getCustomerInfo/0
 Accept: */*
 Cache-Control: no-cache
-
-###
-
-GET http://localhost:8080/misc/getCustomerInfo/0
-Accept: */*
-Cache-Control: no-cache
-
-###
-
-GET http://localhost:8080/misc/getCustomerInfo/0
-Accept: */*
-Cache-Control: no-cache
-
-###
-
-GET http://localhost:8080/misc/getCustomerInfo/0
-Accept: */*
-Cache-Control: no-cache
-
-###
-
-GET http://localhost:8080/misc/getCustomerInfo/0
-Accept: */*
-Cache-Control: no-cache
-
-###
-
-GET http://localhost:8080/misc/getCustomerInfo/0
-Accept: */*
-Cache-Control: no-cache
-
-###
-
-GET http://localhost:8080/misc/getCustomerInfo/0
-Accept: */*
-Cache-Control: no-cache
-
-###
-
-GET http://localhost:8080/misc/getCustomerInfo/0
-Accept: */*
-Cache-Control: no-cache
-
-###
-
-GET http://localhost:8080/misc/getCustomerInfo/0
-Accept: */*
-Cache-Control: no-cache
-
-###
-
-GET https://httpbin.org/ip
-Accept: application/json
-
-<> 2019-04-22T065148.200.json
-
-###
-
-GET https://httpbin.org/ip
-Accept: application/json
-
-<> 2019-04-22T065145.200.json
 
 ###
 

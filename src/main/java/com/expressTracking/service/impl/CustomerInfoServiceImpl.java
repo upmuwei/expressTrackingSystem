@@ -1,7 +1,9 @@
 package com.expressTracking.service.impl;
 
 import com.expressTracking.dao.CustomerInfoDao;
+import com.expressTracking.dao.RegionDao;
 import com.expressTracking.entity.CustomerInfo;
+import com.expressTracking.entity.Region;
 import com.expressTracking.service.CustomerInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,14 +23,20 @@ import java.util.List;
 public class CustomerInfoServiceImpl implements CustomerInfoService {
     private final CustomerInfoDao customerInfoDao;
 
+    private final RegionDao regionDao;
+
     @Autowired
-    public CustomerInfoServiceImpl(CustomerInfoDao customerInfoDao) {
+    public CustomerInfoServiceImpl(CustomerInfoDao customerInfoDao, RegionDao regionDao) {
         this.customerInfoDao = customerInfoDao;
+        this.regionDao = regionDao;
     }
 
     @Override
     public CustomerInfo get(int id) {
-        return customerInfoDao.get(id);
+        CustomerInfo customerInfo = customerInfoDao.get(id);
+        Region region = regionDao.get(customerInfo.getRegionCode());
+        customerInfo.setRegionString(region.toString());
+        return customerInfo;
     }
 
     @Override

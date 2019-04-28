@@ -77,8 +77,8 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
-    public UserInfo checkLogin(int uId, String password) {
-        return userInfoDao.checkLogin(uId,password);
+    public UserInfo checkLogin(String account, String password) {
+        return userInfoDao.checkLogin(account,password);
     }
 
     @Override

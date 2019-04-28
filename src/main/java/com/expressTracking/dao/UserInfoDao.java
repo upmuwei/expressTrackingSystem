@@ -19,7 +19,7 @@ public interface UserInfoDao {
 
     public int checkByTelCode(String telCode);
 
-    public UserInfo checkLogin(@Param("uId") int uId, @Param("password") String password);
+    public UserInfo checkLogin(@Param("telCode") String telCode, @Param("password") String password);
 
     /**
      *默认依据id排序，升序

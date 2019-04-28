@@ -18,4 +18,6 @@ public interface TransPackageService {
     public void update(TransPackage transPackage);
 
     public int newTransPackage(TransPackage transPackage, int uId) throws Exception;
+
+    public int openTransPackage(int uId, String packageId) throws Exception;
 }

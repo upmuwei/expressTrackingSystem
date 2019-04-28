@@ -13,7 +13,7 @@ public interface UserInfoService {
 
     public int delete(int uId);
 
-    public UserInfo checkLogin(int uId, String password);
+    public UserInfo checkLogin(String account, String password);
 
     public List<UserInfo> findLike(String propertyName, String value);
 

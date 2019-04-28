@@ -291,7 +291,7 @@ public class DomainController {
      * 创建包裹
      * @param transPackage 包裹单
      * @param uId 员工id
-     * @return {@code HttpStatus=200, Header={"Type", "Save"}}包裹单号
+     * @return {@code HttpStatus=200, Header={"Type", "Save"}} 包裹单号
      */
     @RequestMapping(value = "/newTransPackage/{uId}", method = RequestMethod.POST)
     public ResponseEntity<String> newTransPackage(@RequestBody TransPackage transPackage,
@@ -311,40 +311,22 @@ public class DomainController {
     /**
      * 拆开包裹
      * @param uId 工作人员id
-     * @param id 包裹id
-     * @return {@code HttpStatus=200, Header={"Type", "Update"}} "成功信息"
+     * @param packageId 包裹id
+     * @return {@code HttpStatus=200, Header={"Type", "Update"}} 包裹单号
      */
-    @RequestMapping(value = "/openTransPackage/{uId}/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/openTransPackage/{uId}/{packageId}", method = RequestMethod.GET)
     public ResponseEntity<String> openTransPackage(@PathVariable("uId")int uId,
-                                                   @PathVariable("id")String id) throws Exception {
-        TransPackage transPackage = transPackageService.get(id);
-        if(transPackage.getStatus() == 0){
-            throw new Exception("包裹处于新建状态，未装入快件");
+                                                   @PathVariable("packageId")String packageId) throws Exception {
+        if (transPackageService.openTransPackage(uId, packageId) == 0) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .header("Type", "Error")
+                    .contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .body("{\"message\":\"拆包失败\"}");
         }
-        List<TransPackageContent> transPackageContents = transPackage.getContent();
-        if(transPackageContents.isEmpty()){
-            throw new Exception("传入包裹id不存在");
-        }
-        transPackage.setStatus(0);
-        transPackageService.update(transPackage);
-        PackageRecord packageRecord = new PackageRecord();
-        packageRecord.setPackageId(transPackage.getId());
-        packageRecord.setuId(uId);
-        packageRecord.setOperation(3);
-        packageRecordService.save(packageRecord);
-        for (TransPackageContent transPackageContent : transPackageContents) {
-            if (transPackageContent.getStatus() == 1) {
-                continue;
-            }
-            transPackageContent.setStatus(TransPackageContent.STATUS.STATUS_OUTOF_PACKAGE);
-            transPackageContentService.update(transPackageContent);
-            ExpressSheet expressSheet = expressSheetService.get(transPackageContent.getExpressId());
-            expressSheet.setStatus(ExpressSheet.STATUS.STATUS_PARTATION);
-            expressSheetService.update(expressSheet);
-        }
+
         return ResponseEntity.ok().header("Type", "Update")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .body("{\"message\":\"打开包裹成功\"}");
+                .body("{\"message\":\"" + packageId + "\"}");
     }
 
 

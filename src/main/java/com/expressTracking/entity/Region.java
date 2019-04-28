@@ -81,13 +81,14 @@ public class Region implements Serializable {
 			return String.valueOf(getRegionCode());
 		}
 		else {
-			return "Region[ " +
+			/*return "Region[ " +
 					"RegionCode=" + getRegionCode() + " " +
 					"Prv=" + getPrv() + " " +
 					"Cty=" + getCty() + " " +
 					"Twn=" + getTwn() + " " +
 					"Stage=" + getStage() + " " +
-					"]";
+					"]";*/
+			return getPrv() + getCty() + getTwn() + getStage();
 		}
 	}
 

@@ -63,7 +63,7 @@
     </delete>
 
     <select id="checkLogin" resultMap="userInfoMap">
-        <include refid="userInfo_get"/> where uid = #{uId} and PWD = #{password};
+        <include refid="userInfo_get"/> where TelCode = #{telCode} and PWD = #{password};
     </select>
 
     <select id="findLike" resultMap="userInfoMap">

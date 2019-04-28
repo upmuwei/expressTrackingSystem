@@ -1,5 +1,6 @@
 package com.expressTracking.controller;
 
+import com.expressTracking.entity.Account;
 import com.expressTracking.entity.UserInfo;
 import com.expressTracking.service.UserInfoService;
 import org.apache.commons.io.FileUtils;
@@ -38,20 +39,18 @@ public class UserController {
 
     /**
      * 登录
-     * @param uId 用户id
-     * @param pwd 密码
      * @return {@code HttpStatus=200, Header={"session", "String.valueOf(uId)"}}返回用户信息
      */
-    @RequestMapping(value = "/doLogin/{uId}/{pwd}", method = RequestMethod.POST)
-    public ResponseEntity<UserInfo> doLogin(HttpSession session, @PathVariable("uId") int uId,
-                                            @PathVariable("pwd") String pwd) throws Exception {
-        UserInfo userInfo = userInfoService.checkLogin(uId, pwd);
+    @RequestMapping(value = "/doLogin", method = RequestMethod.POST)
+    public ResponseEntity<UserInfo> doLogin(HttpSession session, @RequestBody Account account) throws Exception {
+        UserInfo userInfo = userInfoService.checkLogin(account.getId(), account.getPassword());
         if (userInfo == null) {
             throw new Exception("账号或密码错误");
         }
         LOGGER.info(userInfo.getuId() + userInfo.getName() + "登录");
-        session.setAttribute(String.valueOf(uId), userInfo);
-        return ResponseEntity.ok().header("session", String.valueOf(uId)).body(userInfo);
+        String sessionId = account.getId() + System.currentTimeMillis();
+        session.setAttribute(sessionId, userInfo);
+        return ResponseEntity.ok().header("session", sessionId).body(userInfo);
     }
 
     /**
