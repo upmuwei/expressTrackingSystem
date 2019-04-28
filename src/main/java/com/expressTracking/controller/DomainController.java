@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.*;
 import java.util.*;
 
@@ -116,7 +117,7 @@ public class DomainController {
     }
 
     /**
-     * 查询快递但
+     * 查询快递单
      * @param id 快递单号
      * @return {@code HttpStatus=200, Header={"Type", "Select"}}快递单
      */
@@ -176,6 +177,7 @@ public class DomainController {
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
                     .body("{\"message\":\"揽收失败\"}");
         }
+        LOGGER.info(uId + "揽收" + expressId);
         return ResponseEntity.ok().header("Type", "Save")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body("{\"message\":\"" + expressId + "\"}");
@@ -197,6 +199,7 @@ public class DomainController {
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
                     .body("{\"message\":\"派送失败\"}");
         }
+        LOGGER.info(uId + "派送" + id);
         return ResponseEntity.ok().header("Type", "Update")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body("{\"message\":\"" + id + "\"}");
@@ -217,6 +220,7 @@ public class DomainController {
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
                     .body("{\"message\":\"交付失败\"}");
         }
+        LOGGER.info(uId + "交付" + id);
         return ResponseEntity.ok().header("Type", "Update")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body("{\"message\":\"" + id + "\"}");
@@ -277,6 +281,7 @@ public class DomainController {
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
                     .body("{\"message\":\"创建失败\"}");
         }
+        LOGGER.info(uId + "创建" + transPackage + "包裹");
         return ResponseEntity.ok().header("Type", "Save")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body("{\"message\":\"" + transPackage.getId() + "\"}");
@@ -298,7 +303,7 @@ public class DomainController {
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
                     .body("{\"message\":\"拆包失败\"}");
         }
-
+        LOGGER.info(uId +"拆开" + packageId);
         return ResponseEntity.ok().header("Type", "Update")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body("{\"message\":\"" + packageId + "\"}");
@@ -321,6 +326,7 @@ public class DomainController {
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
                     .body("{\"message\":\"更改失败\"}");
         }
+        LOGGER.info(uId + "转运" + transPackageId);
         return ResponseEntity.ok().header("Type", "Update")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body("{\"message\":\"" + transPackageId + "\"}");
@@ -343,7 +349,7 @@ public class DomainController {
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
                     .body("{\"message\":\"扫描失败\"}");
         }
-
+        LOGGER.info(userId2 + "确认" + userId1 + "送达包裹" + transPackageId);
         return ResponseEntity.ok().header("Type", "Update")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body("{\"message\":\"" + transPackageId + "\"}");
@@ -361,6 +367,7 @@ public class DomainController {
     public ResponseEntity<String> packOk(@PathVariable("transPackageId")String transPackageId,
                                                                 @PathVariable("uId")int uId) throws Exception {
         packageRecordService.packOk(transPackageId, uId);
+        LOGGER.info(uId + "打包" + transPackageId);
         return ResponseEntity.ok().header("Type", "Save")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body("{\"message\":\"" + transPackageId + "\"}");

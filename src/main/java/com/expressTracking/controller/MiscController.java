@@ -289,7 +289,7 @@ public class MiscController {
 	@RequestMapping(value = "/appointTransPorter/{packageId}/{nodeUId}/{userId}" , method = RequestMethod.GET)
 	public ResponseEntity<String> appointTransPorter(@PathVariable("packageId")String packageId,
 									 @PathVariable("nodeUId")int nodeUId,@PathVariable("userId")int userId) throws Exception {
-
+		LOGGER.info(nodeUId +" appointTransPort " + userId + packageId);
 		if(userPackageService.appointTransPorter(packageId, nodeUId, userId) == 0) {
 			return ResponseEntity.ok().header("Type","Error")
 					.contentType(MediaType.APPLICATION_JSON_UTF8)

@@ -7,6 +7,7 @@ import com.expressTracking.entity.TransPackage;
 import com.expressTracking.entity.UserInfo;
 import com.expressTracking.service.TransPackageService;
 import com.expressTracking.service.UserInfoService;
+import com.expressTracking.utils.MD5Utils;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,27 +44,28 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
-    public void save(UserInfo userInfo) throws Exception {
+    public int save(UserInfo userInfo) throws Exception {
         if (userInfoDao.checkByTelCode(userInfo.getTelCode()) == 0) {
-            String receivePackageId = '3' + System.currentTimeMillis() + userInfo.getTelCode();
-            String delivePackageId = '5' + System.currentTimeMillis() + userInfo.getTelCode();
-            String transPackageId = '4' + System.currentTimeMillis() + userInfo.getTelCode();
+            String receivePackageId = System.currentTimeMillis() + userInfo.getTelCode();
+            TransPackage receivePackage = new TransPackage(receivePackageId, "0",
+                    "0", new Date(), 3);
+            transPackageDao.insert(receivePackage);
+            String delivePackageId = System.currentTimeMillis() + userInfo.getTelCode();
+            TransPackage delivePackage = new TransPackage(delivePackageId, "0",
+                    "0", new Date(), 5);
+            transPackageDao.insert(delivePackage);
+            String transPackageId = System.currentTimeMillis() + userInfo.getTelCode();
+            TransPackage transPackage = new TransPackage(transPackageId, "0",
+                    "0", new Date(), 4);
+            transPackageDao.insert(transPackage);
+            userInfo.setPassword(MD5Utils.getSaltMD5(userInfo.getPassword()));
             userInfo.setReceivePackageId(receivePackageId);
             userInfo.setDelivePackageId(delivePackageId);
             userInfo.setTransPackageId(transPackageId);
             userInfoDao.insert(userInfo);
-            TransPackage receivePackage = new TransPackage(receivePackageId, "0",
-                    "0", new Date(), 3);
-            TransPackage delivePackage = new TransPackage(delivePackageId, "0",
-                    "0", new Date(), 5);
-            TransPackage transPackage = new TransPackage(transPackageId, "0",
-                    "0", new Date(), 4);
-            transPackageDao.insert(receivePackage);
-            transPackageDao.insert(delivePackage);
-            transPackageDao.insert(transPackage);
-            return;
+            return 1;
         }
-        throw new Exception("此用户已存在");
+        return 0;
     }
 
     @Override
@@ -78,7 +80,14 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public UserInfo checkLogin(String account, String password) {
-        return userInfoDao.checkLogin(account,password);
+        UserInfo userInfo = userInfoDao.checkLogin(account);
+        if (userInfo == null) {
+            return null;
+        } else if (MD5Utils.getSaltverifyMD5(password, userInfo.getPassword())) {
+            userInfo.setPassword(password);
+            return userInfo;
+        }
+        return null;
     }
 
     @Override

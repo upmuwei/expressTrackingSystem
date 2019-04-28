@@ -1,10 +1,14 @@
 package com.expressTracking.entity;
 
+import java.io.Serializable;
+
 /**
  * @author muwei
  * @date 2019/4/5
  */
-public class CodeNamePair {
+public class CodeNamePair implements Serializable {
+
+	private static final long serialVersionUID = -1496011593697630914L;
 
 	/**
 	 * 地区编码

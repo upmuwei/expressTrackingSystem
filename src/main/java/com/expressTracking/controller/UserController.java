@@ -3,6 +3,7 @@ package com.expressTracking.controller;
 import com.expressTracking.entity.Account;
 import com.expressTracking.entity.UserInfo;
 import com.expressTracking.service.UserInfoService;
+import com.expressTracking.utils.MD5Utils;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,7 +70,7 @@ public class UserController {
     }
 
     /**
-     * 查询用户信息
+     * 查询员工信息
      * @param property 属性 UID or Name or TelCode or DptID or ReceivePackageID or DelivePackageID or TransPackageID
      * @param restrictions 限制条件 eq or like
      * @param value 属性值
@@ -93,9 +94,9 @@ public class UserController {
     }
 
     /**
-     * 删除用户
-     * @param uId 用户id
-     * @return {@code HttpStatus=200, Header={"Type", "Delete"}}"删除成功"
+     * 删除员工
+     * @param uId 员工id
+     * @return {@code HttpStatus=200, Header={"Type", "Delete"}} "删除成功"
      */
     @RequestMapping(value = "/deleteUserInfo/{uId}", method = RequestMethod.GET)
     public ResponseEntity<String> deleteUserInfo(@PathVariable("uId") int uId) {
@@ -106,27 +107,39 @@ public class UserController {
     }
 
     /**
-     * 添加用户
-     * @param userInfo 用户信息
-     * @return {@code HttpStatus=200, Header={"Type", "Save"}}"添加成功"
+     * 添加员工
+     * @param userInfo 员工信息
+     * @return {@code HttpStatus=200, Header={"Type", "Save"}}"员工电话号码"
      */
     @RequestMapping(value = "/addUserInfo", method = RequestMethod.POST)
-    public ResponseEntity<UserInfo> addUserInfo(@RequestBody UserInfo userInfo) throws Exception{
-        userInfoService.save(userInfo);
-        return ResponseEntity.ok().header("Type", "Save").body(userInfo);
+    public ResponseEntity<String> addUserInfo(@RequestBody UserInfo userInfo) throws Exception{
+        if (userInfoService.save(userInfo) == 0) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .header("Type", "Error")
+                    .contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .body("{\"message\":\"此用户已存在\"}");
+        }
+        return ResponseEntity.ok().header("Type", "Save")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .body("{\"message\":\"" + userInfo.getTelCode() + "\"}");
     }
 
     /**
-     * 更新用户信息
-     * @param userInfo 用户信息
-     * @return {@code HttpStatus=200, Header={"Type", "Update"}}用户信息
+     * 更新员工信息
+     * @param userInfo 员工信息
+     * @return {@code HttpStatus=200, Header={"Type", "Update"}} 员工电话号码
      */
     @RequestMapping(value = "/updateUserInfo", method = RequestMethod.POST)
-    public ResponseEntity<UserInfo> updateUserInfo(@RequestBody UserInfo userInfo) throws Exception {
+    public ResponseEntity<String> updateUserInfo(@RequestBody UserInfo userInfo) throws Exception {
         if(userInfoService.update(userInfo) == 0) {
-            throw new Exception("更新失败");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .header("Type", "Error")
+                    .contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .body("{\"message\":\"更新失败\"}");
         }
-        return ResponseEntity.ok().header("Type", "Update").body(userInfo);
+        return ResponseEntity.ok().header("Type", "Update")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .body("{\"message\":\"" + userInfo.getTelCode() + "\"}");
     }
 
     /**
