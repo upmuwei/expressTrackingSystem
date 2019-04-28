@@ -14,5 +14,5 @@ public interface PackageRecordService {
 
     public List<PackageRecord> findByuId(int uId);
 
-    public void save(PackageRecord packageRecord);
+    public void packOk(String packageId, int uId);
 }

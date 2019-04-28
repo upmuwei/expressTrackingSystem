@@ -12,4 +12,6 @@ public interface UserPackageService {
     public void save(UsersPackage userPackage);
 
     public int remove(int sn);
+
+    public int arriveDestination(String packageId, int userId1, int userId2) throws Exception;
 }

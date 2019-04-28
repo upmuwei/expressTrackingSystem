@@ -106,9 +106,11 @@ public class MiscController {
      * @return {@code HttpStatus=200, Header={"Type", "Save"}}节点信息
      */
 	@RequestMapping(value = "/saveNode",method = RequestMethod.POST)
-	public ResponseEntity<TransNode> saveNodesList(@RequestBody TransNode transNode) {
+	public ResponseEntity<String> saveNodesList(@RequestBody TransNode transNode) {
 		transNodeService.save(transNode);
-		return ResponseEntity.ok().header("Type", "Save").body(transNode);
+		return ResponseEntity.ok().header("Type", "Save")
+				.contentType(MediaType.APPLICATION_JSON_UTF8)
+				.body(transNode.getId());
 
 	}
 

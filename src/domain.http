@@ -10,14 +10,13 @@ Accept: application/json
 
 ###
 
-POST http://127.0.0.1:8080/misc/saveCustomerInfo
+POST http://127.0.0.1:8080/domain/newTransPackage/11
 Content-Type: application/json
 
 {
-  "id": "1111112222",
+  "id": "1111113334",
   "sourceNode": "410101",
   "targetNode": "410101",
-  "createTime": 1556419853000,
   "status": 2
 }
 ###

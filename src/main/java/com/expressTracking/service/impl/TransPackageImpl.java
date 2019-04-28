@@ -1,13 +1,7 @@
 package com.expressTracking.service.impl;
 
-import com.expressTracking.dao.ExpressSheetDao;
-import com.expressTracking.dao.PackageRecordDao;
-import com.expressTracking.dao.TransPackageContentDao;
-import com.expressTracking.dao.TransPackageDao;
-import com.expressTracking.entity.ExpressSheet;
-import com.expressTracking.entity.PackageRecord;
-import com.expressTracking.entity.TransPackage;
-import com.expressTracking.entity.TransPackageContent;
+import com.expressTracking.dao.*;
+import com.expressTracking.entity.*;
 import com.expressTracking.service.TransPackageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,13 +27,17 @@ public class TransPackageImpl implements TransPackageService {
 
     private final ExpressSheetDao expressSheetDao;
 
+    private final UsersPackageDao usersPackageDao;
+
     @Autowired
     public TransPackageImpl(TransPackageDao transPackageDao, PackageRecordDao packageRecordDao,
-                            TransPackageContentDao transPackageContentDao, ExpressSheetDao expressSheetDao) {
+                            TransPackageContentDao transPackageContentDao, ExpressSheetDao expressSheetDao,
+                            UsersPackageDao usersPackageDao) {
         this.transPackageDao = transPackageDao;
         this.packageRecordDao = packageRecordDao;
         this.transPackageContentDao = transPackageContentDao;
         this.expressSheetDao = expressSheetDao;
+        this.usersPackageDao = usersPackageDao;
     }
 
     @Override
@@ -76,8 +74,8 @@ public class TransPackageImpl implements TransPackageService {
         packageRecord.setuId(uId);
         packageRecord.setPackageId(transPackage.getId());
         packageRecord.setOperation(0);
-        packageRecordDao.insert(packageRecord);
         transPackageDao.insert(transPackage);
+        packageRecordDao.insert(packageRecord);
         return 1;
     }
 
@@ -110,6 +108,54 @@ public class TransPackageImpl implements TransPackageService {
             expressSheet.setStatus(ExpressSheet.STATUS.STATUS_PARTATION);
             expressSheetDao.update(expressSheet);
         }
+        return 1;
+    }
+
+    @Override
+    public int deliveryTransPackage(String packageId, int uId) throws Exception {
+        UsersPackage usersPackage = usersPackageDao.getByPackageId(packageId);
+        if (usersPackage.getUserUid() != uId) {
+            throw new Exception("转运人员错误，不能转运");
+        }
+        TransPackage transPackage = transPackageDao.get(packageId);
+        if (transPackage.getStatus() != 1) {
+            throw new Exception("包裹状态信息错误,不能转运");
+        }
+        transPackage.setStatus(2);
+        if (transPackageDao.update(transPackage) == 0) {
+            return 0;
+        }
+        PackageRecord packageRecord = new PackageRecord();
+        packageRecord.setuId(uId);
+        packageRecord.setPackageId(transPackage.getId());
+        packageRecord.setOperation(2);
+        packageRecordDao.insert(packageRecord);
+        List<TransPackageContent> transPackageContents = transPackage.getContent();
+        for(TransPackageContent transPackageContent:transPackageContents) {
+            ExpressSheet expressSheet = expressSheetDao.get(transPackageContent.getExpressId());
+            expressSheet.setStatus(ExpressSheet.STATUS.STATUS_TRANSPORT);
+            expressSheetDao.update(expressSheet);
+        }
+        return 1;
+    }
+
+    @Override
+    public int packTransPackage(String packageId, String expressId) throws Exception {
+        TransPackage transPackage = transPackageDao.get(packageId);
+        if (transPackage.getStatus() == 1 || transPackage.getStatus() == 2) {
+            throw new Exception("包裹状态信息错误");
+        }
+        if (transPackage.getStatus() == 0) {
+            transPackage.setStatus(1);
+        }
+        if (transPackageDao.update(transPackage) == 0) {
+            return 0;
+        }
+        TransPackageContent transPackageContent = new TransPackageContent();
+        transPackageContent.setPackageId(packageId);
+        transPackageContent.setExpressId(expressId);
+        transPackageContent.setStatus(TransPackageContent.STATUS.STATUS_ACTIVE);
+        transPackageContentDao.insert(transPackageContent);
         return 1;
     }
 }

@@ -29,33 +29,20 @@ public class DomainController {
 
     private final TransPackageService transPackageService;
 
-    private final TransPackageContentService transPackageContentService;
-
-    private final UserInfoService userInfoService;
-
     private final UserPackageService userPackageService;
-
-    private final TransHistoryService transHistoryService;
-
-    private final TransNodeService transNodeService;
 
     private final PackageRecordService packageRecordService;
 
     @Autowired
     public DomainController(ExpressSheetService expressSheetService, TransPackageService transPackageService,
-                            TransPackageContentService transPackageContentService, UserInfoService userInfoService,
-                            UserPackageService userPackageService, TransHistoryService transHistoryService, TransNodeService transNodeService, PackageRecordService packageRecordService) {
+                            UserPackageService userPackageService, PackageRecordService packageRecordService) {
         this.expressSheetService = expressSheetService;
         this.transPackageService = transPackageService;
-        this.transPackageContentService = transPackageContentService;
-        this.userInfoService = userInfoService;
         this.userPackageService = userPackageService;
-        this.transHistoryService = transHistoryService;
-        this.transNodeService = transNodeService;
         this.packageRecordService = packageRecordService;
     }
 
-    private Date getCurrentDate() throws Exception {
+    /*private Date getCurrentDate() throws Exception {
 
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         Date tm = new Date();
@@ -66,7 +53,7 @@ public class DomainController {
             throw new Exception("获取时间出错");
         }
         return tm;
-    }
+    }*/
 
     /**
      * 得到快递单集合
@@ -334,35 +321,21 @@ public class DomainController {
      * 转运包裹
      * @param transPackageId 包裹id
      * @param uId 转运人员id
-     * @return {@code Body="Success", HttpStatus=200, Header={"Type", "Update"}} 成功消息
+     * @return {@code Body="Success", HttpStatus=200, Header={"Type", "Update"}} 包裹单号
      */
     @RequestMapping(value = "/deliveryTransPackage/{transPackageId}/{uId}", method = RequestMethod.POST)
     public ResponseEntity<String> deliveryTransPackage(@PathVariable("transPackageId") String transPackageId,
                                                        @PathVariable("uId")int uId) throws Exception {
-        UsersPackage usersPackage = userPackageService.findByPackageId(transPackageId);
-        if (usersPackage.getUserUid() != uId) {
-            throw new Exception("转运人员错误，不能转运");
-        }
-        TransPackage transPackage = transPackageService.get(transPackageId);
-        if (transPackage.getStatus() != 1) {
-            throw new Exception("包裹状态信息错误,不能转运");
-        }
-        transPackage.setStatus(2);
-        transPackageService.update(transPackage);
-        PackageRecord packageRecord = new PackageRecord();
-        packageRecord.setuId(uId);
-        packageRecord.setPackageId(transPackage.getId());
-        packageRecord.setOperation(2);
-        packageRecordService.save(packageRecord);
-        List<TransPackageContent> transPackageContents = transPackage.getContent();
-        for(TransPackageContent transPackageContent:transPackageContents) {
-            ExpressSheet expressSheet = expressSheetService.get(transPackageContent.getExpressId());
-            expressSheet.setStatus(ExpressSheet.STATUS.STATUS_TRANSPORT);
-            expressSheetService.update(expressSheet);
+
+        if (transPackageService.deliveryTransPackage(transPackageId, uId) == 0) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .header("Type", "Error")
+                    .contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .body("{\"message\":\"更改失败\"}");
         }
         return ResponseEntity.ok().header("Type", "Update")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .body("{\"message\":\"Success\"}");
+                .body("{\"message\":\"" + transPackageId + "\"}");
     }
 
     /**
@@ -370,34 +343,23 @@ public class DomainController {
      * @param transPackageId 转运包裹id
      * @param userId1 转运人员id
      * @param userId2 扫描员id
-     * @return {@code Body="Success", HttpStatus=200, Header={"Type", "Update"}} 成功消息
+     * @return {@code Body="Success", HttpStatus=200, Header={"Type", "Update"}} 包裹单号
      */
     @RequestMapping(value = "/arriveDestination/{transPackageId}/{userId1}/{userId2}", method = RequestMethod.POST)
     public ResponseEntity<String> arriveDestination(@PathVariable("transPackageId") String transPackageId,
                                                @PathVariable("userId1")int userId1,
                                                @PathVariable("userId2") int userId2) throws Exception {
-        UsersPackage usersPackage = userPackageService.findByPackageId(transPackageId);
-        UserInfo userInfo = userInfoService.get(userId2);
-        TransNode transNode = transNodeService.get(userInfo.getDptId());
-        TransHistory transHistory = new TransHistory();
-        if (usersPackage == null) {
-            throw new Exception("未查到包裹Id");
-        } else{
-            userPackageService.remove(usersPackage.getSn());
-            usersPackage.setUserUid(userId2);
-            usersPackage.setSn(0);
-            userPackageService.save(usersPackage);
-            transHistory.setActTime(getCurrentDate());
-            transHistory.setuIdFrom(userId1);
-            transHistory.setuIdTo(userId2);
-            transHistory.setX(transNode.getX());
-            transHistory.setY(transNode.getY());
-            transHistory.setPackageId(transPackageId);
-            transHistoryService.save(transHistory);
-            return ResponseEntity.ok().header("Type", "Update")
+        if (userPackageService.arriveDestination(transPackageId, userId1, userId2) == 0) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .header("Type", "Error")
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
-                    .body("{\"message\":\"Success\"}");
+                    .body("{\"message\":\"扫描失败\"}");
         }
+
+        return ResponseEntity.ok().header("Type", "Update")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .body("{\"message\":\"" + transPackageId + "\"}");
+
     }
 
 
@@ -405,17 +367,15 @@ public class DomainController {
      * 确认打包完成
      * @param transPackageId 包裹id
      * @param uId 员工Id
-     * @return {@code HttpStatus=200, Header={"Type", "Save"}}包裹内容
+     * @return {@code HttpStatus=200, Header={"Type", "Save"}}包裹单号
      */
     @RequestMapping(value = "/packTransPackage/{transPackageId}/{uId}", method = RequestMethod.POST)
-    public ResponseEntity<PackageRecord> packOk(@PathVariable("transPackageId")String transPackageId,
+    public ResponseEntity<String> packOk(@PathVariable("transPackageId")String transPackageId,
                                                                 @PathVariable("uId")int uId) throws Exception {
-        PackageRecord packageRecord = new PackageRecord();
-        packageRecord.setPackageId(transPackageId);
-        packageRecord.setuId(uId);
-        packageRecord.setOperation(1);
+        packageRecordService.packOk(transPackageId, uId);
         return ResponseEntity.ok().header("Type", "Save")
-                .body(packageRecord);
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .body("{\"message\":\"" + transPackageId + "\"}");
     }
 
     /**
@@ -425,23 +385,18 @@ public class DomainController {
      * @return {@code HttpStatus=200, Header={"Type", "Save"}}包裹内容
      */
     @RequestMapping(value = "/packTransPackage/{transPackageId}/{expressSheetId}", method = RequestMethod.POST)
-    public ResponseEntity<TransPackageContent> packTransPackage(@PathVariable("transPackageId")String transPackageId,
+    public ResponseEntity<String> packTransPackage(@PathVariable("transPackageId")String transPackageId,
                                                                 @PathVariable("expressSheetId")String expressSheetId) throws Exception {
-        TransPackage transPackage = transPackageService.get(transPackageId);
-        if (transPackage.getStatus() == 1 || transPackage.getStatus() == 2) {
-            throw new Exception("包裹状态信息错误");
+        if (transPackageService.packTransPackage(transPackageId, expressSheetId) == 0) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .header("Type", "Error")
+                    .contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .body("{\"message\":\"打包失败\"}");
         }
-        if (transPackage.getStatus() == 0) {
-            transPackage.setStatus(1);
-        }
-        transPackageService.update(transPackage);
-        TransPackageContent transPackageContent = new TransPackageContent();
-        transPackageContent.setPackageId(transPackageId);
-        transPackageContent.setExpressId(expressSheetId);
-        transPackageContent.setStatus(TransPackageContent.STATUS.STATUS_ACTIVE);
-        transPackageContentService.save(transPackageContent);
+
         return ResponseEntity.ok().header("Type", "Save")
-                .body(transPackageContent);
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .body("{\"message\":\"打包成功\"}");
     }
 
     /**
