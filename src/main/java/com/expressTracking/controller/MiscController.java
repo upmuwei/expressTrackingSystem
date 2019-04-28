@@ -10,9 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -37,40 +35,16 @@ public class MiscController {
 
 	private final UserPackageService userPackageService;
 
-	private final UserInfoService userInfoService;
-
-	private final TransPackageService transPackageService;
-
 	@Autowired
 	public MiscController(TransNodeService transNodeService, CustomerInfoService customerInfoService,
                           RegionService regionService, PackageRouteService packageRouteService,
-                          TransHistoryService transHistoryService, UserPackageService userPackageService,
-                          UserInfoService userInfoService, TransPackageService transPackageService) {
+                          TransHistoryService transHistoryService, UserPackageService userPackageService) {
 		this.transNodeService = transNodeService;
 		this.customerInfoService = customerInfoService;
 		this.regionService = regionService;
 		this.packageRouteService = packageRouteService;
 		this.transHistoryService = transHistoryService;
 		this.userPackageService = userPackageService;
-        this.userInfoService = userInfoService;
-        this.transPackageService = transPackageService;
-	}
-
-	/**
-	 * 获取当前时间
-	 * @return Date
-	 */
-	private Date getCurrentDate() throws Exception {
-
-		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-		Date tm;
-		try {
-			tm= sdf.parse(sdf.format(new Date()));
-		} catch (java.text.ParseException e) {
-			e.printStackTrace();
-			throw new Exception("获取时间出错");
-		}
-		return tm;
 	}
 
 	/**
@@ -103,14 +77,14 @@ public class MiscController {
     /**
      * 保存节点信息
      * @param transNode 节点信息
-     * @return {@code HttpStatus=200, Header={"Type", "Save"}}节点信息
+     * @return {@code HttpStatus=200, Header={"Type", "Save"}}节点Id
      */
 	@RequestMapping(value = "/saveNode",method = RequestMethod.POST)
 	public ResponseEntity<String> saveNodesList(@RequestBody TransNode transNode) {
 		transNodeService.save(transNode);
 		return ResponseEntity.ok().header("Type", "Save")
 				.contentType(MediaType.APPLICATION_JSON_UTF8)
-				.body(transNode.getId());
+				.body("{\"message\":\"" + transNode.getId() + "\"}");
 
 	}
 
@@ -155,15 +129,17 @@ public class MiscController {
 	/**
 	 * 更新客户信息
 	 * @param customerInfo 客户信息
-	 * @return {@code HttpStatus=200, Header={"Type", "Update"}}用户信息
+	 * @return {@code HttpStatus=200, Header={"Type", "Update"}}用户手机号码
 	 */
 	@RequestMapping(value = "/updateCustomerInfo", method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<CustomerInfo> updateCustomerInfo(@RequestBody CustomerInfo customerInfo) throws Exception {
+	public ResponseEntity<String> updateCustomerInfo(@RequestBody CustomerInfo customerInfo) throws Exception {
 	    if (customerInfoService.update(customerInfo) == 0) {
 	    	throw new Exception("更新失败");
 		}
-		return ResponseEntity.ok().header("Type", "Update").body(customerInfo);
+		return ResponseEntity.ok().header("Type", "Update")
+				.contentType(MediaType.APPLICATION_JSON_UTF8)
+				.body("{\"message\":\"" + customerInfo.getTelCode() + "\"}");
 	}
 
 	/**
@@ -187,13 +163,16 @@ public class MiscController {
 	/**
 	 * 保存客户信息
 	 * @param obj 用户信息
-	 * @return {@code HttpStatus=200, Header={"Type", "Save"}}用户信息
+	 * @return {@code HttpStatus=200, Header={"Type", "Save"}}用户电话号码
 	 * @see CustomerInfo
 	 */
     @RequestMapping(value = "/saveCustomerInfo",method = RequestMethod.POST)
-	public ResponseEntity<CustomerInfo> saveCustomerInfo( @RequestBody CustomerInfo obj)  throws Exception{
+	public ResponseEntity<String> saveCustomerInfo( @RequestBody CustomerInfo obj)  throws Exception{
     	customerInfoService.save(obj);
-		return ResponseEntity.ok().header("Type", "Save").body(obj);
+		return ResponseEntity.ok().header("Type", "Save")
+				.contentType(MediaType.APPLICATION_JSON_UTF8)
+				.body("{\"message\":\"" + obj.getTelCode() + "\"}");
+
 	}
 
 
@@ -274,13 +253,14 @@ public class MiscController {
 	/**
 	 * 保存包裹路线信息
 	 * @param obj 包裹路线信息
-	 * @return {@code HttpStatus=200, Header={"Type", "Save"}}包裹路线信息
+	 * @return {@code HttpStatus=200, Header={"Type", "Save"}}包裹单号
 	 */
 	@RequestMapping(value = "/uploadRoute" , method = RequestMethod.POST)
-	public ResponseEntity<PackageRoute> savePackageRoute(@RequestBody PackageRoute obj) throws Exception {
-		obj.setTm(getCurrentDate());
+	public ResponseEntity<String> savePackageRoute(@RequestBody PackageRoute obj) throws Exception {
 		packageRouteService.save(obj);
-		return ResponseEntity.ok().header("Type", "Save").body(obj);
+		return ResponseEntity.ok().header("Type", "Save")
+				.contentType(MediaType.APPLICATION_JSON_UTF8)
+				.body("{\"message\":\"" + obj.getPackageId() + "\"}");
 
 	}
 
@@ -291,8 +271,11 @@ public class MiscController {
 	 * @see PackageRoute
 	 */
 	@RequestMapping(value = "/getPackageRoute/{expressSheetId}" , method = RequestMethod.GET)
-	public ResponseEntity<List<PackageRoute>> getPackageRouteList(@PathVariable("expressSheetId") String expressSheetId) {
+	public ResponseEntity<List<PackageRoute>> getPackageRouteList(@PathVariable("expressSheetId") String expressSheetId) throws Exception {
 		List<PackageRoute> packageRoutes = packageRouteService.getPackageRouteList(expressSheetId);
+		if (packageRoutes == null) {
+			throw new Exception("获取失败");
+		}
 		return ResponseEntity.ok().header("Type", "Select").body(packageRoutes);
 	}
 
@@ -306,26 +289,15 @@ public class MiscController {
 	@RequestMapping(value = "/appointTransPorter/{packageId}/{nodeUId}/{userId}" , method = RequestMethod.GET)
 	public ResponseEntity<String> appointTransPorter(@PathVariable("packageId")String packageId,
 									 @PathVariable("nodeUId")int nodeUId,@PathVariable("userId")int userId) throws Exception {
-		UsersPackage usersPackage = userPackageService.findByPackageId(packageId);
-        TransPackage transPackage = transPackageService.get(packageId);
-        UserInfo userInfo = userInfoService.get(nodeUId);
-        TransNode transNode = transNodeService.get(userInfo.getDptId());
-        if (usersPackage == null) {
-            throw new Exception("包裹id不存在");
-        }else if (transPackage.getStatus() == 2) {
-			throw  new Exception("包裹处于转运状态，不能为其指派转运员");
-        } else {
-        	TransHistory transHistory = new TransHistory(packageId, getCurrentDate(), nodeUId,
-					userId, transNode.getX(), transNode.getY());
-        	userPackageService.remove(usersPackage.getSn());
-			transHistoryService.save(transHistory);
-			usersPackage.setUserUid(userId);
-			usersPackage.setSn(0);
-			userPackageService.save(usersPackage);
-        	return ResponseEntity.ok().header("Type","Update")
+
+		if(userPackageService.appointTransPorter(packageId, nodeUId, userId) == 0) {
+			return ResponseEntity.ok().header("Type","Error")
 					.contentType(MediaType.APPLICATION_JSON_UTF8)
-					.body("{\"message\":\"Success\"}");
+					.body("{\"message\":\"指派失败\"}");
 		}
+		return ResponseEntity.ok().header("Type","Update")
+				.contentType(MediaType.APPLICATION_JSON_UTF8)
+				.body("{\"message\":\"" + packageId + "\"}");
 	}
 
 	/**

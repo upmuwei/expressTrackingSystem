@@ -1,3 +1,0 @@
-{
-  "message": "nested exception is org.apache.ibatis.reflection.ReflectionException: There is no getter for property named 'packageId' in 'class java.lang.String'"
-}

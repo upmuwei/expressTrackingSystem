@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.*;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -41,19 +40,6 @@ public class DomainController {
         this.userPackageService = userPackageService;
         this.packageRecordService = packageRecordService;
     }
-
-    /*private Date getCurrentDate() throws Exception {
-
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        Date tm = new Date();
-        try {
-            tm= sdf.parse(sdf.format(new Date()));
-        } catch (java.text.ParseException e) {
-            e.printStackTrace();
-            throw new Exception("获取时间出错");
-        }
-        return tm;
-    }*/
 
     /**
      * 得到快递单集合
@@ -287,11 +273,11 @@ public class DomainController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .header("Type", "Error")
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
-                    .body(transPackage.getId());
+                    .body("{\"message\":\"创建失败\"}");
         }
         return ResponseEntity.ok().header("Type", "Save")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .body(transPackage.getId());
+                .body("{\"message\":\"" + transPackage.getId() + "\"}");
     }
 
 

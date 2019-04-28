@@ -1,15 +1,7 @@
 package com.expressTracking.service.impl;
 
-import com.expressTracking.dao.TransHistoryDao;
-import com.expressTracking.dao.TransNodeDao;
-import com.expressTracking.dao.UserInfoDao;
-import com.expressTracking.dao.UsersPackageDao;
-import com.expressTracking.entity.TransHistory;
-import com.expressTracking.entity.TransNode;
-import com.expressTracking.entity.UserInfo;
-import com.expressTracking.entity.UsersPackage;
-import com.expressTracking.service.TransHistoryService;
-import com.expressTracking.service.TransNodeService;
+import com.expressTracking.dao.*;
+import com.expressTracking.entity.*;
 import com.expressTracking.service.UserPackageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,15 +26,19 @@ public class UserPackageServiceImpl implements UserPackageService {
 
     private final TransHistoryDao transHistoryDao;
 
+    private final TransPackageDao transPackageDao;
+
     private final TransNodeDao transNodeDao;
 
     @Autowired
     public UserPackageServiceImpl(UsersPackageDao usersPackageDao,
                                   UserInfoDao userInfoDao,
-                                  TransHistoryDao transHistoryDao, TransNodeDao transNodeDao) {
+                                  TransHistoryDao transHistoryDao,
+                                  TransPackageDao transPackageDao, TransNodeDao transNodeDao) {
         this.usersPackageDao = usersPackageDao;
         this.userInfoDao = userInfoDao;
         this.transHistoryDao = transHistoryDao;
+        this.transPackageDao = transPackageDao;
         this.transNodeDao = transNodeDao;
     }
 
@@ -83,6 +79,30 @@ public class UserPackageServiceImpl implements UserPackageService {
         TransHistory transHistory = new TransHistory(packageId,
                 new Date(), userId1, userId2, transNode.getX() ,transNode.getY());
         transHistoryDao.insert(transHistory);
+        return 1;
+    }
+
+    @Override
+    public int appointTransPorter(String packageId, int nodeUId, int userId) throws Exception {
+
+        UsersPackage usersPackage = usersPackageDao.getByPackageId(packageId);
+        TransPackage transPackage = transPackageDao.get(packageId);
+        UserInfo userInfo = userInfoDao.get(nodeUId);
+        TransNode transNode = transNodeDao.get(userInfo.getDptId());
+        if (usersPackage == null) {
+            throw new Exception("包裹id不存在");
+        }else if (transPackage.getStatus() == 2) {
+            throw  new Exception("包裹处于转运状态，不能为其指派转运员");
+        }
+        TransHistory transHistory = new TransHistory(packageId, new Date(), nodeUId,
+                userId, transNode.getX(), transNode.getY());
+        if (usersPackageDao.delete(usersPackage.getSn()) == 0) {
+            return 0;
+        }
+        transHistoryDao.insert(transHistory);
+        usersPackage.setUserUid(userId);
+        usersPackage.setSn(0);
+        usersPackageDao.insert(usersPackage);
         return 1;
     }
 }
