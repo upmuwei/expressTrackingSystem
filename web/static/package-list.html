@@ -41,29 +41,6 @@
                 }
             });
         });
-        $("#submit2").click(function () {
-            var str="http://localhost:8080/domain/getTransPackage/"+$("#input2").val();
-            $.ajax({
-                url:str,
-                type:"GET",
-                dataType:'JSON',
-                contentType : "application/json; charset=utf-8",
-                success:function(data){
-                    $("#numspan").text("显示数据："+(data.length).toString()+"条");
-                        $("#firsttbody").append(
-                            "<tr> " +
-                            "<td>"+data[i].id +"</td> " +
-                            "<td>"+data[i].sourceNode +"</td> " +
-                            "<td>"+data[i].targetNode +"</td>" +
-                            "<td>"+data[i].createTime +"</td>" +
-                            "<td>"+data[i].status +" </td>"+
-                            "</tr>");
-                },
-                error:function(){
-                    alert("error");
-                }
-            });
-        });
     });
 </script>
 <body>
@@ -94,15 +71,7 @@
                     </select>
                 </div>
                 <input id="input" class="layui-input" type="text" name="customername" placeholder="请输入属性值" autocomplete="off" value="">
-                <button class="layui-btn" id="submit1" type="button"><i class="layui-icon">&#xe615;</i></button>
-            </form>
-        </div>
-        <div class="layui-row">
-            <form class="layui-form layui-col-md12 x-so" method="#">
-                <div class="layui-input-inline" style="margin-left: 530px">
-                    <input id="input2" class="layui-input" type="text" name="customername" placeholder="请输入属性值" autocomplete="off" value="">
-                    <button class="layui-btn" id="submit2" type="button"><i class="layui-icon">&#xe615;</i></button>
-                </div>
+                <button class="layui-btn" id="submit" type="button"><i class="layui-icon">&#xe615;</i></button>
             </form>
         </div>
         <xblock>
@@ -119,7 +88,9 @@
                     <th>状态</th>
                 </tr>
             </thead>
-            <tbody id="firsttbody"></tbody>
+            <tbody id="firsttbody">
+
+            </tbody>
         </table>
         <div class="page">
             <div>

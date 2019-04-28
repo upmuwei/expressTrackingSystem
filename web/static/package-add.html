@@ -33,12 +33,13 @@
                 data: JSON.stringify({"id":id,"sourceNode":sourceNode,"targetNode":targetNode,
                     "createTime":createTime,"status":status}),
                 success : function(data) {
+                    alert("success");
                     layer.msg('已添加!',{icon:1,time:1000});
                     alert("关闭该页面");
                     x_admin_close();
                 },
-                error : function(error) {
-                    alert(error);
+                error : function() {
+                    alert("error");
                 }
 
             });
@@ -71,14 +72,14 @@
                 <input type="text" id="L_targetNode" name="targetNode" required="targetNode" lay-verify="targetNode" autocomplete="off" class="layui-input">
             </div>
         </div>
-        <div class="layui-form-item">
-            <label for="L_createTime" class="layui-form-label">
-                <span class="x-red">*</span>创建时间
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" id="L_createTime" name="createTime" required="createTime" lay-verify="createTime" autocomplete="off" class="layui-input">
-            </div>
-        </div>
+        <!--<div class="layui-form-item">-->
+            <!--<label for="L_createTime" class="layui-form-label">-->
+                <!--<span class="x-red">*</span>创建时间-->
+            <!--</label>-->
+            <!--<div class="layui-input-inline">-->
+                <!--<input type="text" id="L_createTime" name="createTime" required="createTime" lay-verify="createTime" autocomplete="off" class="layui-input">-->
+            <!--</div>-->
+        <!--</div>-->
         <div class="layui-form-item">
             <label for="L_status" class="layui-form-label">
                 <span class="x-red">*</span>状态

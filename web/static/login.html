@@ -13,7 +13,6 @@
     <script src="lib/layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="js/xadmin.js"></script>
     <script type="text/javascript" src="js/cookie.js"></script>
-
 </head>
 <body class="login-bg">
     
@@ -32,20 +31,20 @@
     </div>
 
     <script>
-        $(function  () {
+        $(function() {
             layui.use('form', function(){
-              var form = layui.form;
-              var $ = layui.$;
-              form.on('submit(login)', function(data){
-                var url = "http://localhost:8080/user/doLogin/"
-                    + data.field.username + "/" + data.field.password;
-                $.post(url,null,function (data) {
-                    location.href='index.html'
-                    }
-                ).fail(function (jqXHR) {
-                    layer.msg(jqXHR.responseText);
-                });
-                return false;
+                var form = layui.form;
+                var $ = layui.$;
+                form.on('submit(login)', function(data){
+                    var url = "http://localhost:8080/user/doLogin/"
+                        + data.field.username + "/" + data.field.password;
+                    $.post(url,null,function (data) {
+                        location.href='index.html'
+                        }
+                    ).fail(function (jqXHR) {
+                        layer.msg(jqXHR.responseText);
+                    });
+                    return false;
               });
             });
         })

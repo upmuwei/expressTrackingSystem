@@ -253,6 +253,7 @@ public class DomainController {
      */
     @RequestMapping(value = "/getTransPackage/{packageId}", method = RequestMethod.GET)
     public ResponseEntity<TransPackage> getTransPackage(@PathVariable("packageId")String packageId) throws Exception {
+        System.out.println("id="+packageId);
         TransPackage es = transPackageService.get(packageId);
         if (es == null) {
             throw new Exception("未找到此包裹信息");
@@ -269,6 +270,7 @@ public class DomainController {
     @RequestMapping(value = "/newTransPackage/{uId}", method = RequestMethod.POST)
     public ResponseEntity<String> newTransPackage(@RequestBody TransPackage transPackage,
                                                         @PathVariable("uId") int uId) throws Exception {
+        System.out.println("transPackage="+transPackage+"uid="+uId);
         if (transPackageService.newTransPackage(transPackage, uId) == 0) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .header("Type", "Error")
