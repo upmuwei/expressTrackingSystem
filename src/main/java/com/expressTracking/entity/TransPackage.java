@@ -108,8 +108,7 @@ public class TransPackage implements Serializable {
 	public List<PackageRoute> getRoute() {
 		return route;
 	}
-	
-	
+
 	public void setUser(UsersPackage value) {
 		this.user = value;
 	}
