@@ -9,7 +9,7 @@
     <context:annotation-config/>
 
     <context:property-placeholder location="classpath:jdbc.properties"/>
-
+    <!--数据源-->
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
         <property name="driverClassName" value="${database.driver}" />
         <property name="url" value="${database.url}" />
@@ -19,17 +19,17 @@
         <property name="maxIdle" value="5" />
         <property name="maxWait" value="10000" />
     </bean>
-
+    <!--session工厂-->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
         <property name="configLocation" value="classpath:mybatis-config.xml"/>
         <property name="mapperLocations" value="classpath:mapper/*.xml"/>
     </bean>
-
+    <!--事务管理器-->
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource"/>
     </bean>
-
+    <!--Mapper映射关系-->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="com.expressTracking.dao"/>
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
