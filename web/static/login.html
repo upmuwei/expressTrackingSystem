@@ -21,33 +21,68 @@
         <div id="darkbannerwrap"></div>
         
         <form method="post" class="layui-form">
-            <input name="username" placeholder="用户名"  type="text" lay-verify="required" class="layui-input" >
+            <input id="id" name="id" placeholder="用户名"  type="text" lay-verify="required" class="layui-input" >
             <hr class="hr15">
-            <input name="password" lay-verify="required" placeholder="密码"  type="password" class="layui-input">
+            <input id="password" name="password" lay-verify="required" placeholder="密码"  type="password" class="layui-input">
             <hr class="hr15">
-            <input value="登录" lay-submit lay-filter="login" style="width:100%;" type="submit">
+            <input value="登录" id="submit" lay-submit lay-filter="login" style="width:100%;" type="submit">
             <hr class="hr20" >
         </form>
     </div>
 
     <script>
         $(function() {
-            layui.use('form', function(){
-                var form = layui.form;
-                var $ = layui.$;
-                form.on('submit(login)', function(data){
-                    var url = "http://localhost:8080/user/doLogin/"
-                        + data.field.username + "/" + data.field.password;
-                    $.post(url,null,function (data) {
-                        location.href='index.html'
-                        }
-                    ).fail(function (jqXHR) {
-                        layer.msg(jqXHR.responseText);
-                    });
-                    return false;
-              });
+            $("#submit").click(function () {
+                var id=$("#id").val();
+                var password=$("#password").val();
+                $.ajax({
+                    url: "http://localhost:8080/user/doLogin",
+                    dataType:"json",
+                    type:"post",
+                    contentType : "application/json; charset=utf-8",
+                    data: JSON.stringify({"id":id,"password":password}),
+                    success:function (data) {
+                        alert(data);
+                        location.href="index.html";
+                    },
+                    error:function () {
+                        alert("error");
+                    }
+                });
             });
-        })
+            // layui.use('form', function(){
+            //     var form = layui.form;
+            //     var $ = layui.$;
+            //     form.on('submit(login)', function(data){
+            //         var url = "http://localhost:8080/user/doLogin/"
+            //             + data.field.username + "/" + data.field.password;
+            //         $.post(url,null,function (data) {
+            //             location.href='index.html'
+            //             }
+            //         ).fail(function (jqXHR) {
+            //             layer.msg(jqXHR.responseText);
+            //         });
+            //         return false;
+            //   });
+            // });
+        });
+        layui.use(['form','layer'], function(){
+            $ = layui.jquery;
+            var form = layui.form,layer = layui.layer;
+            //自定义验证规则
+            form.verify({
+                id: function(value){
+                    if(value === '' || value === null){
+                        return '账号不能为空';
+                    }
+                }
+                ,password: function(value){
+                    if(value === '' || value === null){
+                        return '密码不能为空';
+                    }
+                }
+            });
+        });
     </script>
 </body>
 </html>
