@@ -35,29 +35,34 @@
         <include refid="user_get"/> where TelCode=#{telCode,jdbcType=VARCHAR}  ;
     </select>
 
+
+
     <insert id="insert" parameterType="CustomerInfo">
+        <selectKey keyProperty="id" resultType="int" order="AFTER">
+            SELECT LAST_INSERT_ID() as value
+        </selectKey>
         insert into customerinfo
-          <trim prefix="(" suffix=")" suffixOverrides=",">
-              <if test="name != null and name != ''">
-                  Name,
-              </if>
-              <if test="telCode != null and telCode != ''">
-                  TelCode,
-              </if>
-              <if test="department != null and department != ''">
-                  Department,
-              </if>
-              <if test="regionCode != null and regionCode != ''">
-                  RegionCode,
-              </if>
-              <if test="address != null and address != ''">
-                  Address,
-              </if>
-              <if test="postCode != 0">
-                  PostCode,
-              </if>
-          </trim>
-          <trim prefix="values(" suffix=")" suffixOverrides=",">
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">
+                Name,
+            </if>
+            <if test="telCode != null and telCode != ''">
+                TelCode,
+            </if>
+            <if test="department != null and department != ''">
+                Department,
+            </if>
+            <if test="regionCode != null and regionCode != ''">
+                RegionCode,
+            </if>
+            <if test="address != null and address != ''">
+                Address,
+            </if>
+            <if test="postCode != 0">
+                PostCode,
+            </if>
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
               <if test="name != null and name != ''">
                   #{name,jdbcType=VARCHAR},
               </if>

@@ -13,7 +13,7 @@ public interface CustomerInfoDao {
 
     public int delete(int id);
 
-    public void insert(CustomerInfo customerInfo);
+    public int insert(CustomerInfo customerInfo);
 
     public CustomerInfo get(int id);
 

@@ -3,7 +3,6 @@ package com.expressTracking.controller;
 import com.expressTracking.entity.Account;
 import com.expressTracking.entity.UserInfo;
 import com.expressTracking.service.UserInfoService;
-import com.expressTracking.utils.MD5Utils;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
