@@ -53,6 +53,7 @@ public class DomainController {
     public ResponseEntity<List<ExpressSheet>> getExpressList(@PathVariable("Property")String property,
                                              @PathVariable("Restrictions")String restrictions,
                                              @PathVariable("Value")String value) throws Exception {
+        System.out.println("property="+property+"   value="+value);
         List<ExpressSheet> list;
         switch(restrictions.toLowerCase()){
             case "eq":

@@ -21,11 +21,11 @@
         <div id="darkbannerwrap"></div>
         
         <form method="post" class="layui-form">
-            <input id="id" name="id" placeholder="用户名"  type="text" lay-verify="required" class="layui-input" >
+            <input id="id" name="id" placeholder="用户名"  type="text" lay-verify="id" class="layui-input" >
             <hr class="hr15">
-            <input id="password" name="password" lay-verify="required" placeholder="密码"  type="password" class="layui-input">
+            <input id="password" name="password" lay-verify="password" placeholder="密码"  type="password" class="layui-input">
             <hr class="hr15">
-            <input value="登录" id="submit" lay-submit lay-filter="login" style="width:100%;" type="submit">
+            <button type="button" id="submit" style="background-color: #009688;margin-left: auto;width: 100%;height: 40px;font-size: medium;color: white">登录</button>
             <hr class="hr20" >
         </form>
     </div>
@@ -41,9 +41,8 @@
                     type:"post",
                     contentType : "application/json; charset=utf-8",
                     data: JSON.stringify({"id":id,"password":password}),
-                    success:function (data) {
-                        alert(data);
-                        location.href="index.html";
+                    success:function () {
+                        window.location.href="index.html";
                     },
                     error:function () {
                         alert("error");
