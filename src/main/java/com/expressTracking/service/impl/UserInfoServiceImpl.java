@@ -79,6 +79,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     public UserInfo checkLogin(String account, String password) {
         UserInfo userInfo = userInfoDao.checkLogin(account);
+        System.out.println(userInfo);
         if (userInfo == null) {
             return null;
         } else if (MD5Utils.getSaltverifyMD5(password, userInfo.getPassword())) {
