@@ -129,7 +129,7 @@ public class MiscController {
 	/**
 	 * 更新客户信息
 	 * @param customerInfo 客户信息
-	 * @return {@code HttpStatus=200, Header={"Type", "Update"}}用户手机号码
+	 * @return {@code HttpStatus=200, Header={"Type", "Update"}}客户Id
 	 */
 	@RequestMapping(value = "/updateCustomerInfo", method = RequestMethod.POST)
 	@ResponseBody
@@ -139,7 +139,7 @@ public class MiscController {
 		}
 		return ResponseEntity.ok().header("Type", "Update")
 				.contentType(MediaType.APPLICATION_JSON_UTF8)
-				.body("{\"message\":\"" + customerInfo.getTelCode() + "\"}");
+				.body("{\"message\":\"" + customerInfo.getId() + "\"}");
 	}
 
 	/**
@@ -163,15 +163,15 @@ public class MiscController {
 	/**
 	 * 保存客户信息
 	 * @param obj 用户信息
-	 * @return {@code HttpStatus=200, Header={"Type", "Save"}}用户电话号码
+	 * @return {@code HttpStatus=200, Header={"Type", "Save"}}客户Id
 	 * @see CustomerInfo
 	 */
     @RequestMapping(value = "/saveCustomerInfo",method = RequestMethod.POST)
-	public ResponseEntity<String> saveCustomerInfo( @RequestBody CustomerInfo obj)  throws Exception{
+	public ResponseEntity<String> saveCustomerInfo( @RequestBody CustomerInfo obj) {
     	customerInfoService.save(obj);
 		return ResponseEntity.ok().header("Type", "Save")
 				.contentType(MediaType.APPLICATION_JSON_UTF8)
-				.body("{\"message\":\"" + obj.getTelCode() + "\"}");
+				.body("{\"message\":\"" + obj.getId() + "\"}");
 
 	}
 
