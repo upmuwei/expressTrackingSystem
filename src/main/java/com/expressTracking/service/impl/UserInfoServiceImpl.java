@@ -2,20 +2,15 @@ package com.expressTracking.service.impl;
 
 import com.expressTracking.dao.TransPackageDao;
 import com.expressTracking.dao.UserInfoDao;
-import com.expressTracking.entity.ExpressSheet;
 import com.expressTracking.entity.TransPackage;
 import com.expressTracking.entity.UserInfo;
-import com.expressTracking.service.TransPackageService;
 import com.expressTracking.service.UserInfoService;
 import com.expressTracking.utils.MD5Utils;
-import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -45,7 +40,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public int save(UserInfo userInfo) throws Exception {
-        if (userInfoDao.checkByTelCode(userInfo.getTelCode()) == 0) {
+        if (userInfoDao.checkByTelCode(userInfo.getTelCode()) == null) {
             String receivePackageId = System.currentTimeMillis() + userInfo.getTelCode();
             TransPackage receivePackage = new TransPackage(receivePackageId, "0",
                     "0", new Date(), 3);
@@ -63,6 +58,9 @@ public class UserInfoServiceImpl implements UserInfoService {
             userInfo.setDelivePackageId(delivePackageId);
             userInfo.setTransPackageId(transPackageId);
             userInfoDao.insert(userInfo);
+            if (userInfo.getuId() == 0) {
+                throw new Exception("创建失败");
+            }
             return 1;
         }
         return 0;
@@ -81,6 +79,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     public UserInfo checkLogin(String account, String password) {
         UserInfo userInfo = userInfoDao.checkLogin(account);
+        System.out.println(userInfo);
         if (userInfo == null) {
             return null;
         } else if (MD5Utils.getSaltverifyMD5(password, userInfo.getPassword())) {

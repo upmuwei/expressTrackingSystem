@@ -68,13 +68,16 @@ public class ExpressSheetServiceImpl implements ExpressSheetService {
     }
 
     @Override
-    public void save(ExpressSheet expressSheet) throws Exception{
+    public int save(ExpressSheet expressSheet) throws Exception{
         if (expressSheetDao.get(expressSheet.getId()) != null) {
             throw new Exception("此订单已存在，不能创建");
         }
         expressSheet.setType(0);
         expressSheet.setStatus(ExpressSheet.STATUS.STATUS_CREATED);
-        expressSheetDao.insert(expressSheet);
+        int a = expressSheetDao.insert(expressSheet);
+        System.out.println("\n\n\n" + a +"\n\n\n");
+        return 1;
+
     }
 
 

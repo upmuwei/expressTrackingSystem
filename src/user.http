@@ -5,30 +5,27 @@
 # * 'ptr' and 'ptrp' create a POST request with a simple or parameter-like body;
 # * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
 
-GET http://localhost:8080/domain/getTransPackageList/ID/eq/1111112222
-Accept: application/json
 
-###
-
-POST http://127.0.0.1:8080/domain/newTransPackage/11
+POST http://localhost:8080/user/addUserInfo
 Content-Type: application/json
 
 {
-  "id": "1111113334",
-  "sourceNode": "410101",
-  "targetNode": "410101",
-  "status": 2
+  "pwd": "12345",
+  "name": "李伟",
+  "urull": "0",
+  "telCode": "12345678934",
+  "status": "0",
+  "dptId": "sdfdsfdsf"
 }
+
 ###
 
-POST http://localhost:8080/domain/createExpressSheet
+POST http://localhost:8080/user/doLogin
 Content-Type: application/json
 
 {
-  "id": "1212221",
-  "type": "1",
-  "senderId": "1",
-  "receverId": "2"
+  "id": "13833554433",
+  "password": "aaaa"
 }
 
 ###

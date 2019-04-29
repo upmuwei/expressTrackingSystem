@@ -19,7 +19,7 @@ public interface ExpressSheetService {
 
     public ExpressSheet get(String id);
 
-    public void save(ExpressSheet expressSheet) throws Exception;
+    public int save(ExpressSheet expressSheet) throws Exception;
 
     /**
      * 揽收快递

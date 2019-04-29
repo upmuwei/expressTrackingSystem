@@ -13,7 +13,7 @@ public interface ExpressSheetDao {
 
     public int delete(String id);
 
-    public void insert(ExpressSheet expressSheet);
+    public int insert(ExpressSheet expressSheet);
 
     public ExpressSheet get(String id);
 

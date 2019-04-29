@@ -28,11 +28,6 @@ public class UserInfo implements Serializable {
 	private Integer status;
 
 	/**
-	 * 个人头像位置
-	 */
-	private String image;
-
-	/**
 	 * 所属转运节点
 	 */
 	private String dptId;
@@ -102,14 +97,6 @@ public class UserInfo implements Serializable {
 	
 	public Integer getStatus() {
 		return status;
-	}
-
-	public String getImage() {
-		return image;
-	}
-
-	public void setImage(String image) {
-		this.image = image;
 	}
 
 	public void setDptId(String value) {

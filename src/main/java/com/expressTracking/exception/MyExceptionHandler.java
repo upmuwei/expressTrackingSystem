@@ -1,5 +1,6 @@
 package com.expressTracking.exception;
 
+import org.apache.ibatis.reflection.ReflectionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -24,7 +25,7 @@ public class MyExceptionHandler {
     @ExceptionHandler(value={Exception.class})
     public ResponseEntity<String> exp(Exception e, HttpServletRequest request) {
         LOGGER.error(request.getRequestURI() + e.getMessage());
-        if (e instanceof SQLException) {
+        if (e instanceof SQLException || e instanceof ReflectionException) {
             return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .header("Type", "Error")
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
