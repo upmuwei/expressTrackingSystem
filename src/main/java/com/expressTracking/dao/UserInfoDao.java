@@ -13,11 +13,11 @@ public interface UserInfoDao {
 
     public int delete(int uId);
 
-    public void insert(UserInfo userInfo);
+    public int insert(UserInfo userInfo);
 
     public UserInfo get(int uId);
 
-    public int checkByTelCode(String telCode);
+    public String checkByTelCode(String telCode);
 
     public UserInfo checkLogin(@Param("telCode") String telCode);
 

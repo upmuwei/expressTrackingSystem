@@ -27,6 +27,16 @@ public class ExpressSheet implements Serializable {
 	private int type;
 
 	/**
+	 * 寄件人id
+	 */
+	private int senderId;
+
+	/**
+	 * 收件人id
+	 */
+	private int receverId;
+
+	/**
 	 * 寄件人
 	 */
 	private CustomerInfo sender;
@@ -198,21 +208,37 @@ public class ExpressSheet implements Serializable {
 	public int getStatus() {
 		return status;
 	}
-	
-	public void setSender(CustomerInfo value) {
-		this.sender = value;
+
+	public int getSenderId() {
+		return senderId;
 	}
-	
+
+	public void setSenderId(int senderId) {
+		this.senderId = senderId;
+	}
+
+	public int getReceverId() {
+		return receverId;
+	}
+
+	public void setReceverId(int receverId) {
+		this.receverId = receverId;
+	}
+
 	public CustomerInfo getSender() {
 		return sender;
 	}
-	
-	public void setRecever(CustomerInfo value) {
-		this.recever = value;
+
+	public void setSender(CustomerInfo sender) {
+		this.sender = sender;
 	}
-	
+
 	public CustomerInfo getRecever() {
 		return recever;
+	}
+
+	public void setRecever(CustomerInfo recever) {
+		this.recever = recever;
 	}
 
 	@Override
@@ -225,35 +251,23 @@ public class ExpressSheet implements Serializable {
 			return String.valueOf(getId());
 		}
 		else {
-			StringBuilder sb = new StringBuilder();
-			sb.append("ExpressSheet[ ");
-			sb.append("ID=").append(getId()).append(" ");
-			sb.append("Type=").append(getType()).append(" ");
-			if (getSender() != null) {
-				sb.append("Sender.Persist_ID=").append(getSender().toString(true)).append(" ");
-			}
-			else {
-				sb.append("Sender=null ");
-			}
-			if (getRecever() != null) {
-				sb.append("Recever.Persist_ID=").append(getRecever().toString(true)).append(" ");
-			}
-			else {
-				sb.append("Recever=null ");
-			}
-			sb.append("Weight=").append(getWeight()).append(" ");
-			sb.append("TranFee=").append(getTranFee()).append(" ");
-			sb.append("PackageFee=").append(getPackageFee()).append(" ");
-			sb.append("InsuFee=").append(getInsuFee()).append(" ");
-			sb.append("Accepter=").append(getAccepter()).append(" ");
-			sb.append("Deliver=").append(getDeliver()).append(" ");
-			sb.append("AccepterTime=").append(getAccepteTime()).append(" ");
-			sb.append("DeliveTime=").append(getDeliveTime()).append(" ");
-			sb.append("Acc1=").append(getAcc1()).append(" ");
-			sb.append("Acc2=").append(getAcc2()).append(" ");
-			sb.append("Status=").append(getStatus()).append(" ");
-			sb.append("]");
-			return sb.toString();
+			return "ExpressSheet[ " +
+					"ID=" + getId() + " " +
+					"Type=" + getType() + " " +
+					"Sender=" + getSender() + " " +
+					"Recever=" + getRecever() + " " +
+					"Weight=" + getWeight() + " " +
+					"TranFee=" + getTranFee() + " " +
+					"PackageFee=" + getPackageFee() + " " +
+					"InsuFee=" + getInsuFee() + " " +
+					"Accepter=" + getAccepter() + " " +
+					"Deliver=" + getDeliver() + " " +
+					"AccepterTime=" + getAccepteTime() + " " +
+					"DeliveTime=" + getDeliveTime() + " " +
+					"Acc1=" + getAcc1() + " " +
+					"Acc2=" + getAcc2() + " " +
+					"Status=" + getStatus() + " " +
+					"]";
 		}
 	}
 

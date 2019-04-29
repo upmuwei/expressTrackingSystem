@@ -26,7 +26,7 @@
         from userinfo
     </sql>
 
-    <select id="checkByTelCode" parameterType="string" resultType="int">
+    <select id="checkByTelCode" parameterType="string" resultType="string">
         select 1 from userinfo where TelCode = #{telCode,jdbcType=VARCHAR}
     </select>
 
@@ -35,6 +35,9 @@
     </select>
 
     <insert id="insert" parameterType="UserInfo">
+        <selectKey resultType="int" keyProperty="uId" keyColumn="UID" order="AFTER">
+            select LAST_INSERT_ID() as value
+        </selectKey>
         insert into userinfo(PWD, Name, URull, TelCode, Status, DptID,
                              ReceivePackageID, DelivePackageID, TransPackageID)
                              values (#{password} ,#{name},#{uRull},#{telCode},

@@ -17,6 +17,8 @@
         <result property="acc1" column="Acc1"/>
         <result property="acc2" column="Acc2"/>
         <result property="status" column="Status"/>
+        <result property="senderId" column="sender"/>
+        <result property="receverId" column="recever"/>
         <association property="sender" column="sender"
                      select="com.expressTracking.dao.CustomerInfoDao.get" />
         <association property="recever" column="recever"
@@ -27,8 +29,8 @@
         update expresssheet
         <trim prefix="set" suffixOverrides=",">
             <if test="type != null"> type=#{type,jdbcType=INTEGER}, </if>
-            <if test="sender != 0"> sender=#{sender},  </if>
-            <if test="recever != 0">  recever =#{recever}, </if>
+            <if test="senderId != 0"> sender=#{senderId,jdbcType=INTEGER} ,  </if>
+            <if test="receverId != 0">  recever =#{receverId,jdbcType=INTEGER} , </if>
             <if test="weight != null"> weight=#{weight},  </if>
             <if test="tranFee != null"> TranFee=#{tranFee}, </if>
             <if test="packageFee != null"> PackageFee=#{packageFee}, </if>
@@ -116,10 +118,10 @@
               <if test="type != null">
                   Type,
               </if>
-              <if test="sender != null">
+              <if test="senderId != null">
                   Sender,
               </if>
-              <if test="recever != null">
+              <if test="receverId != null">
                   Recever,
               </if>
               <if test="weight != null">
@@ -163,11 +165,11 @@
               <if test="type != null">
                   #{type},
               </if>
-              <if test="sender != null">
-                  #{sender.id},
+              <if test="senderId != null">
+                  #{senderId,jdbcType=INTEGER},
               </if>
-              <if test="recever != null">
-                  #{recever.id},
+              <if test="receverId != null">
+                  #{receverId,jdbcType=INTEGER},
               </if>
               <if test="weight != null">
                   #{weight},

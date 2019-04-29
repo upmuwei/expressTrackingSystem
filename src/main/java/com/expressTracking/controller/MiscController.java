@@ -168,8 +168,15 @@ public class MiscController {
 	 */
     @RequestMapping(value = "/saveCustomerInfo",method = RequestMethod.POST)
 	public ResponseEntity<String> saveCustomerInfo( @RequestBody CustomerInfo obj) {
+    	obj.setId(0);
     	customerInfoService.save(obj);
-		return ResponseEntity.ok().header("Type", "Save")
+		if (obj.getId() == 0) {
+			return ResponseEntity.ok().header("Type", "Error")
+					.contentType(MediaType.APPLICATION_JSON_UTF8)
+					.body("{\"message\":\"保存失败\"}");
+
+		}
+    	return ResponseEntity.ok().header("Type", "Save")
 				.contentType(MediaType.APPLICATION_JSON_UTF8)
 				.body("{\"message\":\"" + obj.getId() + "\"}");
 
