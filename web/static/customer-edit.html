@@ -34,8 +34,8 @@
                 document.getElementById("L_address").value=data.address;
                 document.getElementById("L_postCode").value=data.postCode;
             },
-            error:function (error) {
-                alert(error);
+            error:function () {
+                alert("error");
             }
         });
         $("#edit").click(function () {
@@ -56,9 +56,9 @@
                     "regionCode": regioncode, "address": address, "postCode": postcode
                 }),
                 success: function (data) {
-                    x_admin_close();
                     alert("即将关闭");
                     layer.msg('已更新!', {icon: 1, time: 1000});
+                    x_admin_close();
                     x_admin_father_reload();
                     open(location, '_self').close();
                 },
@@ -123,11 +123,11 @@
         <div class="layui-form-item">
             <label class="layui-form-label">
             </label>
-            <button id="edit"  class="layui-btn" lay-filter="add" lay-submit="">编辑</button>
+            <button id="edit"  class="layui-btn" lay-filter="edit" lay-submit="">编辑</button>
         </div>
     </form>
 </div>
-<!--<script>
+<script>
     layui.use(['form','layer'], function(){
         $ = layui.jquery;
         var form = layui.form
@@ -178,6 +178,6 @@
             return false;
         });
     });
-</script>-->
+</script>
 </body>
 </html>

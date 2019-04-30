@@ -29,6 +29,7 @@
                   dataType:'JSON',
                   contentType : "application/json; charset=utf-8",
                   success:function(data){
+                      var tableData;
 
                       $("#numspan").text("显示数据："+(data.length).toString()+"条");
                       for(var i=0;i<data.length;i++){
@@ -36,26 +37,21 @@
                               '<a title="编辑"  href="javascript:;"  onclick="x_admin_show( \'编辑\',\'customer-edit.html?Data='+data[i].id+'\',600,400)">'+
                               "<i class=\"layui-icon\">&#xe642;</i>" +
                               "</a>" +
-                              "<a title='修改密码' href='javascript:;' onclick='x_admin_show(\"修改密码\",\"customer-password.html\",600,400)'> " +
-                              "<i class='layui-icon'>&#xe631;</i> " +
-                              "</a>" +
                               '<a title="删除" href="javascript:;" onclick="customer_del(this,'+data[i].id+')">'+
                               "<i class='layui-icon'>&#xe640;</i> " +
                               "</a> "+
                               "</td>"
-                          $("#firsttbody").append(
-                              "<tr> " +
-
-                              "<td>"+data[i].id +"</td> " +
-                              "<td>"+data[i].name +"</td>" +
-                              "<td>"+data[i].telCode +"</td>" +
-                              "<td>"+data[i].department +" </td>" +
-                              "<td>"+data[i].regionCode +"</td>" +
-                              "<td>"+data[i].address +"</td>" +
-                              "<td>"+data[i].postCode +"</td> " +str+
-
-                              "</tr>");
+                              tableData+="<tr> " +
+                                  "<td>"+data[i].id +"</td> " +
+                                  "<td>"+data[i].name +"</td>" +
+                                  "<td>"+data[i].telCode +"</td>" +
+                                  "<td>"+data[i].department +" </td>" +
+                                  "<td>"+data[i].regionCode +"</td>" +
+                                  "<td>"+data[i].address +"</td>" +
+                                  "<td>"+data[i].postCode +"</td> " +str+
+                              "</tr>";
                       }
+                      $("#firsttbody").html(tableData);
 
                   },
                   error:function(error){
@@ -123,18 +119,6 @@
 
   </div>
       <script>
-           layui.use('laydate', function(){
-           var laydate = layui.laydate;
-           //执行一个laydate实例
-           laydate.render({
-               elem: '#start' //指定元素
-           });
-           //执行一个laydate实例
-           laydate.render({
-               elem: '#end' //指定元素
-           });
-      });
-
       /*用户-删除*/
       function customer_del(obj,id){
           layer.confirm('确认要删除吗？',function(){

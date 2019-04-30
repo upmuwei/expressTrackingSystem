@@ -21,21 +21,19 @@
                 dataType:'JSON',
                 contentType : "application/json; charset=utf-8",
                 success:function(data){
+                    var tableData;
                     $("#numspan").text("显示数据："+(data.length).toString()+"条");
                     for(var i=0;i<data.length;i++){
                         var str="<td class='td-manage'>"+
                             '<a title="编辑"  href="javascript:;"  onclick="x_admin_show( \'编辑\',\'customer-edit.html?Data='+data[i].id+'\',600,400)">'+
                             "<i class=\"layui-icon\">&#xe642;</i>" +
                             "</a>" +
-                            "<a title='修改密码' href='javascript:;' onclick='x_admin_show(\"修改密码\",\"customer-password.html\",600,400)'> " +
-                            "<i class='layui-icon'>&#xe631;</i> " +
-                            "</a>" +
                             '<a title="删除" href="javascript:;" onclick="customer_del(this,'+data[i].id+')">'+
                             "<i class='layui-icon'>&#xe640;</i> " +
                             "</a> "+
                             "</td>"
-                        $("#firsttbody").append(
-                            "<tr> " +
+
+                        tableData+="<tr> " +
 								"<td align='center'>"+data[i].id +"</td> " +
 								"<td align='center'>"+data[i].nodeName +"</td> " +
 								"<td align='center'>"+data[i].nodeType +"</td>" +
@@ -43,9 +41,9 @@
 								"<td align='center'>"+data[i].telCode +" </td>" +
 								"<td align='center'>"+data[i].x +"</td>" +
 								"<td align='center'>"+data[i].y +"</td>" +str+
-                            "</tr>");
+                            "</tr>";
                     }
-
+                    $("#firsttbody").html(tableData);
                 },
                 error:function(error){
                     alert(error);

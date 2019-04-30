@@ -24,37 +24,33 @@
                 dataType:'JSON',
                 contentType : "application/json; charset=utf-8",
                 success:function(data){
-
+                    var tableData;
                     $("#numspan").text("显示数据："+(data.length).toString()+"条");
                     for(var i=0;i<data.length;i++){
                         var str="<td class='td-manage'>"+
                             '<a title="编辑"  href="javascript:;"  onclick="x_admin_show( \'编辑\',\'employee-edit.html? Data='+data[i].uId+'\',600,400)">'+
                             "<i class=\"layui-icon\">&#xe642;</i>" +
                             "</a>" +
-                            "<a title='修改密码' href='javascript:;' onclick='x_admin_show(\"修改密码\",\"employee-password.html\",600,400)'> " +
-                            "<i class='layui-icon'>&#xe631;</i> " +
-                            "</a>" +
                             '<a title="删除" href="javascript:;" onclick="employee_del(this,'+data[i].uId+')">'+
                             "<i class='layui-icon'>&#xe640;</i> " +
                             "</a> "+
                             "</td>"
-                        $("#firsttbody").append(
-                            "<tr> " +
 
-                            "<td>"+data[i].uId +"</td> " +
-                            "<td>"+data[i].password +"</td> " +
-                            "<td>"+data[i].name +"</td>" +
-                            "<td>"+data[i].uRull +"</td>" +
-                            "<td>"+data[i].telCode +" </td>" +
-                            "<td>"+data[i].status +"</td>" +
-                            "<td>"+data[i].dptId +"</td>" +
-                            "<td>"+data[i].receivePackageId +"</td> "+
-                            "<td>"+data[i].delivePackageId +"</td> "+
-                            "<td>"+data[i].transPackageId +"</td> "
-                            +str+
-
-                            "</tr>");
+                            tableData+="<tr> " +
+                                "<td>"+data[i].uId +"</td> " +
+                                "<td>"+data[i].password +"</td> " +
+                                "<td>"+data[i].name +"</td>" +
+                                "<td>"+data[i].uRull +"</td>" +
+                                "<td>"+data[i].telCode +" </td>" +
+                                "<td>"+data[i].status +"</td>" +
+                                "<td>"+data[i].dptId +"</td>" +
+                                "<td>"+data[i].receivePackageId +"</td> "+
+                                "<td>"+data[i].delivePackageId +"</td> "+
+                                "<td>"+data[i].transPackageId +"</td> "
+                                +str+
+                            "</tr>";
                     }
+                    $("#firsttbody").html(tableData);
                 },
                 error:function(){
                     alert("error");
