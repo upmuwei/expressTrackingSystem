@@ -9,7 +9,7 @@ public class Account implements Serializable {
 
     private static final long serialVersionUID = -5442000268601430622L;
 
-    private String id;
+    private String phone;
 
     private String password;
 
@@ -17,17 +17,17 @@ public class Account implements Serializable {
 
     }
 
-    public Account(String id, String password) {
-        this.id = id;
+    public Account(String phone, String password) {
+        this.phone = phone;
         this.password = password;
     }
 
-    public String getId() {
-        return id;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getPassword() {

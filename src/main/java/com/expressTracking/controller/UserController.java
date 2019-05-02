@@ -43,14 +43,17 @@ public class UserController {
      */
     @RequestMapping(value = "/doLogin", method = RequestMethod.POST)
     public ResponseEntity<UserInfo> doLogin(HttpSession session, @RequestBody Account account) throws Exception {
-        UserInfo userInfo = userInfoService.checkLogin(account.getId(), account.getPassword());
+        UserInfo userInfo = userInfoService.checkLogin(account.getPhone(), account.getPassword());
         if (userInfo == null) {
             throw new Exception("账号或密码错误");
         }
+
         LOGGER.info(userInfo.getuId() + userInfo.getName() + "登录");
-        String sessionId = account.getId() + System.currentTimeMillis();
+
+        //标识用户登录的会话ID
+        String sessionId = account.getPhone() + System.currentTimeMillis();
         session.setAttribute(sessionId, userInfo);
-        return ResponseEntity.ok().header("session", sessionId).body(userInfo);
+        return ResponseEntity.ok().header("Type", "Select").body(userInfo);
     }
 
     /**
@@ -112,6 +115,7 @@ public class UserController {
      */
     @RequestMapping(value = "/addUserInfo", method = RequestMethod.POST)
     public ResponseEntity<String> addUserInfo(@RequestBody UserInfo userInfo) throws Exception{
+        System.out.println(userInfo);
         if (userInfoService.save(userInfo) == 0) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .header("Type", "Error")
@@ -130,6 +134,7 @@ public class UserController {
      */
     @RequestMapping(value = "/updateUserInfo", method = RequestMethod.POST)
     public ResponseEntity<String> updateUserInfo(@RequestBody UserInfo userInfo) throws Exception {
+
         if(userInfoService.update(userInfo) == 0) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .header("Type", "Error")
