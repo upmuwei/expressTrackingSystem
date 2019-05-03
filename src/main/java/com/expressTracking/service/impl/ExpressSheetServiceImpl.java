@@ -63,8 +63,14 @@ public class ExpressSheetServiceImpl implements ExpressSheetService {
     }
 
     @Override
-    public ExpressSheet get(String id) {
+    public ExpressSheet getByExpressId(String id) {
         return expressSheetDao.get(id);
+    }
+
+
+    @Override
+    public List<ExpressSheet> getByMoreConditions(ExpressSheet expressSheet) {
+        return expressSheetDao.findByMoreConditions(expressSheet);
     }
 
     @Override

@@ -23,4 +23,6 @@ public interface ExpressSheetDao {
     public List<ExpressSheet> findLike(@Param("propertyName") String propertyName,
                                        @Param("value") String value);
 
+
+    public List<ExpressSheet> findByMoreConditions(ExpressSheet expressSheet);
 }

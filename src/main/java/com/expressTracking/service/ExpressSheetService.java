@@ -1,11 +1,11 @@
 package com.expressTracking.service;
 
 import com.expressTracking.entity.ExpressSheet;
-
 import java.util.List;
 
 /**
  * @author muwei
+ * @date 2019/4/28
  */
 public interface ExpressSheetService {
 
@@ -17,9 +17,16 @@ public interface ExpressSheetService {
 
     public List<ExpressSheet> getListInPackage(String packageId);
 
-    public ExpressSheet get(String id);
+    public ExpressSheet getByExpressId(String id);
 
     public int save(ExpressSheet expressSheet) throws Exception;
+
+    /**
+     * 根据多种条件查询快递
+     * @param expressSheet 快递单
+     * @return 快递集合
+     */
+    public List<ExpressSheet> getByMoreConditions(ExpressSheet expressSheet);
 
     /**
      * 揽收快递

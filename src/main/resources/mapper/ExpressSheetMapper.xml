@@ -211,4 +211,30 @@
         delete from expresssheet where id=#{id,jdbcType=VARCHAR}
     </delete>
 
+
+    <select id="findByMoreConditions" parameterType="ExpressSheet" resultMap="expressSheetMap">
+        <include refid="express_get"/>
+        <where>
+            <choose>
+                <when test="id != null and id != ''">
+                    ID = #{id,jdbcType=VARCHAR}
+                </when>
+                <when test="senderId != 0 ">
+                    and Sender = #{senderId,jdbcType=INTEGER}
+                </when>
+                <when test="receverId != 0">
+                    and Recever = #{receverId,jdbcType=INTEGER}
+                </when>
+                <when test="accepter != null and accepter != ''">
+                    and Accepter = #{accepter,jdbcType=VARCHAR}
+                </when>
+                <when test="deliver != null and deliver != ''">
+                    and Deliver = #{deliver,jdbcType=VARCHAR}
+                </when>
+                <when test="status != 0">
+                    and Status = #{status,jdbcType=INTEGER}
+                </when>
+            </choose>
+        </where>
+    </select>
 </mapper>

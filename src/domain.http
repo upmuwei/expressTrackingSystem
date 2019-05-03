@@ -32,3 +32,14 @@ Content-Type: application/json
 }
 
 ###
+
+
+POST http://localhost:8080/domain/getExpressList
+Content-Type: application/json
+
+{
+  "recever": "1",
+  "accepter": "12"
+}
+
+###
