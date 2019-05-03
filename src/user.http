@@ -29,3 +29,8 @@ Content-Type: application/json
 }
 
 ###
+
+GET http://localhost:8080/user/getUserList/Name/eq/李伟
+Accept: application/json
+
+###
