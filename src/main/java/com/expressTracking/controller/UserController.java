@@ -3,6 +3,8 @@ package com.expressTracking.controller;
 import com.expressTracking.entity.Account;
 import com.expressTracking.entity.UserInfo;
 import com.expressTracking.service.UserInfoService;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,7 +55,7 @@ public class UserController {
         //标识用户登录的会话ID
         String sessionId = account.getPhone() + System.currentTimeMillis();
         session.setAttribute(sessionId, userInfo);
-        return ResponseEntity.ok().header("Type", "Select").body(userInfo);
+        return ResponseEntity.ok().header("Type", "Session",sessionId).body(userInfo);
     }
 
     /**
