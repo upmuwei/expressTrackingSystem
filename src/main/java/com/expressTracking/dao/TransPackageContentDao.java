@@ -9,7 +9,7 @@ import java.util.List;
 public interface TransPackageContentDao {
     public int update(TransPackageContent transPackageContent);
 
-    public void insert(TransPackageContent transPackageContent);
+    public int insert(TransPackageContent transPackageContent);
 
     public List<String> getExpressId(String packageId);
 
@@ -21,4 +21,6 @@ public interface TransPackageContentDao {
 
     public TransPackageContent findByExpressIdAndStatus(@Param("expressId") String expressId,
                                                         @Param("status")int status);
+
+    public TransPackageContent findByPackageIdAndEsId(@Param("packageId") String packageId,@Param("esId") String esId);
 }

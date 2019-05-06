@@ -33,7 +33,10 @@
             <if test="createTime != null"> CreateTime=#{createTime} ,</if>
             <if test="status != null"> Status=#{status}</if>
         </set>
-            where ID=#{id};
+            where ID=#{id}
+    </update>
+    <update id="updatePackageStatus">
+      update transpackage set Status=#{status} where ID=#{packageId,jdbcType=VARCHAR}
     </update>
 
     <insert id="insert" parameterType="TransPackage">

@@ -10,7 +10,17 @@ import java.util.List;
 public interface TransPackageDao {
     public int update(TransPackage transPackage);
 
-    public void insert(TransPackage transPackage);
+    /**
+     * 修改包裹状态
+     * @param packageId 包裹编号
+     * @param status 包裹状态
+     * @return
+     */
+    public int updatePackageStatus(@Param("packageId") String packageId,@Param("status") int status);
+
+    public int insert(TransPackage transPackage);
+
+
 
     public TransPackage get(String id);
 

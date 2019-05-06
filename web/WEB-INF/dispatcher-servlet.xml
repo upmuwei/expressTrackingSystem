@@ -29,18 +29,46 @@
             <bean class="com.expressTracking.interceptor.MyInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
-
-
+    <!-- annotation-driven 控制器映射器和控制器适配器 ，用来控制@Controller处理http请求的方式-->
     <mvc:annotation-driven>
         <mvc:message-converters>
-            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
-                <property name="supportedMediaTypes" value="text/plain;charset=UTF-8" />
+            <!--<bean class="org.springframework.http.converter.StringHttpMessageConverter">-->
+                <!--<property name="supportedMediaTypes" value="text/plain;charset=UTF-8"/>-->
+            <!--</bean>-->
+            <!-- register-defaults="true"表示使用默认的消息转换器 -->
+            <!-- FastJson(Spring4.2x以上版本设置) -->
+            <!-- 使用@responsebody注解并且返回值类型为String时，返回的string字符串带有双引号"{'user':'songfs'}"，其原因是直接将string类型转成了json字符串，应该在json解析器之前添加字符串解析器-->
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter"/>
+            <!-- FastJsonHttpMessageConverter4 使@ResponseBody支持返回Map<String,Object>等类型,它会自动转换为json-->
+            <!-- 需要返回json时需要配置 produces = "application/json"。不需要再指定utf-8了 -->
+            <bean id="fastJsonHttpMessageConverter"
+                  class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter4">
+                <!-- 加入支持的媒体类型 -->
+                <property name="supportedMediaTypes">
+                    <list>
+                        <!-- 这里顺序不能反，一定先写text/html，不然IE执行AJAX时,返回JSON会出现下载文件 -->
+                        <value>application/json;charset=UTF-8</value>
+                        <value>text/html;charset=UTF-8</value>
+                        <value>application/xml;charset=UTF-8</value>
+                    </list>
+                </property>
+                <property name="fastJsonConfig">
+                    <bean class="com.alibaba.fastjson.support.config.FastJsonConfig">
+                        <property name="features">
+                            <list>
+                                <value>AllowArbitraryCommas</value>
+                                <value>AllowUnQuotedFieldNames</value>
+                                <value>DisableCircularReferenceDetect</value>
+                            </list>
+                        </property>
+                        <property name="dateFormat" value="yyyy-MM-dd HH:mm:ss"/>
+                    </bean>
+                </property>
             </bean>
-            <!--<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>-->
         </mvc:message-converters>
     </mvc:annotation-driven>
 
-    <context:component-scan base-package="com.expressTracking" />
+    <context:component-scan base-package="com.expressTracking.*"/>
 
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
         <property name="defaultEncoding" value="UTF-8"/>

@@ -23,4 +23,6 @@ public interface UserInfoService {
 
     public List<UserInfo> findBy(String propertyName, String value);
 
+    public UserInfo getUserByTelCode(String phone);
+
 }

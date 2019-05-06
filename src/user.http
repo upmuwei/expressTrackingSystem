@@ -6,7 +6,7 @@
 # * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
 
 
-POST http://localhost:8080/user/addUserInfo
+POST http://localhost:8080/expressTrackingSystem_war_exploded/user/addUserInfo
 Content-Type: application/json
 
 {
@@ -26,6 +26,15 @@ Content-Type: application/json
 {
   "id": "13833554433",
   "password": "aaaa"
+}
+
+###
+POST  http://localhost:8080/expressTrackingSystem_war_exploded/user/login
+Content-Type: application/json
+
+{
+  "phone": "17803878845",
+  "password": "1759840027"
 }
 
 ###

@@ -12,7 +12,7 @@ public interface UsersPackageDao {
 
     public int delete(int sn);
 
-    public void insert(UsersPackage userPackage);
+    public int insert(UsersPackage userPackage);
 
     public List<UsersPackage> getByUserUId(int userUId);
 

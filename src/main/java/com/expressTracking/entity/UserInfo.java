@@ -1,4 +1,6 @@
 package com.expressTracking.entity;
+import com.google.gson.annotations.Expose;
+
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -10,14 +12,15 @@ public class UserInfo implements Serializable {
 	public UserInfo() {
 	}
 
+	@Expose
 	private int uId;
-
+	@Expose
 	private String password;
-
+	@Expose
 	private String name;
-
+	@Expose
 	private Integer uRull;
-
+	@Expose
 	private String telCode;
 
 	/**
@@ -25,26 +28,30 @@ public class UserInfo implements Serializable {
 	 * 未审核未0
 	 * 审核通过为1
 	 */
+	@Expose
 	private Integer status;
 
 	/**
 	 * 所属转运节点
 	 */
+	@Expose
 	private String dptId;
 
 	/**
 	 * 揽收货篮id
 	 */
+	@Expose
 	private String receivePackageId;
 
 	/**
 	 * 派送货篮id
 	 */
+	@Expose
 	private String delivePackageId;
 
-
+	@Expose
 	private String transPackageId;
-
+	@Expose
 	private Set<UsersPackage> usersPackage = new HashSet<>();
 
 	public int getuId() {

@@ -152,11 +152,12 @@ public class DomainController {
      * @return {@code HttpStatus=200, Header={"Type", "Save"}}快递单号
      */
     @RequestMapping(value = "/createExpressSheet", method = RequestMethod.POST)
-    public ResponseEntity<String> createExpressSheet(@RequestBody ExpressSheet expressSheet) throws Exception {
+    public ResponseEntity<ExpressSheet> createExpressSheet(@RequestBody ExpressSheet expressSheet) throws Exception {
         expressSheetService.save(expressSheet);
+        System.out.println(expressSheet);
         return ResponseEntity.ok().header("Type", "Save")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .body("{\"message\":\"" + expressSheet.getId() + "\"}");
+                .body(expressSheet);
     }
 
 
@@ -195,6 +196,9 @@ public class DomainController {
                     .header("Type", "Error")
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
                     .body("{\"message\":\"揽收失败\"}");
+        }else{
+            ExpressSheet expressSheet = expressSheetService.get(expressId);
+
         }
         LOGGER.info(uId + "揽收" + expressId);
         return ResponseEntity.ok().header("Type", "Save")

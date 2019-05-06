@@ -39,13 +39,18 @@ public class ExpressSheetServiceImpl implements ExpressSheetService {
     }
 
     @Override
+    public int delete(String esId) {
+        return expressSheetDao.delete(esId);
+    }
+
+    @Override
     public int update(ExpressSheet expressSheet) {
         return expressSheetDao.update(expressSheet);
     }
 
     @Override
     public List<ExpressSheet> findBy(String propertyName, String value) {
-        return expressSheetDao.findBy(propertyName,value);
+            return expressSheetDao.findBy(propertyName, value);
     }
 
     @Override
@@ -71,6 +76,25 @@ public class ExpressSheetServiceImpl implements ExpressSheetService {
     @Override
     public List<ExpressSheet> getByMoreConditions(ExpressSheet expressSheet) {
         return expressSheetDao.findByMoreConditions(expressSheet);
+    }
+
+    @Override
+    public List<ExpressSheet> getByParameters(ExpressSheet expressSheet) {
+        if(expressSheet != null){
+            return expressSheetDao.getByParameters(expressSheet);
+        }else{
+            return null;
+        }
+    }
+
+    @Override
+    public int create(String expressId, Integer accepter) {
+        ExpressSheet expressSheet = new ExpressSheet();
+        expressSheet.setId(expressId);
+        expressSheet.setAccepter(accepter + "");
+        expressSheet.setType(0);
+        expressSheet.setStatus(ExpressSheet.STATUS.STATUS_CREATED);
+        return expressSheetDao.insert(expressSheet);
     }
 
     @Override

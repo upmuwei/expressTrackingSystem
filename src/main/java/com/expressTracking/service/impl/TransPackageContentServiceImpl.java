@@ -24,7 +24,7 @@ public class TransPackageContentServiceImpl implements TransPackageContentServic
 
     @Autowired
     public TransPackageContentServiceImpl(TransPackageContentDao transPackageContentDao) {
-        this.transPackageContentDao=transPackageContentDao;
+        this.transPackageContentDao = transPackageContentDao;
     }
 
     @Override
@@ -38,6 +38,35 @@ public class TransPackageContentServiceImpl implements TransPackageContentServic
     }
 
     @Override
+    public int moveEsToPackage(String packageId, String esId) {
+        TransPackageContent transPackageContent = containExpress(packageId, esId);
+        if (transPackageContent != null) {
+            transPackageContent.setStatus(TransPackageContent.STATUS.STATUS_ACTIVE);
+            return transPackageContentDao.update(transPackageContent);
+        } else {
+            transPackageContent = new TransPackageContent();
+            transPackageContent.setExpressId(esId);
+            transPackageContent.setPackageId(packageId);
+            transPackageContent.setStatus(TransPackageContent.STATUS.STATUS_ACTIVE);
+            return transPackageContentDao.insert(transPackageContent);
+        }
+    }
+
+    @Override
+    public int moveEsOutPackage(String packageId, String esId) {
+        TransPackageContent transPackageContent = containExpress(packageId, esId);
+        if (transPackageContent != null) {
+            if (transPackageContent.getStatus() == TransPackageContent.STATUS.STATUS_ACTIVE) {
+                transPackageContent.setStatus(TransPackageContent.STATUS.STATUS_OUTOF_PACKAGE);
+                return transPackageContentDao.update(transPackageContent);
+            }else{
+                return 1;
+            }
+        }
+        return 0;
+    }
+
+    @Override
     public TransPackageContent findByExpressIdAndStatus(String expressId, int status) {
         return transPackageContentDao.findByExpressIdAndStatus(expressId, status);
     }
@@ -47,4 +76,8 @@ public class TransPackageContentServiceImpl implements TransPackageContentServic
         return transPackageContentDao.findByPackageIdAndStatus(packageId, status);
     }
 
+    @Override
+    public TransPackageContent containExpress(String packageId, String esId) {
+        return transPackageContentDao.findByPackageIdAndEsId(packageId, esId);
+    }
 }

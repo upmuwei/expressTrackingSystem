@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Date;
 import java.util.List;
 
@@ -68,6 +69,9 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public int update(UserInfo userInfo) {
+        if (userInfo != null) {
+            userInfo.setPassword(MD5Utils.getSaltMD5(userInfo.getPassword()));
+        }
         return userInfoDao.update(userInfo);
     }
 
@@ -83,7 +87,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         if (userInfo == null) {
             return null;
         } else if (MD5Utils.getSaltverifyMD5(password, userInfo.getPassword())) {
-            userInfo.setPassword(password);
+//            userInfo.setPassword(password);
             return userInfo;
         }
         return null;
@@ -91,11 +95,21 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public List<UserInfo> findLike(String propertyName, String value) {
-        return userInfoDao.findLike(propertyName,value);
+        return userInfoDao.findLike(propertyName, value);
     }
 
     @Override
     public List<UserInfo> findBy(String propertyName, String value) {
-        return userInfoDao.findBy(propertyName,value);
+        return userInfoDao.findBy(propertyName, value);
+    }
+
+    @Override
+    public UserInfo getUserByTelCode(String phone) {
+        List<UserInfo> userInfos = findBy("TelCode", phone);
+        if (!userInfos.isEmpty()) {
+            return userInfos.get(0);
+        } else {
+            return null;
+        }
     }
 }

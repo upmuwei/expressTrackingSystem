@@ -15,9 +15,9 @@ public interface TransPackageService {
 
     public TransPackage get(String id);
 
-    public void save(TransPackage transPackage);
+    public int save(TransPackage transPackage);
 
-    public void update(TransPackage transPackage);
+    public int update(TransPackage transPackage);
 
     /**
      * 新建包裹
@@ -27,6 +27,22 @@ public interface TransPackageService {
      * @throws Exception
      */
     public int newTransPackage(TransPackage transPackage, int uId) throws Exception;
+
+    /**
+     * 新建包裹
+     * @param packageId 包裹编号
+     * @param userId 创建的用户编号
+     * @return
+     */
+    public int newTransPackage(String packageId,int userId);
+
+    /**
+     * 拆包
+     * @param packageId
+     * @param userId
+     * @return
+     */
+    public int unPackTransPckage(String packageId, int userId);
 
     /**
      * 打开包裹
