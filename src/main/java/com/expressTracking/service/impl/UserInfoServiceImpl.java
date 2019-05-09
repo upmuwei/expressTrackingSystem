@@ -76,6 +76,14 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
+    public int updatePassword(int userId, String password) {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setuId(userId);
+        userInfo.setPassword(password);
+        return update(userInfo);
+    }
+
+    @Override
     public int delete(int uId) {
         return userInfoDao.delete(uId);
     }

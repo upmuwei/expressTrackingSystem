@@ -13,7 +13,9 @@ public interface CustomerInfoService {
 
     public List<CustomerInfo> findByTelCode(String telCode);
 
-    public void save(CustomerInfo customerInfo);
+    public List<CustomerInfo> findByParameter(CustomerInfo customerInfo);
+
+    public int save(CustomerInfo customerInfo);
 
     public int removeById(int id);
 

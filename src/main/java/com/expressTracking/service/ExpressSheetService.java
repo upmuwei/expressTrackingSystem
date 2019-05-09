@@ -10,6 +10,8 @@ import java.util.List;
  */
 public interface ExpressSheetService {
 
+
+
     public int update(ExpressSheet expressSheet);
 
     public int delete(String esId);
@@ -24,6 +26,8 @@ public interface ExpressSheetService {
 
     public List<ExpressSheet> getByParameters(ExpressSheet expressSheet);
 
+    public List<ExpressSheet> getByAccpterAndStatus(String accepter,Integer status);
+
     /**
      * 创建快件信息
      *
@@ -33,7 +37,10 @@ public interface ExpressSheetService {
      */
     public int create(String expressId, Integer accepter);
 
-    public int save(ExpressSheet expressSheet) throws Exception;
+
+    public int save(ExpressSheet expressSheet);
+
+
 
     /**
      * 揽收快递
@@ -61,4 +68,14 @@ public interface ExpressSheetService {
      * @return 成功返回1，失败返回0
      */
     public int deliveryExpressSheet(String expressId, int uId) throws Exception;
+
+
+    /**
+     * 创建包裹信息
+     * @param expressSheet
+     * @param accpter
+     * @return
+     */
+    public int create(ExpressSheet expressSheet,Integer accpter);
+
 }

@@ -21,4 +21,6 @@ public interface CustomerInfoDao {
 
     public List<CustomerInfo> findByTelCode(String telCode);
 
+    public List<CustomerInfo> fingByParameter(CustomerInfo customerInfo);
+
 }

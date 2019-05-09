@@ -74,7 +74,7 @@ public class DomainController {
      */
     @RequestMapping(value = "getExpressList", method = RequestMethod.POST)
     public ResponseEntity<List<ExpressSheet>> getExpressList(@RequestBody ExpressSheet expressSheet) throws Exception {
-        List<ExpressSheet> list = expressSheetService.getByMoreConditions(expressSheet);
+        List<ExpressSheet> list = expressSheetService.getByParameters(expressSheet);
         if (list == null) {
             throw new Exception("未查询到");
         } else {
@@ -142,7 +142,7 @@ public class DomainController {
      */
     @RequestMapping(value ="/getExpressSheet/{id}", method = RequestMethod.GET)
     public ResponseEntity<ExpressSheet> getExpressSheet(@PathVariable("id")String id) {
-        ExpressSheet expressSheet = expressSheetService.getByExpressId(id);
+        ExpressSheet expressSheet = expressSheetService.get(id);
         return ResponseEntity.ok().header("Type", "Select").body(expressSheet);
     }
 
@@ -168,7 +168,7 @@ public class DomainController {
      */
     @RequestMapping(value = "/updateExpressSheet", method = RequestMethod.POST)
     public ResponseEntity<String> updateExpressSheet(@RequestBody ExpressSheet obj) throws Exception {
-        ExpressSheet expressSheet = expressSheetService.getByExpressId(obj.getId());
+        ExpressSheet expressSheet = expressSheetService.get(obj.getId());
         if (expressSheet.getStatus() != 0 && expressSheet.getStatus() != 1) {
             throw new Exception("快递已发货，不能更改快递信息");
         } else if(expressSheetService.update(obj) == 0) {

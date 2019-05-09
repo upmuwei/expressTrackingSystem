@@ -9,6 +9,8 @@ import java.util.List;
 public interface RegionDao {
     public Region get(String id);
 
+    public String getRegionString(String regionCode);
+
     public List<Region> getProvinceList();
 
     public List<Region> getCityList(String prv);

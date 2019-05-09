@@ -21,11 +21,11 @@ import java.util.List;
  * @author muwei
  * @date 2019/4/8
  */
-@Service
+@Service("transPackageService")
 @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
-public class TransPackageImpl implements TransPackageService {
+public class TransPackageServiceImpl implements TransPackageService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TransPackageImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TransPackageServiceImpl.class);
     @Autowired
     private TransPackageDao transPackageDao;
     @Autowired

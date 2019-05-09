@@ -8,6 +8,7 @@ import com.expressTracking.utils.JsonUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,6 +34,7 @@ public class PackageController {
     @Autowired
     private TransPackageContentService tPackageContentService;
     @Autowired
+    @Qualifier("transPackageService")
     private TransPackageService transPackageService;
     @Autowired
     private UserPackageService userPackageService;
@@ -52,25 +54,31 @@ public class PackageController {
     @RequestMapping("/create/{packageId}/{userId}")
     public JSONObject createPackage(@PathVariable("packageId") String packageId, @PathVariable("userId") Integer userId) {
         JSONObject jsonObject = new JSONObject();
+        ResponseCode code = new ResponseCode();
         if (packageId != null && userId != null) {
             TransPackage transPackage = transPackageService.get(packageId);
             if (transPackage != null) {
-                jsonObject.put("message", "包裹信息已存在");
+                code.setCode(ResponseCode.Result.FAIL);
+                code.setMessage("包裹信息已存在");
             } else if (userInfoService.get(userId) == null) {
-                jsonObject.put("message", "用户信息不存在");
+                code.setCode(ResponseCode.Result.FAIL);
+                code.setMessage("用户信息不存在");
             } else {
                 if (transPackageService.newTransPackage(packageId, userId) > 0) {
-                    jsonObject.put("message", "包裹创建成功");
+                    code.setCode(ResponseCode.Result.SUCESS);
                     transPackage = transPackageService.get(packageId);
-
                     jsonObject.put("package", JSON.parse(JsonUtils.toJson(transPackage)));
                 } else {
-                    jsonObject.put("message", "包裹创建失败");
+                    code.setCode(ResponseCode.Result.FAIL);
+                    code.setMessage("包裹创建失败");
                 }
             }
         } else {
-            jsonObject.put("message", "参数错误");
+            code.setCode(ResponseCode.Result.ERROR);
+            code.setMessage("参数错误");
         }
+
+        jsonObject.put("code", code);
         return jsonObject;
     }
 
@@ -83,16 +91,21 @@ public class PackageController {
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public JSONObject updatePackage(@RequestBody TransPackage transPackage) {
         JSONObject jsonObject = new JSONObject();
+        ResponseCode code = new ResponseCode();
         if (transPackage != null) {
             if (transPackageService.update(transPackage) > 0) {
-                jsonObject.put("message", "保存成功");
+                code.setCode(ResponseCode.Result.SUCESS);
                 jsonObject.put("package", JSON.parse(JsonUtils.toJson(transPackage)));
             } else {
-                jsonObject.put("message", "保存失败");
+                code.setCode(ResponseCode.Result.FAIL);
+                code.setMessage("保存失败");
             }
         } else {
-            jsonObject.put("message", "参数错误");
+            code.setCode(ResponseCode.Result.ERROR);
+            code.setMessage("参数错误");
         }
+
+        jsonObject.put("code", code);
         return jsonObject;
     }
 
@@ -106,21 +119,25 @@ public class PackageController {
     @RequestMapping("/move_in_es/{packageId}/{esId}")
     public JSONObject moveEsToPackage(@PathVariable("packageId") String packageId, @PathVariable("esId") String esId) {
         JSONObject jsonObject = new JSONObject();
+        ResponseCode code = new ResponseCode();
+        code.setCode(ResponseCode.Result.FAIL);
         if (packageId != null && esId != null) {
             TransPackage transPackage = null;
             TransPackageContent transPackageContent = null;
             if ((transPackage = transPackageService.get(packageId)) == null) {
-                jsonObject.put("message", "包裹信息不存在");
+                code.setMessage("包裹信息不存在");
             } else if (expressSheetService.get(esId) == null) {
-                jsonObject.put("message", "快件信息不存在");
+                code.setMessage("快件信息不存在");
             } else if (tPackageContentService.moveEsToPackage(packageId, esId) > 0) {
-                jsonObject.put("message", "快件打包成功");
+                code.setCode(ResponseCode.Result.SUCESS);
             } else {
-                jsonObject.put("message", "快件打包失败");
+                code.setMessage("快件打包失败");
             }
         } else {
-            jsonObject.put("message", "参数错误");
+            code.setCode(ResponseCode.Result.ERROR);
+            code.setMessage("参数错误");
         }
+        jsonObject.put("code", code);
         return jsonObject;
     }
 
@@ -134,23 +151,30 @@ public class PackageController {
     @RequestMapping("/move_out_es/{packageId}/{esId}")
     public JSONObject moveEsOutPackage(@PathVariable("packageId") String packageId, @PathVariable("esId") String esId) {
         JSONObject jsonObject = new JSONObject();
+        ResponseCode code = new ResponseCode();
+        code.setCode(ResponseCode.Result.FAIL);
+
         if (packageId != null && esId != null) {
             TransPackage transPackage = null;
             TransPackageContent transPackageContent = null;
             if ((transPackage = transPackageService.get(packageId)) == null) {
-                jsonObject.put("message", "包裹信息不存在");
+                code.setMessage("包裹信息不存在");
             } else if (transPackage.getStatus() == TransPackage.PACKAGE_COLLECT) {
-                jsonObject.put("message", "揽收货篮,不可以取出包裹");
+                code.setMessage("揽收货篮,不可以取出包裹");
             } else if (expressSheetService.get(esId) == null) {
+                code.setMessage("快件信息不存在");
                 jsonObject.put("message", "快件信息不存在");
             } else if (tPackageContentService.moveEsOutPackage(packageId, esId) > 0) {
-                jsonObject.put("message", "快件移出成功");
+                code.setCode(ResponseCode.Result.SUCESS);
+                code.setMessage("快件移出成功");
             } else {
-                jsonObject.put("message", "快件移出成功失败");
+                code.setMessage("快件移出失败");
             }
         } else {
-            jsonObject.put("message", "参数错误");
+            code.setCode(ResponseCode.Result.ERROR);
+            code.setMessage("参数错误");
         }
+        jsonObject.put("code", code);
         return jsonObject;
     }
 
@@ -164,22 +188,26 @@ public class PackageController {
     @RequestMapping("/unpack/{packageId}/{userId}")
     public JSONObject unpack(@PathVariable("packageId") String pacakgeId, @PathVariable("userId") Integer userId) {
         JSONObject jsonObject = new JSONObject();
+        ResponseCode code = new ResponseCode();
+        code.setCode(ResponseCode.Result.FAIL);
         if (pacakgeId != null && userId != null) {
             TransPackage transPackage = transPackageService.get(pacakgeId);
             if (transPackage == null) {
-                jsonObject.put("message", "包裹信息不存在");
+                code.setMessage("包裹信息不存在");
             } else if (userInfoService.get(userId) == null) {
-                jsonObject.put("message", "用户信息不存在");
+                code.setMessage("用户信息不存在");
             } else if (transPackage.getStatus() == TransPackage.PACKAGE_NEW) {
-                jsonObject.put("message", "包裹处于新建状态，不可以拆包");
+                code.setMessage("包裹处于新建状态，不可以拆包");
             } else if (transPackageService.unPackTransPckage(pacakgeId, userId) > 0) {
-                jsonObject.put("message", "拆包成功");
+                code.setCode(ResponseCode.Result.SUCESS);
                 transPackage = transPackageService.get(pacakgeId);
                 jsonObject.put("package", JSON.parse(JsonUtils.toJson(transPackage)));
             }
         } else {
-            jsonObject.put("message", "参数错误");
+            code.setCode(ResponseCode.Result.ERROR);
+            code.setMessage("参数错误");
         }
+        jsonObject.put("code", code);
         return jsonObject;
     }
 
@@ -190,17 +218,21 @@ public class PackageController {
     @RequestMapping("/get_package/{packageId}")
     public JSONObject getPackage(@PathVariable("packageId") String packageId) {
         JSONObject jsonObject = new JSONObject();
+        ResponseCode code = new ResponseCode();
+        code.setCode(ResponseCode.Result.FAIL);
         if (packageId != null) {
             TransPackage transPackage = transPackageService.get(packageId);
             if (transPackage != null) {
-                jsonObject.put("message", "查询成功");
+                code.setCode(ResponseCode.Result.SUCESS);
                 jsonObject.put("package", JSON.parse(JsonUtils.toJson(transPackage)));
             } else {
-                jsonObject.put("message", "查询失败");
+                code.setMessage("查询失败");
             }
         } else {
-            jsonObject.put("message", "参数错误");
+            code.setCode(ResponseCode.Result.ERROR);
+            code.setMessage("参数错误");
         }
+        jsonObject.put("code", code);
         return jsonObject;
     }
 
@@ -217,6 +249,8 @@ public class PackageController {
                                      @PathVariable("restrictions") String restrictions,
                                      @PathVariable("value") String value) {
         JSONObject jsonObject = new JSONObject();
+        ResponseCode code = new ResponseCode();
+        code.setCode(ResponseCode.Result.FAIL);
         if (property != null && restrictions != null && value != null) {
             List<TransPackage> transPackageList = new ArrayList<>();
             switch (restrictions) {
@@ -230,14 +264,14 @@ public class PackageController {
                     break;
                 }
             }
-            jsonObject.put("message", "查询成功");
+            code.setCode(ResponseCode.Result.SUCESS);
             jsonObject.put("packageList", JSON.parse(JsonUtils.toJson(transPackageList)));
         } else {
-            jsonObject.put("message", "参数错误");
+            code.setCode(ResponseCode.Result.ERROR);
+            code.setMessage("参数错误");
         }
+        jsonObject.put("code", code);
         return jsonObject;
     }
-
-//    public JSONObject
 
 }

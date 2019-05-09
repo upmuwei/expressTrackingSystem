@@ -15,6 +15,8 @@ public interface UserInfoService {
 
     public int update(UserInfo userInfo);
 
+    public int updatePassword(int userId,String password);
+
     public int delete(int uId);
 
     public UserInfo checkLogin(String account, String password);

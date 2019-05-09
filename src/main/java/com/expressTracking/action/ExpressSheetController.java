@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.expressTracking.entity.ExpressSheet;
+import com.expressTracking.entity.ResponseCode;
 import com.expressTracking.entity.UserInfo;
 import com.expressTracking.service.ExpressSheetService;
 import com.expressTracking.service.UserInfoService;
@@ -37,51 +38,86 @@ public class ExpressSheetController {
      * @param accepter 揽收人ID
      * @return
      */
-    @RequestMapping("/create/{esId}/{accepter}")
-    public JSONObject createEs(@PathVariable("esId") String esId, @PathVariable("accepter") Integer accepter) throws Exception {
+//    @RequestMapping("/create/{esId}/{accepter}")
+//    public JSONObject createEs(@PathVariable("esId") String esId, @PathVariable("accepter") Integer accepter) throws Exception {
+//        JSONObject jsonObject = new JSONObject();
+//        if (esId != null && accepter != null) {
+//            System.out.println(esId + "=======" + accepter);
+//            ExpressSheet expressSheet = esService.get(esId);
+//            UserInfo userInfo = userInfoService.get(accepter);
+//            if (expressSheet != null) {
+//                jsonObject.put("message", "快件信息已存在");
+//                jsonObject.put("es", JSON.parse(JsonUtils.toJson(expressSheet)));
+//            } else if (userInfo == null) {
+//                jsonObject.put("message", "用户信息不存在");
+//            } else {
+//                if (esService.create(esId, accepter) > 0) {
+//                    expressSheet = esService.get(esId);
+//                    if (expressSheet != null) {
+//                        jsonObject.put("message", "快件创建成功");
+//                        jsonObject.put("es", JSON.parse(JsonUtils.toJson(expressSheet)));
+//                    }
+//                } else {
+//                    jsonObject.put("message", "快件创建失败");
+//                }
+//                System.out.println(expressSheet);
+//            }
+//        }
+//        return jsonObject;
+//    }
+
+    /**
+     * 创建快件信息
+     * 揽收
+     *
+     * @param es
+     * @return
+     */
+    @RequestMapping(value = "/create/{userId}", method = RequestMethod.POST)
+    public JSONObject create(@RequestBody ExpressSheet es, @PathVariable("userId") Integer userId) {
         JSONObject jsonObject = new JSONObject();
-        if (esId != null && accepter != null) {
-            System.out.println(esId + "=======" + accepter);
-            ExpressSheet expressSheet = esService.get(esId);
-            UserInfo userInfo = userInfoService.get(accepter);
-            if (expressSheet != null) {
-                jsonObject.put("message", "快件信息已存在");
-                jsonObject.put("es", JSON.parse(JsonUtils.toJson(expressSheet)));
-            } else if (userInfo == null) {
-                jsonObject.put("message", "用户信息不存在");
+        ResponseCode code = new ResponseCode();
+        //检查快递
+        if (es != null && es.getId() != null) {
+            if (esService.get(es.getId()) != null) {
+                //检查快件信息是否存在
+                code.setCode(ResponseCode.Result.ERROR);
+                code.setMessage("快件信息已存在");
+            } else if (esService.create(es, userId) > 0) {
+                code.setCode(ResponseCode.Result.SUCESS);
             } else {
-                if (esService.create(esId, accepter) > 0) {
-                    expressSheet = esService.get(esId);
-                    if (expressSheet != null) {
-                        jsonObject.put("message", "快件创建成功");
-                        jsonObject.put("es", JSON.parse(JsonUtils.toJson(expressSheet)));
-                    }
-                } else {
-                    jsonObject.put("message", "快件创建失败");
-                }
-                System.out.println(expressSheet);
+                code.setCode(ResponseCode.Result.FAIL);
+                code.setMessage("快件创建失败");
             }
+        } else {
+            code.setCode(ResponseCode.Result.ERROR);
+            code.setMessage("参数错误");
         }
+        jsonObject.put("code", JSON.parse(JsonUtils.toJson(code)));
         return jsonObject;
     }
 
     @RequestMapping("/delete/{esId}")
     public JSONObject delete(@PathVariable("esId") String esId) {
         JSONObject jsonObject = new JSONObject();
+        ResponseCode code = new ResponseCode();
         if (esId != null) {
             ExpressSheet expressSheet = esService.get(esId);
             if (expressSheet == null) {
-                jsonObject.put("message", "快件" + esId + "不存在");
+                code.setCode(ResponseCode.Result.FAIL);
+                code.setMessage("快件" + esId + "不存在");
             } else {
                 if (esService.delete(esId) > 0) {
-                    jsonObject.put("message", "删除快件" + esId + "成功");
+                    code.setCode(ResponseCode.Result.SUCESS);
                 } else {
-                    jsonObject.put("message", "删除快件" + esId + "失败");
+                    code.setCode(ResponseCode.Result.FAIL);
                 }
             }
         } else {
-            jsonObject.put("message", "参数错误");
+            code.setCode(ResponseCode.Result.ERROR);
+            code.setMessage("参数错误");
         }
+        jsonObject.put("code", JSON.parse(JsonUtils.toJson(code)));
         return jsonObject;
     }
 
@@ -94,12 +130,19 @@ public class ExpressSheetController {
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public JSONObject update(@RequestBody ExpressSheet expressSheet) {
         JSONObject jsonObject = new JSONObject();
-        if (expressSheet != null && esService.update(expressSheet) > 0) {
-            jsonObject.put("message", "修改成功！");
-            jsonObject.put("es",JSON.parse(JsonUtils.toJson(expressSheet)));
+        ResponseCode code = new ResponseCode();
+        if (expressSheet != null) {
+            if (esService.update(expressSheet) > 0) {
+                code.setCode(ResponseCode.Result.SUCESS);
+                jsonObject.put("es", JSON.parse(JsonUtils.toJson(expressSheet)));
+            } else {
+                code.setCode(ResponseCode.Result.FAIL);
+            }
         } else {
-            jsonObject.put("message", "修改失败！");
+            code.setCode(ResponseCode.Result.ERROR);
+            code.setMessage("参数错误");
         }
+        jsonObject.put("code", JSON.parse(JsonUtils.toJson(code)));
         return jsonObject;
     }
 
@@ -113,22 +156,30 @@ public class ExpressSheetController {
     @RequestMapping("/update/{esId}/{status}")
     public JSONObject update(@PathVariable("esId") String esId, @PathVariable("status") Integer status) {
         JSONObject jsonObject = new JSONObject();
+        ResponseCode code = new ResponseCode();
         if (esId != null && status != null) {
             ExpressSheet expressSheet = esService.get(esId);
             if (expressSheet == null) {
-                jsonObject.put("message", "快件" + esId + "不存在");
+                code.setCode(ResponseCode.Result.FAIL);
+                code.setMessage("快件" + esId + "不存在");
             } else if (status < ExpressSheet.STATUS.STATUS_CREATED || status > ExpressSheet.STATUS.STATUS_DELIVERIED) {
-                jsonObject.put("message", "快件状态不合法");
+                code.setCode(ResponseCode.Result.FAIL);
+                code.setMessage("快件状态不合法");
             } else {
                 expressSheet.setStatus(status);
                 if (esService.update(expressSheet) > 0) {
-                    jsonObject.put("message", "快件状态修改成功");
+                    code.setCode(ResponseCode.Result.SUCESS);
+                    code.setMessage("快件状态修改成功");
                     jsonObject.put("es", JSON.parse(JsonUtils.toJson(expressSheet)));
+                } else {
+                    code.setCode(ResponseCode.Result.FAIL);
                 }
             }
         } else {
-            jsonObject.put("message", "参数错误");
+            code.setCode(ResponseCode.Result.ERROR);
+            code.setMessage("参数错误");
         }
+        jsonObject.put("code", JSON.parse(JsonUtils.toJson(code)));
         return jsonObject;
     }
 
@@ -142,20 +193,25 @@ public class ExpressSheetController {
     @RequestMapping("/deliver/{esId}/{deliver}")
     public JSONObject deliverEs(@PathVariable("esId") String esId, @PathVariable("deliver") Integer deliver) {
         JSONObject jsonObject = new JSONObject();
+        ResponseCode code = new ResponseCode();
         if (esId != null && deliver != null) {
             ExpressSheet expressSheet = esService.get(esId);
             UserInfo deliverInfo = userInfoService.get(deliver);
             if (expressSheet == null) {
-                jsonObject.put("message", "快件" + esId + "不存在");
+                code.setCode(ResponseCode.Result.FAIL);
+                code.setMessage("快件" + esId + "不存在");
             } else if (deliverInfo == null) {
-                jsonObject.put("message", "用户" + deliver + "不存在");
+                code.setCode(ResponseCode.Result.FAIL);
+                code.setMessage("用户" + deliver + "不存在");
             } else {
                 expressSheet.setStatus(ExpressSheet.STATUS.STATUS_DELIVERIED);
                 expressSheet.setDeliver(deliver + "");
             }
         } else {
-            jsonObject.put("message", "参数错误");
+            code.setCode(ResponseCode.Result.ERROR);
+            code.setMessage("参数错误");
         }
+        jsonObject.put("code", JSON.parse(JsonUtils.toJson(code)));
         return jsonObject;
     }
 
@@ -168,17 +224,22 @@ public class ExpressSheetController {
     @RequestMapping("/get/{esId}")
     public JSONObject getEs(@PathVariable("esId") String esId) {
         JSONObject jsonObject = new JSONObject();
+
+        ResponseCode code = new ResponseCode();
         if (esId != null) {
             ExpressSheet expressSheet = esService.get(esId);
             if (expressSheet != null) {
-                jsonObject.put("message", "查询成功");
+                code.setCode(ResponseCode.Result.SUCESS);
                 jsonObject.put("es", JSON.parse(JsonUtils.toJson(expressSheet)));
             } else {
-                jsonObject.put("message", "快件" + esId + "不存在");
+                code.setCode(ResponseCode.Result.FAIL);
+                code.setMessage("快件" + esId + "不存在");
             }
         } else {
-            jsonObject.put("message", "参数错误");
+            code.setCode(ResponseCode.Result.ERROR);
+            code.setMessage("参数错误");
         }
+        jsonObject.put("code", JSON.parse(JsonUtils.toJson(code)));
         return jsonObject;
     }
 
@@ -192,19 +253,53 @@ public class ExpressSheetController {
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     public JSONObject getEsList(@RequestBody ExpressSheet expressSheet) {
         JSONObject jsonObject = new JSONObject();
+        ResponseCode code = new ResponseCode();
         if (expressSheet != null) {
             List<ExpressSheet> expressSheetList = esService.getByParameters(expressSheet);
             if (expressSheetList != null) {
-                jsonObject.put("message", "查询成功");
+                code.setCode(ResponseCode.Result.SUCESS);
                 jsonObject.put("esList", JSON.parse(JsonUtils.toJson(expressSheetList)));
             } else {
-                jsonObject.put("message", "查询失败");
+                code.setCode(ResponseCode.Result.FAIL);
+                code.setMessage("查询失败");
             }
         } else {
-            jsonObject.put("message", "参数错误");
+            code.setCode(ResponseCode.Result.ERROR);
+            code.setMessage("参数错误");
         }
+        jsonObject.put("code", JSON.parse(JsonUtils.toJson(code)));
         return jsonObject;
     }
+
+    /**
+     * 获取由userId创建的状态为status的快件列表信息
+     *
+     * @param userId
+     * @param status
+     * @return
+     */
+    public JSONObject getEsList(Integer userId, Integer status) {
+        JSONObject jsonObject = new JSONObject();
+        ResponseCode code = new ResponseCode();
+        if (userId != null && status != null) {
+            UserInfo userInfo = userInfoService.get(userId);
+            if(userInfo != null){
+                List<ExpressSheet> expressSheets = esService.getByAccpterAndStatus(userId + "",status);
+                code.setCode(ResponseCode.Result.SUCESS);
+                jsonObject.put("expressSheetList",JSON.parse(JsonUtils.toJson(expressSheets)));
+            }else{
+                code.setCode(ResponseCode.Result.FAIL);
+                code.setMessage("用户信息不存在");
+            }
+        } else {
+            code.setCode(ResponseCode.Result.ERROR);
+            code.setMessage("参数错误");
+        }
+        jsonObject.put("code", JSON.parse(JsonUtils.toJson(code)));
+        return jsonObject;
+    }
+
+//    public JSONObject deliverEs(String )
 
 
 }
