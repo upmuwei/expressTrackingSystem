@@ -52,6 +52,7 @@ public class TransPackage implements Serializable {
      * 3,分拣(分拣货篮)
      * 4,揽收货篮
      * 5,派送货篮
+     * 6,已拆包
      */
     @Expose
     private Integer status;

@@ -83,8 +83,8 @@ public class CustomerController {
      * @param regionCode
      * @return
      */
-    @RequestMapping("/list/{name}/{phone}/{regionCode}")
-    public JSONObject getCustomerList(@PathVariable("name") String name,@PathVariable("phone") String phone, @PathVariable("regionCode") String regionCode) {
+    @RequestMapping("/list")
+    public JSONObject getCustomerList(String name, String phone, String regionCode) {
         JSONObject jsonObject = new JSONObject();
         ResponseCode code = new ResponseCode();
         CustomerInfo customerInfo = new CustomerInfo();
@@ -100,23 +100,24 @@ public class CustomerController {
 
     /**
      * 修改客户信息
+     *
      * @param customerInfo
      * @return
      */
-    @RequestMapping(value = "/update",method = RequestMethod.POST)
-    public JSONObject update(@RequestBody CustomerInfo customerInfo){
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public JSONObject update(@RequestBody CustomerInfo customerInfo) {
         JSONObject jsonObject = new JSONObject();
         ResponseCode code = new ResponseCode();
-        if(customerInfo != null && customerInfo.getId() != 0){
-            if(customerInfoService.update(customerInfo) > 0){
+        if (customerInfo != null && customerInfo.getId() != 0) {
+            if (customerInfoService.update(customerInfo) > 0) {
                 code.setCode(ResponseCode.Result.SUCESS);
                 customerInfo = customerInfoService.get(customerInfo.getId());
-                jsonObject.put("customer",customerInfo);
-            }else{
+                jsonObject.put("customer", customerInfo);
+            } else {
                 code.setCode(ResponseCode.Result.FAIL);
                 code.setMessage("修改失败");
             }
-        }else{
+        } else {
             code.setCode(ResponseCode.Result.ERROR);
             code.setMessage("参数错误");
         }
