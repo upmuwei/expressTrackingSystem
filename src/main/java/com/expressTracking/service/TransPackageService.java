@@ -1,6 +1,7 @@
 package com.expressTracking.service;
 
 import com.expressTracking.entity.TransPackage;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -15,6 +16,8 @@ public interface TransPackageService {
 
     public TransPackage get(String id);
 
+    public List<TransPackage> getByUserId(Integer userId,Integer operation, Integer status);
+
     public int save(TransPackage transPackage);
 
     public int update(TransPackage transPackage);
@@ -26,7 +29,7 @@ public interface TransPackageService {
      * @return
      * @throws Exception
      */
-    public int newTransPackage(TransPackage transPackage, int uId) throws Exception;
+    public int newTransPackage(TransPackage transPackage, int uId);
 
     /**
      * 新建包裹
@@ -43,6 +46,7 @@ public interface TransPackageService {
      * @return
      */
     public int unPackTransPckage(String packageId, int userId);
+
 
     /**
      * 打开包裹
@@ -69,6 +73,7 @@ public interface TransPackageService {
      * @return
      */
     public int packTransPackage(String packageId, String expressId) throws Exception;
+
 
 
 }

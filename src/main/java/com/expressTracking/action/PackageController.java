@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.ws.Response;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +43,39 @@ public class PackageController {
     private ExpressSheetService expressSheetService;
     @Autowired
     private UserInfoService userInfoService;
+
+
+    /**
+     * 新建包裹信息
+     *
+     * @param transPackage
+     * @param userId
+     * @return
+     */
+    @RequestMapping(value = "/save/{userId}", method = RequestMethod.POST)
+    public JSONObject newTransPackage(@RequestBody TransPackage transPackage, @PathVariable("userId") Integer userId) {
+        JSONObject jsonObject = new JSONObject();
+        ResponseCode code = new ResponseCode();
+        code.setCode(ResponseCode.Result.FAIL);
+        System.out.println(transPackage);
+        if (transPackage != null && userId != null && transPackage.getId() != null) {
+            if (transPackageService.get(transPackage.getId()) == null) {
+                if (transPackageService.newTransPackage(transPackage, userId) > 0) {
+                    code.setCode(ResponseCode.Result.SUCESS);
+                    jsonObject.put("package", JSON.parse(JsonUtils.toJson(transPackageService.get(transPackage.getId()))));
+                } else {
+                    code.setMessage("创建包裹失败");
+                }
+            } else {
+                code.setMessage("包裹信息已存在");
+            }
+        } else {
+            code.setCode(ResponseCode.Result.ERROR);
+            code.setMessage("参数错误");
+        }
+        jsonObject.put("code", code);
+        return jsonObject;
+    }
 
 
     /**
@@ -116,22 +150,34 @@ public class PackageController {
      * @param esId
      * @return
      */
-    @RequestMapping("/move_in_es/{packageId}/{esId}")
+    @RequestMapping("/move_es_in/{packageId}/{esId}")
     public JSONObject moveEsToPackage(@PathVariable("packageId") String packageId, @PathVariable("esId") String esId) {
         JSONObject jsonObject = new JSONObject();
         ResponseCode code = new ResponseCode();
         code.setCode(ResponseCode.Result.FAIL);
         if (packageId != null && esId != null) {
-            TransPackage transPackage = null;
-            TransPackageContent transPackageContent = null;
-            if ((transPackage = transPackageService.get(packageId)) == null) {
-                code.setMessage("包裹信息不存在");
-            } else if (expressSheetService.get(esId) == null) {
-                code.setMessage("快件信息不存在");
-            } else if (tPackageContentService.moveEsToPackage(packageId, esId) > 0) {
-                code.setCode(ResponseCode.Result.SUCESS);
-            } else {
-                code.setMessage("快件打包失败");
+            switch (tPackageContentService.moveEsToPackage(packageId, esId)) {
+                case 1:
+                    code.setMessage("包裹不存在");
+                    break;
+                case 2:
+                    code.setMessage("快件不存在");
+                    break;
+                case 3:
+                    code.setMessage("快件状态错误");
+                    break;
+                case 4:
+                    code.setMessage("快件已在包裹中");
+                    break;
+                case 5:
+                    code.setMessage("添加失败");
+                    break;
+                case 6:
+                    code.setCode(ResponseCode.Result.SUCESS);
+                    break;
+                default:
+                    code.setMessage("参数错误");
+                    break;
             }
         } else {
             code.setCode(ResponseCode.Result.ERROR);
@@ -153,23 +199,45 @@ public class PackageController {
         JSONObject jsonObject = new JSONObject();
         ResponseCode code = new ResponseCode();
         code.setCode(ResponseCode.Result.FAIL);
-
         if (packageId != null && esId != null) {
-            TransPackage transPackage = null;
-            TransPackageContent transPackageContent = null;
-            if ((transPackage = transPackageService.get(packageId)) == null) {
-                code.setMessage("包裹信息不存在");
-            } else if (transPackage.getStatus() == TransPackage.PACKAGE_COLLECT) {
-                code.setMessage("揽收货篮,不可以取出包裹");
-            } else if (expressSheetService.get(esId) == null) {
-                code.setMessage("快件信息不存在");
-                jsonObject.put("message", "快件信息不存在");
-            } else if (tPackageContentService.moveEsOutPackage(packageId, esId) > 0) {
-                code.setCode(ResponseCode.Result.SUCESS);
-                code.setMessage("快件移出成功");
-            } else {
-                code.setMessage("快件移出失败");
+            switch (tPackageContentService.moveEsOutPackage(packageId,esId)){
+                case 1 :{
+                    code.setMessage("包裹不存在");
+                    break;
+                }
+                case 2:{
+                    code.setMessage("快件不在包裹中");
+                    break;
+                }
+//                case 3:{
+//                    code.setMessage("移出快件失败");
+//                    break;
+//                }
+                case 4:{
+                    //移出成功
+                    code.setCode(ResponseCode.Result.SUCESS);
+                    break;
+                }
+                default:{
+                    code.setMessage("移出快件失败");
+                }
             }
+
+//            TransPackage transPackage = null;
+//            TransPackageContent transPackageContent = null;
+//            if ((transPackage = transPackageService.get(packageId)) == null) {
+//                code.setMessage("包裹信息不存在");
+//            } else if (transPackage.getStatus() == TransPackage.PACKAGE_COLLECT) {
+//                code.setMessage("揽收货篮,不可以取出包裹");
+//            } else if (expressSheetService.get(esId) == null) {
+//                code.setMessage("快件信息不存在");
+//                jsonObject.put("message", "快件信息不存在");
+//            } else if (tPackageContentService.moveEsOutPackage(packageId, esId) > 0) {
+//                code.setCode(ResponseCode.Result.SUCESS);
+//                code.setMessage("快件移出成功");
+//            } else {
+//                code.setMessage("快件移出失败");
+//            }
         } else {
             code.setCode(ResponseCode.Result.ERROR);
             code.setMessage("参数错误");
@@ -191,18 +259,39 @@ public class PackageController {
         ResponseCode code = new ResponseCode();
         code.setCode(ResponseCode.Result.FAIL);
         if (pacakgeId != null && userId != null) {
-            TransPackage transPackage = transPackageService.get(pacakgeId);
-            if (transPackage == null) {
-                code.setMessage("包裹信息不存在");
-            } else if (userInfoService.get(userId) == null) {
-                code.setMessage("用户信息不存在");
-            } else if (transPackage.getStatus() == TransPackage.PACKAGE_NEW) {
-                code.setMessage("包裹处于新建状态，不可以拆包");
-            } else if (transPackageService.unPackTransPckage(pacakgeId, userId) > 0) {
-                code.setCode(ResponseCode.Result.SUCESS);
-                transPackage = transPackageService.get(pacakgeId);
-                jsonObject.put("package", JSON.parse(JsonUtils.toJson(transPackage)));
+            switch (transPackageService.unPackTransPckage(pacakgeId,userId)){
+                case 1:{
+                    code.setMessage("包裹信息不存在");
+                    break;
+                }
+                case 2:{
+                    code.setMessage("用户信息不存在");
+                    break;
+                }
+                case 3:{
+                    code.setCode(ResponseCode.Result.SUCESS);
+                    TransPackage transPackage = transPackageService.get(pacakgeId);
+                    jsonObject.put("package", JSON.parse(JsonUtils.toJson(transPackage)));
+                    break;
+                }
+                default:{
+                    code.setMessage("拆包失败");
+                    break;
+                }
             }
+
+//            TransPackage transPackage = transPackageService.get(pacakgeId);
+//            if (transPackage == null) {
+//                code.setMessage("包裹信息不存在");
+//            } else if (userInfoService.get(userId) == null) {
+//                code.setMessage("用户信息不存在");
+//            } else if (transPackage.getStatus() == TransPackage.PACKAGE_NEW) {
+//                code.setMessage("包裹处于新建状态，不可以拆包");
+//            } else if (transPackageService.unPackTransPckage(pacakgeId, userId) > 0) {
+//                code.setCode(ResponseCode.Result.SUCESS);
+//                transPackage = transPackageService.get(pacakgeId);
+//                jsonObject.put("package", JSON.parse(JsonUtils.toJson(transPackage)));
+//            }
         } else {
             code.setCode(ResponseCode.Result.ERROR);
             code.setMessage("参数错误");
@@ -236,6 +325,27 @@ public class PackageController {
         return jsonObject;
     }
 
+    /**
+     * 获取由 userID 执行 operation 且状态为status的包裹信息
+     * @param userId
+     * @param operation
+     * @param status
+     * @return
+     */
+    @RequestMapping("/getPackageList/{userId}/{operation}/{status}")
+    public JSONObject getPackageList(@PathVariable("userId") Integer userId,@PathVariable("operation") Integer operation,@PathVariable("status") Integer status){
+        JSONObject jsonObject = new JSONObject();
+        ResponseCode code = new ResponseCode();
+        if(userId != null && operation != null && status != null){
+            code.setCode(ResponseCode.Result.SUCESS);
+            jsonObject.put("packageList",transPackageService.getByUserId(userId,operation,status));
+        }else{
+            code.setCode(ResponseCode.Result.ERROR);
+            code.setMessage("参数错误");
+        }
+        jsonObject.put("code", code);
+        return jsonObject;
+    }
     /**
      * 得到包裹集合
      *

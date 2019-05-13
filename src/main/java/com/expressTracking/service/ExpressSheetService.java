@@ -11,8 +11,9 @@ import java.util.List;
 public interface ExpressSheetService {
 
 
-
     public int update(ExpressSheet expressSheet);
+
+    public int updateEsStatus(String esId,int statsu);
 
     public int delete(String esId);
 
@@ -20,13 +21,18 @@ public interface ExpressSheetService {
 
     public List<ExpressSheet> findLike(String propertyName, String value);
 
+    /**
+     * 查询在包裹中的快件信息
+     * @param packageId
+     * @return
+     */
     public List<ExpressSheet> getListInPackage(String packageId);
 
     public ExpressSheet get(String id);
 
     public List<ExpressSheet> getByParameters(ExpressSheet expressSheet);
 
-    public List<ExpressSheet> getByAccpterAndStatus(String accepter,Integer status);
+    public List<ExpressSheet> getByAccpterAndStatus(String accepter, Integer status);
 
     /**
      * 创建快件信息
@@ -40,7 +46,13 @@ public interface ExpressSheetService {
 
     public int save(ExpressSheet expressSheet);
 
-
+    /**
+     * 获取包裹中的快件列表
+     *
+     * @param pckageId
+     * @return
+     */
+    public List<ExpressSheet> getEsListFromPackage(String pckageId);
 
     /**
      * 揽收快递
@@ -72,10 +84,11 @@ public interface ExpressSheetService {
 
     /**
      * 创建包裹信息
+     *
      * @param expressSheet
      * @param accpter
      * @return
      */
-    public int create(ExpressSheet expressSheet,Integer accpter);
+    public int create(ExpressSheet expressSheet, Integer accpter);
 
 }

@@ -31,18 +31,6 @@ public class ExpressSheet implements Serializable {
 	private Integer type;
 
 	/**
-	 * 寄件人id
-	 */
-	@Expose
-	private Integer senderId;
-
-	/**
-	 * 收件人id
-	 */
-	@Expose
-	private Integer receverId;
-
-	/**
 	 * 寄件人
 	 */
 	@Expose
@@ -140,21 +128,7 @@ public class ExpressSheet implements Serializable {
 		this.type = type;
 	}
 
-	public Integer getSenderId() {
-		return senderId;
-	}
 
-	public void setSenderId(Integer senderId) {
-		this.senderId = senderId;
-	}
-
-	public Integer getReceverId() {
-		return receverId;
-	}
-
-	public void setReceverId(Integer receverId) {
-		this.receverId = receverId;
-	}
 
 	public CustomerInfo getSender() {
 		return sender;

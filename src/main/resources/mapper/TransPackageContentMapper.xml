@@ -11,8 +11,8 @@
     </resultMap>
 
     <insert id="insert" parameterType="TransPackageContent">
-      insert into transpackagecontent(ExpressID, PackageID, Status)
-      values (#{expressId}, #{packageId}, #{status} )
+        insert into transpackagecontent(ExpressID, PackageID, Status)
+        values (#{expressId}, #{packageId}, #{status})
     </insert>
 
     <update id="update" parameterType="TransPackageContent">
@@ -23,6 +23,12 @@
             <if test="status != null">Status=#{status}</if>
         </set>
         where SN = #{sn}
+    </update>
+
+    <update id="updateStatusByPackageId">
+        update transpackagecontent
+        set Status = #{status,jdbcType=INTEGER}
+        where PackageID = #{packageId,jdbcType=VARCHAR}
     </update>
 
     <sql id="transPackageContent_get">
@@ -38,21 +44,18 @@
     <select id="getPackageId" parameterType="string" resultType="string">
         select PackageID
         from transpackagecontent
-        where ExpressID=#{expressId}
+        where ExpressID = #{expressId}
     </select>
 
     <select id="getByPackageId" parameterType="string" resultMap="transPackageContentMap">
         <include refid="transPackageContent_get"/>
-        where Status = 0
-        <if test="_parameter != null and _parameter != ''">
-            and PackageID = #{packageId}
-        </if>
+        where Status = 0 and PackageID = #{packageId}
     </select>
 
     <select id="getExpressId" parameterType="string" resultType="string">
         select ExpressID
         from transpackagecontent
-        where PackageID=#{packageId}
+        where PackageID = #{packageId}
     </select>
 
     <select id="findByExpressIdAndStatus" resultMap="transPackageContentMap">

@@ -75,19 +75,30 @@ public class ExpressSheetController {
      */
     @RequestMapping(value = "/create/{userId}", method = RequestMethod.POST)
     public JSONObject create(@RequestBody ExpressSheet es, @PathVariable("userId") Integer userId) {
+        System.out.println(es);
         JSONObject jsonObject = new JSONObject();
         ResponseCode code = new ResponseCode();
+        code.setCode(ResponseCode.Result.FAIL);
         //检查快递
-        if (es != null && es.getId() != null) {
-            if (esService.get(es.getId()) != null) {
-                //检查快件信息是否存在
-                code.setCode(ResponseCode.Result.ERROR);
-                code.setMessage("快件信息已存在");
-            } else if (esService.create(es, userId) > 0) {
-                code.setCode(ResponseCode.Result.SUCESS);
-            } else {
-                code.setCode(ResponseCode.Result.FAIL);
-                code.setMessage("快件创建失败");
+        if (es != null && es.getId() != null && userId != null) {
+            switch (esService.create(es, userId)){
+                case 1:{
+                    code.setMessage("快件信息已存在");
+                    break;
+                }
+                case 2:{
+                    code.setMessage("用户不存在");
+                    break;
+                }
+                case 3:{
+                    code.setCode(ResponseCode.Result.SUCESS);
+                    ExpressSheet expressSheet = esService.get(es.getId());
+                    jsonObject.put("es",expressSheet);
+                }
+                default:{
+                    code.setMessage("揽收失败");
+                    break;
+                }
             }
         } else {
             code.setCode(ResponseCode.Result.ERROR);
@@ -131,6 +142,7 @@ public class ExpressSheetController {
     public JSONObject update(@RequestBody ExpressSheet expressSheet) {
         JSONObject jsonObject = new JSONObject();
         ResponseCode code = new ResponseCode();
+        System.out.println(expressSheet);
         if (expressSheet != null) {
             if (esService.update(expressSheet) > 0) {
                 code.setCode(ResponseCode.Result.SUCESS);
@@ -278,6 +290,7 @@ public class ExpressSheetController {
      * @param status
      * @return
      */
+    @RequestMapping(value = "/list",method = RequestMethod.GET)
     public JSONObject getEsList(Integer userId, Integer status) {
         JSONObject jsonObject = new JSONObject();
         ResponseCode code = new ResponseCode();
@@ -298,8 +311,25 @@ public class ExpressSheetController {
         jsonObject.put("code", JSON.parse(JsonUtils.toJson(code)));
         return jsonObject;
     }
-
-//    public JSONObject deliverEs(String )
-
+    /**
+     * 查询包裹中的快件信息
+     * @param packageId
+     */
+    @RequestMapping("/getEsFormPakcage/{packageId}")
+    public JSONObject getEsListFromPackage(@PathVariable("packageId") String packageId){
+        JSONObject jsonObject = new JSONObject();
+        ResponseCode code = new ResponseCode();
+        code.setCode(ResponseCode.Result.FAIL);
+        if (packageId != null){
+            List<ExpressSheet> expressSheets = esService.getListInPackage(packageId);
+            code.setCode(ResponseCode.Result.SUCESS);
+            jsonObject.put("esList",JSON.parse(JsonUtils.toJson(expressSheets)));
+        }else{
+            code.setCode(ResponseCode.Result.ERROR);
+            code.setMessage("参数错误");
+        }
+        jsonObject.put("code", code);
+        return jsonObject;
+    }
 
 }

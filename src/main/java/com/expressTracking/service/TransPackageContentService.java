@@ -11,6 +11,8 @@ public interface TransPackageContentService {
 
     public int update(TransPackageContent transPackageContent);
 
+    public int updateStatusByPackageId(String packageId,Integer status);
+
     /**
      * 将快件信息添加到包裹中
      * @param packageId
@@ -18,6 +20,7 @@ public interface TransPackageContentService {
      * @return
      */
     public int moveEsToPackage(String packageId, String esId);
+
 
     /**
      * 将快件从包裹中移出

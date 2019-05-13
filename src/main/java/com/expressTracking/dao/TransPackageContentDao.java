@@ -9,6 +9,8 @@ import java.util.List;
 public interface TransPackageContentDao {
     public int update(TransPackageContent transPackageContent);
 
+    public int updateStatusByPackageId(@Param("packageId") String packageId,@Param("status") Integer status);
+
     public int insert(TransPackageContent transPackageContent);
 
     public List<String> getExpressId(String packageId);
@@ -17,7 +19,7 @@ public interface TransPackageContentDao {
 
     public List<TransPackageContent> findByPackageIdAndStatus(@Param("packageId")String packageId,@Param("status") int status);
 
-    public List<TransPackageContent> getByPackageId(@Param("packageId") String packageId);
+    public List<TransPackageContent> getByPackageId(String packageId);
 
     public TransPackageContent findByExpressIdAndStatus(@Param("expressId") String expressId,
                                                         @Param("status")int status);

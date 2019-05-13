@@ -18,11 +18,13 @@ public interface ExpressSheetDao {
      * @param status
      * @return
      */
-    public int updateEsStatus(@PathVariable("esId") String esId, @PathVariable("status") int status);
+    public int updateEsStatus(@Param("esId") String esId, @Param("status") int status);
 
     public int delete(String id);
 
     public int insert(ExpressSheet expressSheet);
+
+    public List<ExpressSheet> selectEsByPackageId(String packageId);
 
     public ExpressSheet get(String id);
 

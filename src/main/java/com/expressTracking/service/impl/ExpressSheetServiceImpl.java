@@ -46,7 +46,16 @@ public class ExpressSheetServiceImpl implements ExpressSheetService {
 
     @Override
     public int update(ExpressSheet expressSheet) {
+        //如果快件处于新建状态则将快件设为揽收状态
+        if (expressSheet.getStatus() == ExpressSheet.STATUS.STATUS_CREATED) {
+            expressSheet.setStatus(ExpressSheet.STATUS.STATUS_RECEIVED);
+        }
         return expressSheetDao.update(expressSheet);
+    }
+
+    @Override
+    public int updateEsStatus(String esId, int statsu) {
+        return expressSheetDao.updateEsStatus(esId, statsu);
     }
 
     @Override
@@ -61,10 +70,12 @@ public class ExpressSheetServiceImpl implements ExpressSheetService {
 
     @Override
     public List<ExpressSheet> getListInPackage(String packageId) {
-        List<String> expressId = transPackageContentDao.getExpressId(packageId);
+        List<TransPackageContent> transPackageContents = transPackageContentDao.getByPackageId(packageId);
         List<ExpressSheet> expressSheets = new ArrayList<>();
-        for (String id : expressId) {
-            expressSheets.add(expressSheetDao.get(id));
+        for (TransPackageContent transPackageContent : transPackageContents) {
+            if (transPackageContent.getStatus() == TransPackageContent.STATUS.STATUS_ACTIVE) {
+                expressSheets.add(expressSheetDao.get(transPackageContent.getExpressId()));
+            }
         }
         return expressSheets;
     }
@@ -96,7 +107,7 @@ public class ExpressSheetServiceImpl implements ExpressSheetService {
     @Override
     public List<ExpressSheet> getByAccpterAndStatus(String accepter, Integer status) {
         ExpressSheet expressSheet = new ExpressSheet();
-        expressSheet.setAccepter(accepter) ;
+        expressSheet.setAccepter(accepter);
         expressSheet.setStatus(status);
         return getByParameters(expressSheet);
     }
@@ -113,29 +124,34 @@ public class ExpressSheetServiceImpl implements ExpressSheetService {
 
     /**
      * 创建快件信息并将快件添加到揽件员的揽件货篮中
-     * 成功返回大于0
-     * 失败返回小于0
      *
      * @param expressSheet
      * @param accpter
-     * @return
+     * @return 1 快件信息已存在 2 用户不存在 3 成功 4 失败
      */
     @Override
     public int create(ExpressSheet expressSheet, Integer accpter) {
-        UserInfo userInfo = userInfoDao.get(accpter);
-        System.out.println(expressSheet + "\n" + userInfo);
-        expressSheet.setAccepter(accpter + "");
-        //expressSheet 或 快件编号 或 用户信息为空时返回0 表示创建快件信息失败
-        if (expressSheet == null || expressSheet.getId() == null || userInfo == null) {
-            return 0;
-        } else {
-            return save(expressSheet) *
-                    transPackageContentService.moveEsToPackage(userInfo.getReceivePackageId(), expressSheet.getId());
+        if (expressSheetDao.get(expressSheet.getId()) != null) {
+            //快件信息已存在
+            return 1;
         }
+
+        UserInfo userInfo = userInfoDao.get(accpter);
+        if (userInfo == null) {
+            //用户信息不存在
+            return 2;
+        }
+
+        expressSheet.setAccepter(userInfo.getuId() + "");
+        //将快件状态设置揽收状态
+        expressSheet.setStatus(ExpressSheet.STATUS.STATUS_RECEIVED);
+        return save(expressSheet) *
+                transPackageContentService.moveEsToPackage(userInfo.getReceivePackageId(), expressSheet.getId()) > 0 ? 3 : 4;
     }
 
     @Override
     public int save(ExpressSheet expressSheet) {
+        System.out.println("esService=" + expressSheet);
         if (expressSheet == null || expressSheetDao.get(expressSheet.getId()) != null) {
             return 0;
         } else {
@@ -146,6 +162,10 @@ public class ExpressSheetServiceImpl implements ExpressSheetService {
         }
     }
 
+    @Override
+    public List<ExpressSheet> getEsListFromPackage(String pckageId) {
+        return expressSheetDao.selectEsByPackageId(pckageId);
+    }
 
     @Override
     public int receiveExpressSheet(String expressId, int uId) throws Exception {

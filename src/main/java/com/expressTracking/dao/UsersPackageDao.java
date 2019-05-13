@@ -16,7 +16,7 @@ public interface UsersPackageDao {
 
     public List<UsersPackage> getByUserUId(int userUId);
 
-    public UsersPackage getByPackageId(String packageId);
+    public UsersPackage getByPackageId(@Param("packageId") String packageId);
 
 
 }

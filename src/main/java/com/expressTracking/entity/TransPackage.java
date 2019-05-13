@@ -86,11 +86,11 @@ public class TransPackage implements Serializable {
     public static final int PACKAGE_PACK = 1;
     //转运
     public static final int PACKAGE_TRANS = 2;
-    //分拣
+    //分拣货篮
     public static final int PACKAGE_SORTING = 3;
-    //揽收
+    //揽收货篮
     public static final int PACKAGE_COLLECT = 4;
-    //派送
+    //派送货篮
     public static final int PACKAGE_DELIVER = 5;
     //包裹已拆包，被废弃的状态
     public static final int PACKAGE_COMPLETE = 6;

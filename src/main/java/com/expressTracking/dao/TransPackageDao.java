@@ -22,7 +22,9 @@ public interface TransPackageDao {
 
 
 
-    public TransPackage get(String id);
+    public TransPackage get(@Param("id") String id);
+
+    public List<TransPackage> getByUserId(@Param("userId") Integer userId,@Param("operation") Integer operation,@Param("status") Integer status);
 
     /**
      * 依据id排序，升序
