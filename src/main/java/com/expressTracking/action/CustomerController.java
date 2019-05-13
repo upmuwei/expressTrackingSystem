@@ -21,7 +21,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/customer")
 public class CustomerController {
-
     @Autowired
     private CustomerInfoService customerInfoService;
 
@@ -84,8 +83,8 @@ public class CustomerController {
      * @param regionCode
      * @return
      */
-    @RequestMapping("/list")
-    public JSONObject getCustomerList(String name, String phone, String regionCode) {
+    @RequestMapping("/list/{name}/{phone}/{regionCode}")
+    public JSONObject getCustomerList(@PathVariable("name") String name,@PathVariable("phone") String phone, @PathVariable("regionCode") String regionCode) {
         JSONObject jsonObject = new JSONObject();
         ResponseCode code = new ResponseCode();
         CustomerInfo customerInfo = new CustomerInfo();
@@ -125,6 +124,4 @@ public class CustomerController {
         jsonObject.put("code", code);
         return jsonObject;
     }
-
-
 }

@@ -220,6 +220,4 @@ public class UserController {
         jsonObject.put("code", JSON.parse(JsonUtils.toJson(code)));
         return jsonObject;
     }
-
-
 }

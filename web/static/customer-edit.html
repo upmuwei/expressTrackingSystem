@@ -20,7 +20,7 @@
         var url = location.search;
         console.log(url);
         var id=url.split("=")[1];
-        var str="http://localhost:8080/misc/getCustomerInfo/"+id;
+        var str="http://localhost:8080/customer/get/"+id;
         $.ajax({
             url:str,
             type:"GET",
@@ -47,7 +47,7 @@
             var postcode = $("#L_postCode").val();
             console.log(telcode);
             $.ajax({
-                url: "http://localhost:8080/misc/updateCustomerInfo" ,
+                url: "http://localhost:8080/customer/update" ,
                 type: "post",
                 dataType: "JSON",
                 contentType: "application/json; charset=utf-8",
@@ -56,10 +56,10 @@
                     "regionCode": regioncode, "address": address, "postCode": postcode
                 }),
                 success: function (data) {
-                    alert("即将关闭");
+                    //alert("即将关闭");
                     layer.msg('已更新!', {icon: 1, time: 1000});
-                    x_admin_close();
                     x_admin_father_reload();
+                    x_admin_close();
                     open(location, '_self').close();
                 },
                 error: function (jqXHR) {

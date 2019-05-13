@@ -29,6 +29,14 @@
                           $("#numspan").text("显示数据："+(data.length).toString()+"条");
                           var tableData;
                           for(var i=0;i<data.length;i++){
+                              var str="<td class='td-manage'>"+
+                                  '<a title="编辑"  href="javascript:;"  onclick="x_admin_show( \'编辑\',\'express-edit.html?Data='+data[i].id+'\',600,400)">'+
+                                  "<i class=\"layui-icon\">&#xe642;</i>" +
+                                  "</a>" +
+                                  '<a title="删除" href="javascript:;" onclick="express_del(this,'+data[i].id+')">'+
+                                  "<i class='layui-icon'>&#xe640;</i> " +
+                                  "</a> "+
+                                  "</td>";
                               tableData+="<tr> " +
                                       "<td>"+data[i].id +"</td> " +
                                       "<td>"+data[i].type +"</td> " +
@@ -45,7 +53,7 @@
                                       "<td>"+data[i].acc1 +"</td> "+
                                       "<td>"+data[i].acc2 +"</td> "+
                                       "<td>"+data[i].status +"</td> "+
-                                  "</tr>";
+                                  "</tr>"+str;
                           }
                           $("#firsttbody").html(tableData);
                       },
@@ -85,6 +93,7 @@
               </form>
           </div>
           <xblock>
+              <button class="layui-btn" onclick="x_admin_show('新建快件','./express-add.html',600,400)"><i class="layui-icon"></i>添加</button>
               <span id="numspan" class="x-right" style="line-height:40px">共有数据：0 条</span>
           </xblock>
           <table class="layui-table">
@@ -119,5 +128,33 @@
               </div>
           </div>
       </div>
+      <script>
+          /*用户-删除*/
+          function express_del(obj,id){
+              layer.confirm('确认要删除吗？',function(){
+                  //发异步删除数据
+                  var str="http://localhost:8080/es/delete/"+id;
+                  $.ajax({
+                      url:str,
+                      type:"GET",
+                      dataType:'JSON',
+                      contentType : "application/json; charset=utf-8",
+                      success:function(data){
+                          if(data.code!=null){
+                              layer.msg(data.code.getMessage(),{icon:1,time:1000});
+                          }
+                          else{
+
+                          }
+
+                      },
+                      error:function(){
+                          alert("error");
+                      }
+                  });
+                  $(obj).parents("tr").remove();
+              });
+          }
+      </script>
   </body>
 </html>
