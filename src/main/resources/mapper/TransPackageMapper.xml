@@ -10,18 +10,29 @@
         <result property="targetNode" column="TargetNode"/>
         <result property="createTime" column="CreateTime"/>
         <result property="status" column="Status"/>
-        <association property="user" column="id"
+        <association property="user" column="id" javaType="UsersPackage"
                     select="com.expressTracking.dao.UsersPackageDao.getByPackageId"/>
-        <collection property="route" column="id"
+        <collection property="route" column="id" ofType="PackageRoute"
                     select="com.expressTracking.dao.PackageRouteDao.getByPackageId"/>
-        <collection property="content" column="id"
+        <collection property="content" column="id" ofType="TransPackageContent"
                     select="com.expressTracking.dao.TransPackageContentDao.getByPackageId"/>
-        <collection property="history" column="id"
+        <collection property="history" column="id" ofType="TransHistory"
                     select="com.expressTracking.dao.TransHistoryDao.get"/>
     </resultMap>
 
     <select id="get" parameterType="String" resultMap="transPackageMap">
         select id, sourcenode, targetnode, createtime, status from transpackage where id=#{id}
+    </select>
+
+    <select id="getByUserId" parameterType="Integer" resultMap="transPackageMap">
+        SELECT
+            id, sourcenode, targetnode, createtime, status
+        FROM
+            transpackage
+        WHERE
+            ID IN ( SELECT PackageID FROM packagerecord WHERE Operation = #{operation,jdbcType=INTEGER}  AND UID = #{userId,jdbcType=INTEGER}  )
+          AND status = #{status,jdbcType=INTEGER}
+
     </select>
 
     <update id="update" parameterType="TransPackage">
@@ -33,7 +44,10 @@
             <if test="createTime != null"> CreateTime=#{createTime} ,</if>
             <if test="status != null"> Status=#{status}</if>
         </set>
-            where ID=#{id};
+            where ID=#{id}
+    </update>
+    <update id="updatePackageStatus">
+      update transpackage set Status=#{status} where ID=#{packageId,jdbcType=VARCHAR}
     </update>
 
     <insert id="insert" parameterType="TransPackage">

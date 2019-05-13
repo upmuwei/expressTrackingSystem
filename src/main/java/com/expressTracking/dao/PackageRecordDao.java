@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface PackageRecordDao {
 
-    public void insert(PackageRecord packageRecord);
+    public int insert(PackageRecord packageRecord);
 
     public List<PackageRecord> selectByuId(int uId);
 

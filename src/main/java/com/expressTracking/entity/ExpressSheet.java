@@ -1,6 +1,8 @@
 package com.expressTracking.entity;
 
 
+import com.google.gson.annotations.Expose;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -19,211 +21,114 @@ public class ExpressSheet implements Serializable {
 	/**
 	 * 快件开头字符不能为1
 	 */
+	@Expose
 	private String id;
 
 	/**
 	 * 快件类型
 	 */
-	private int type;
-
-	/**
-	 * 寄件人id
-	 */
-	private int senderId;
-
-	/**
-	 * 收件人id
-	 */
-	private int receverId;
+	@Expose
+	private Integer type;
 
 	/**
 	 * 寄件人
 	 */
+	@Expose
 	private CustomerInfo sender;
 
 	/**
 	 * 收件人
 	 */
+	@Expose
 	private CustomerInfo recever;
 
 	/**
 	 * 重量
 	 */
-	private float weight;
+	@Expose
+	private Float weight;
 
 	/**
 	 * 运费
 	 */
-	private float tranFee;
+	@Expose
+	private Float tranFee;
 
 	/**
 	 * 包装费
 	 */
-	private float packageFee;
+	@Expose
+	private Float packageFee;
 
 	/**
 	 * 保险费
 	 */
-	private float insuFee;
+	@Expose
+	private Float insuFee;
 
 	/**
 	 * 揽收人
 	 */
+	@Expose
 	private String accepter;
 
 	/**
 	 * 交付人
 	 */
+	@Expose
 	private String deliver;
 
 	/**
 	 * 揽收时间
 	 */
+	@Expose
 	private Date accepteTime;
 
 	/**
 	 * 交付时间
 	 */
+	@Expose
 	private Date deliveTime;
 
 	/**
 	 * 寄件附件（签名）
 	 */
+	@Expose
 	private String acc1;
 
 	/**
 	 * 收件附件（签名）
 	 */
+	@Expose
 	private String acc2;
 
 	/**
 	 * 快递状态
 	 */
-	private int status;
-	
-	public void setId(String value) {
-		this.id = value;
+	@Expose
+	private Integer status;
+
+	public static long getSerialVersionUID() {
+		return serialVersionUID;
 	}
-	
+
 	public String getId() {
 		return id;
 	}
-	
-	public String getORMId() {
-		return getId();
+
+	public void setId(String id) {
+		this.id = id;
 	}
-	
-	public void setType(int value) {
-		this.type = value;
-	}
-	
-	public int getType() {
+
+	public Integer getType() {
 		return type;
 	}
-	
-	public void setWeight(float value) {
-		this.weight = value;
-	}
-	
-	public float getWeight() {
-		return weight;
-	}
-	
-	public void setTranFee(float value) {
-		this.tranFee = value;
-	}
-	
-	public float getTranFee() {
-		return tranFee;
-	}
-	
-	public void setPackageFee(float value) {
-		this.packageFee = value;
-	}
-	
-	public float getPackageFee() {
-		return packageFee;
-	}
-	
-	public void setInsuFee(float value) {
-		this.insuFee = value;
-	}
-	
-	public float getInsuFee() {
-		return insuFee;
-	}
-	
-	public void setAccepter(String value) {
-		this.accepter = value;
-	}
-	
-	public String getAccepter() {
-		return accepter;
-	}
-	
-	public void setDeliver(String value) {
-		this.deliver = value;
-	}
-	
-	public String getDeliver() {
-		return deliver;
-	}
-	
-	public void setAccepteTime(Date value) {
-		this.accepteTime = value;
-	}
-	
-	public Date getAccepteTime() {
-		return accepteTime;
-	}
-	
-	public void setDeliveTime(Date value) {
-		this.deliveTime = value;
-	}
-	
-	public Date getDeliveTime() {
-		return deliveTime;
-	}
-	
-	public void setAcc1(String value) {
-		this.acc1 = value;
-	}
-	
-	public String getAcc1() {
-		return acc1;
-	}
-	
-	public void setAcc2(String value) {
-		this.acc2 = value;
-	}
-	
-	public String getAcc2() {
-		return acc2;
-	}
-	
-	public void setStatus(int value) {
-		this.status = value;
-	}
-	
-	public int getStatus() {
-		return status;
+
+	public void setType(Integer type) {
+		this.type = type;
 	}
 
-	public int getSenderId() {
-		return senderId;
-	}
 
-	public void setSenderId(int senderId) {
-		this.senderId = senderId;
-	}
-
-	public int getReceverId() {
-		return receverId;
-	}
-
-	public void setReceverId(int receverId) {
-		this.receverId = receverId;
-	}
 
 	public CustomerInfo getSender() {
 		return sender;
@@ -239,6 +144,94 @@ public class ExpressSheet implements Serializable {
 
 	public void setRecever(CustomerInfo recever) {
 		this.recever = recever;
+	}
+
+	public Float getWeight() {
+		return weight;
+	}
+
+	public void setWeight(Float weight) {
+		this.weight = weight;
+	}
+
+	public Float getTranFee() {
+		return tranFee;
+	}
+
+	public void setTranFee(Float tranFee) {
+		this.tranFee = tranFee;
+	}
+
+	public Float getPackageFee() {
+		return packageFee;
+	}
+
+	public void setPackageFee(Float packageFee) {
+		this.packageFee = packageFee;
+	}
+
+	public Float getInsuFee() {
+		return insuFee;
+	}
+
+	public void setInsuFee(Float insuFee) {
+		this.insuFee = insuFee;
+	}
+
+	public String getAccepter() {
+		return accepter;
+	}
+
+	public void setAccepter(String accepter) {
+		this.accepter = accepter;
+	}
+
+	public String getDeliver() {
+		return deliver;
+	}
+
+	public void setDeliver(String deliver) {
+		this.deliver = deliver;
+	}
+
+	public Date getAccepteTime() {
+		return accepteTime;
+	}
+
+	public void setAccepteTime(Date accepteTime) {
+		this.accepteTime = accepteTime;
+	}
+
+	public Date getDeliveTime() {
+		return deliveTime;
+	}
+
+	public void setDeliveTime(Date deliveTime) {
+		this.deliveTime = deliveTime;
+	}
+
+	public String getAcc1() {
+		return acc1;
+	}
+
+	public void setAcc1(String acc1) {
+		this.acc1 = acc1;
+	}
+
+	public String getAcc2() {
+		return acc2;
+	}
+
+	public void setAcc2(String acc2) {
+		this.acc2 = acc2;
+	}
+
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
 	}
 
 	@Override

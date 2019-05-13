@@ -3,10 +3,10 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.expressTracking.dao.ExpressSheetDao">
-    <resultMap id="expressSheetMap" type="ExpressSheet" >
+    <resultMap id="expressSheetMap" type="ExpressSheet">
         <id property="id" column="ID"/>
         <result property="type" column="Type"/>
-        <result property="weight" column="Weight" />
+        <result property="weight" column="Weight"/>
         <result property="tranFee" column="TranFee"/>
         <result property="packageFee" column="PackageFee"/>
         <result property="insuFee" column="InsuFee"/>
@@ -17,43 +17,59 @@
         <result property="acc1" column="Acc1"/>
         <result property="acc2" column="Acc2"/>
         <result property="status" column="Status"/>
-        <result property="senderId" column="sender"/>
-        <result property="receverId" column="recever"/>
         <association property="sender" column="sender"
-                     select="com.expressTracking.dao.CustomerInfoDao.get" />
+                     select="com.expressTracking.dao.CustomerInfoDao.get"/>
         <association property="recever" column="recever"
-                     select="com.expressTracking.dao.CustomerInfoDao.get" />
+                     select="com.expressTracking.dao.CustomerInfoDao.get"/>
     </resultMap>
 
-    <update id="update" parameterType="ExpressSheet" >
+    <update id="update" parameterType="ExpressSheet">
         update expresssheet
-        <trim prefix="set" suffixOverrides=",">
-            <if test="type != null"> type=#{type,jdbcType=INTEGER}, </if>
-            <if test="senderId != 0"> sender=#{senderId,jdbcType=INTEGER} ,  </if>
-            <if test="receverId != 0">  recever =#{receverId,jdbcType=INTEGER} , </if>
-            <if test="weight != null"> weight=#{weight},  </if>
-            <if test="tranFee != null"> TranFee=#{tranFee}, </if>
-            <if test="packageFee != null"> PackageFee=#{packageFee}, </if>
-            <if test="insuFee != null"> InsuFee=#{insuFee}, </if>
-            <if test="accepter != null and accepter != ''"> Accepter=#{accepter,jdbcType=VARCHAR},</if>
-            <if test="deliver != null and deliver != ''"> Deliver=#{deliver,jdbcType=VARCHAR}, </if>
-            <if test="accepteTime != null"> AccepteTime=#{accepteTime}, </if>
-            <if test="deliveTime != null and deliveTime != ''"> DeliveTime=#{deliveTime}, </if>
-            <if test="acc1 != null and acc1 != ''"> acc1=#{acc1,jdbcType=VARCHAR}, </if>
-            <if test="acc2 != null and acc2 != ''"> acc2=#{acc2,jdbcType=VARCHAR}, </if>
-            <if test="status != null"> Status=#{status} </if>
-        </trim>
+        <set>
+            <if test="type != null">type=#{type,jdbcType=INTEGER},</if>
+            <if test="sender !=  null">sender=#{sender.id,jdbcType=INTEGER} ,</if>
+            <if test="recever != null">recever =#{recever.id,jdbcType=INTEGER} ,</if>
+            <if test="weight != null">weight=#{weight},</if>
+            <if test="tranFee != null">TranFee=#{tranFee},</if>
+            <if test="packageFee != null">PackageFee=#{packageFee},</if>
+            <if test="insuFee != null">InsuFee=#{insuFee},</if>
+            <if test="accepter != null and accepter != ''">Accepter=#{accepter,jdbcType=VARCHAR},</if>
+            <if test="deliver != null and deliver != ''">Deliver=#{deliver,jdbcType=VARCHAR},</if>
+            <if test="accepteTime != null">AccepteTime=#{accepteTime},</if>
+            <if test="deliveTime != null and deliveTime != ''">DeliveTime=#{deliveTime},</if>
+            <if test="acc1 != null and acc1 != ''">acc1=#{acc1,jdbcType=VARCHAR},</if>
+            <if test="acc2 != null and acc2 != ''">acc2=#{acc2,jdbcType=VARCHAR},</if>
+            <if test="status != null">Status=#{status}</if>
+        </set>
         where id=#{id,jdbcType=VARCHAR}
     </update>
-
+    <update id="updateEsStatus">
+        update expresssheet
+        set Status= #{status,jdbcType=INTEGER}
+        where id = #{esId,jdbcType=VARCHAR}
+    </update>
     <sql id="express_get">
-        select ID, Type, Weight, TranFee, PackageFee, InsuFee, Accepter, Deliver,
-               AccepteTime, DeliveTime, Acc1, Acc2, Status, Sender, Recever
+        select ID,
+               Type,
+               Weight,
+               TranFee,
+               PackageFee,
+               InsuFee,
+               Accepter,
+               Deliver,
+               AccepteTime,
+               DeliveTime,
+               Acc1,
+               Acc2,
+               Status,
+               Sender,
+               Recever
         from expresssheet
     </sql>
 
     <select id="get" parameterType="String" resultMap="expressSheetMap">
-         <include refid="express_get"/> where ID = #{id}
+        <include refid="express_get"/>
+        where ID = #{id}
     </select>
 
     <select id="findBy" resultMap="expressSheetMap">
@@ -107,108 +123,142 @@
             </choose>
         </where>
     </select>
-
+    <select id="getByParameters" parameterType="ExpressSheet" resultMap="expressSheetMap">
+        <include refid="express_get"/>
+        <where>
+            <choose>
+                <when test="id != null">
+                    and ID = #{id,jdbcType=VARCHAR}
+                </when>
+                <when test="sender != null">
+                    and Sender = #{sender.id,jdbcType=INTEGER}
+                </when>
+                <when test="recever != null">
+                    and Recever = #{recever.id,jdbcType=INTEGER}
+                </when>
+                <when test="accepter != null">
+                    and Accepter = #{accepter,jdbcType=VARCHAR}
+                </when>
+                <when test="deliver != null">
+                    and Deliver = #{deliver,jdbcType=VARCHAR}
+                </when>
+                <when test="status != null">
+                    and Status = #{value,jdbcType=INTEGER}
+                </when>
+                <otherwise>
+                    and 1 != 1
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+    
+    <select id="selectEsByPackageId" resultMap="expressSheetMap">
+        <include refid="express_get"/>
+        where ID in (select ExpressID from transpackagecontent where PackageID = #{packageId,jdbcType=VARCHAR})
+    </select>
 
     <insert id="insert" parameterType="ExpressSheet">
         insert into expresssheet
-          <trim prefix="(" suffix=")" suffixOverrides=",">
-              <if test="id != null and id != ''">
-                  ID,
-              </if>
-              <if test="type != null">
-                  Type,
-              </if>
-              <if test="senderId != null">
-                  Sender,
-              </if>
-              <if test="receverId != null">
-                  Recever,
-              </if>
-              <if test="weight != null">
-                  Weight,
-              </if>
-              <if test="tranFee != null">
-                  TranFee,
-              </if>
-              <if test="packageFee != null">
-                  PackageFee,
-              </if>
-              <if test="insuFee != null">
-                  InsuFee,
-              </if>
-              <if test="accepter != null and accepter != ''">
-                  Accepter,
-              </if>
-              <if test="deliver != null and deliver != ''">
-                  Deliver,
-              </if>
-              <if test="accepteTime != null">
-                  AccepteTime,
-              </if>
-              <if test="deliveTime != null">
-                  DeliveTime,
-              </if>
-              <if test="acc1 != null and acc1 != ''">
-                  Acc1,
-              </if>
-              <if test="acc2 != null and acc2 != ''">
-                  Acc2,
-              </if>
-              <if test="status != null">
-                  Status,
-              </if>
-          </trim>
-          <trim prefix="values(" suffix=")" suffixOverrides=",">
-              <if test="id != null and id != ''">
-                  #{id},
-              </if>
-              <if test="type != null">
-                  #{type},
-              </if>
-              <if test="senderId != null">
-                  #{senderId,jdbcType=INTEGER},
-              </if>
-              <if test="receverId != null">
-                  #{receverId,jdbcType=INTEGER},
-              </if>
-              <if test="weight != null">
-                  #{weight},
-              </if>
-              <if test="tranFee != null">
-                  #{tranFee},
-              </if>
-              <if test="packageFee != null">
-                  #{packageFee},
-              </if>
-              <if test="insuFee != null">
-                  #{insuFee},
-              </if>
-              <if test="accepter != null and accepter != ''">
-                  #{accepter},
-              </if>
-              <if test="deliver != null and deliver != ''">
-                  #{deliver},
-              </if>
-              <if test="accepteTime != null">
-                  #{accepteTime},
-              </if>
-              <if test="deliveTime != null">
-                  #{deliveTime},
-              </if>
-              <if test="acc1 != null and acc1 != ''">
-                  #{acc1},
-              </if>
-              <if test="acc2 != null and acc2 != ''">
-                  #{acc2},
-              </if>
-              <if test="status != null">
-                  #{status},
-              </if>
-          </trim>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != ''">
+                ID,
+            </if>
+            <if test="type != null">
+                Type,
+            </if>
+            <if test="sender != null">
+                Sender,
+            </if>
+            <if test="recever != null">
+                Recever,
+            </if>
+            <if test="weight != null">
+                Weight,
+            </if>
+            <if test="tranFee != null">
+                TranFee,
+            </if>
+            <if test="packageFee != null">
+                PackageFee,
+            </if>
+            <if test="insuFee != null">
+                InsuFee,
+            </if>
+            <if test="accepter != null and accepter != ''">
+                Accepter,
+            </if>
+            <if test="deliver != null and deliver != ''">
+                Deliver,
+            </if>
+            <if test="accepteTime != null">
+                AccepteTime,
+            </if>
+            <if test="deliveTime != null">
+                DeliveTime,
+            </if>
+            <if test="acc1 != null and acc1 != ''">
+                Acc1,
+            </if>
+            <if test="acc2 != null and acc2 != ''">
+                Acc2,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != ''">
+                #{id},
+            </if>
+            <if test="type != null">
+                #{type},
+            </if>
+            <if test="sender != null">
+                #{sender.id,jdbcType=INTEGER},
+            </if>
+            <if test="recever != null">
+                #{recever.id,jdbcType=INTEGER},
+            </if>
+            <if test="weight != null">
+                #{weight},
+            </if>
+            <if test="tranFee != null">
+                #{tranFee},
+            </if>
+            <if test="packageFee != null">
+                #{packageFee},
+            </if>
+            <if test="insuFee != null">
+                #{insuFee},
+            </if>
+            <if test="accepter != null and accepter != ''">
+                #{accepter},
+            </if>
+            <if test="deliver != null and deliver != ''">
+                #{deliver},
+            </if>
+            <if test="accepteTime != null">
+                #{accepteTime},
+            </if>
+            <if test="deliveTime != null">
+                #{deliveTime},
+            </if>
+            <if test="acc1 != null and acc1 != ''">
+                #{acc1},
+            </if>
+            <if test="acc2 != null and acc2 != ''">
+                #{acc2},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+        </trim>
     </insert>
-    
+
     <delete id="delete" parameterType="String">
-        delete from expresssheet where id=#{id,jdbcType=VARCHAR}
+        delete
+        from expresssheet
+        where id = #{id,jdbcType=VARCHAR}
     </delete>
 
 
@@ -219,11 +269,11 @@
                 <when test="id != null and id != ''">
                     ID = #{id,jdbcType=VARCHAR}
                 </when>
-                <when test="senderId != 0 ">
-                    and Sender = #{senderId,jdbcType=INTEGER}
+                <when test="sender != null">
+                    and Sender = #{sender.id,jdbcType=INTEGER}
                 </when>
-                <when test="receverId != 0">
-                    and Recever = #{receverId,jdbcType=INTEGER}
+                <when test="recever != null">
+                    and Recever = #{recever.id,jdbcType=INTEGER}
                 </when>
                 <when test="accepter != null and accepter != ''">
                     and Accepter = #{accepter,jdbcType=VARCHAR}

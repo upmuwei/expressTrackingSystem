@@ -36,7 +36,6 @@ public class UserController {
         this.userInfoService = userInfoService;
     }
 
-
     /**
      * 登录
      * @return {@code HttpStatus=200, Header={"session", "String.valueOf(uId)"}}返回用户信息

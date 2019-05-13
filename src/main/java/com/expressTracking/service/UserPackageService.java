@@ -11,6 +11,11 @@ public interface UserPackageService {
 
     public void save(UsersPackage userPackage);
 
+
+
+    public int newUserPackage(String packageId,int userId);
+
+
     public int remove(int sn);
 
     /**

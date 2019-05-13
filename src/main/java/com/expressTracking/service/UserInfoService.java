@@ -15,6 +15,8 @@ public interface UserInfoService {
 
     public int update(UserInfo userInfo);
 
+    public int updatePassword(int userId,String password);
+
     public int delete(int uId);
 
     public UserInfo checkLogin(String account, String password);
@@ -22,5 +24,7 @@ public interface UserInfoService {
     public List<UserInfo> findLike(String propertyName, String value);
 
     public List<UserInfo> findBy(String propertyName, String value);
+
+    public UserInfo getUserByTelCode(String phone);
 
 }

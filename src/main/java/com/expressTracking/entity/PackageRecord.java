@@ -10,6 +10,15 @@ public class PackageRecord implements Serializable {
 
     private static final long serialVersionUID = 4564468784876984512L;
 
+    //新建
+    public static final int PACKAGE_NEW = 0;
+    //打包
+    public static final int PACKAGE_PACK = 1;
+    //转运
+    public static final int PACKAGE_TRANS = 2;
+    //拆包
+    public static final int PACKAGE_UNPACK = 3;
+
     private int sn;
 
     private String packageId;

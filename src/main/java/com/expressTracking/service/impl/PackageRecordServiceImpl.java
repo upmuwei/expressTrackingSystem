@@ -34,11 +34,16 @@ public class PackageRecordServiceImpl implements PackageRecordService {
     }
 
     @Override
-    public void packOk(String transPackageId, int uId) {
+    public int packOk(String transPackageId, int uId) {
+        return addPackageRecord(transPackageId,uId,PackageRecord.PACKAGE_PACK);
+    }
+
+    @Override
+    public int addPackageRecord(String packageId, int userId, int operation) {
         PackageRecord packageRecord = new PackageRecord();
-        packageRecord.setPackageId(transPackageId);
-        packageRecord.setuId(uId);
-        packageRecord.setOperation(1);
-        packageRecordDao.insert(packageRecord);
+        packageRecord.setPackageId(packageId);
+        packageRecord.setuId(userId);
+        packageRecord.setOperation(operation);
+        return packageRecordDao.insert(packageRecord);
     }
 }

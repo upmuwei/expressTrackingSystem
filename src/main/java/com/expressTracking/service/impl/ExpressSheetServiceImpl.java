@@ -7,6 +7,9 @@ import com.expressTracking.entity.ExpressSheet;
 import com.expressTracking.entity.TransPackageContent;
 import com.expressTracking.entity.UserInfo;
 import com.expressTracking.service.ExpressSheetService;
+import com.expressTracking.service.TransPackageContentService;
+import com.expressTracking.utils.DateUtil;
+import com.google.gson.annotations.Expose;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -25,72 +28,149 @@ import java.util.List;
 @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW,
         rollbackFor = Exception.class)
 public class ExpressSheetServiceImpl implements ExpressSheetService {
-    private final ExpressSheetDao expressSheetDao;
-    private final TransPackageContentDao transPackageContentDao;
-    private final UserInfoDao userInfoDao;
-
     @Autowired
-    public ExpressSheetServiceImpl(ExpressSheetDao expressSheetDao,
-                                   TransPackageContentDao transPackageContentDao,
-                                   UserInfoDao userInfoDao) {
-        this.expressSheetDao = expressSheetDao;
-        this.transPackageContentDao = transPackageContentDao;
-        this.userInfoDao = userInfoDao;
+    private ExpressSheetDao expressSheetDao;
+    @Autowired
+    private TransPackageContentDao transPackageContentDao;
+    @Autowired
+    private UserInfoDao userInfoDao;
+    private TransPackageServiceImpl transPackage;
+    @Autowired
+    private TransPackageContentService transPackageContentService;
+
+
+    @Override
+    public int delete(String esId) {
+        return expressSheetDao.delete(esId);
     }
 
     @Override
     public int update(ExpressSheet expressSheet) {
+        //如果快件处于新建状态则将快件设为揽收状态
+        if (expressSheet.getStatus() == ExpressSheet.STATUS.STATUS_CREATED) {
+            expressSheet.setStatus(ExpressSheet.STATUS.STATUS_RECEIVED);
+        }
         return expressSheetDao.update(expressSheet);
     }
 
     @Override
+    public int updateEsStatus(String esId, int statsu) {
+        return expressSheetDao.updateEsStatus(esId, statsu);
+    }
+
+    @Override
     public List<ExpressSheet> findBy(String propertyName, String value) {
-        return expressSheetDao.findBy(propertyName,value);
+        return expressSheetDao.findBy(propertyName, value);
     }
 
     @Override
     public List<ExpressSheet> findLike(String propertyName, String value) {
-        return expressSheetDao.findLike(propertyName,value);
+        return expressSheetDao.findLike(propertyName, value);
     }
+
     @Override
     public List<ExpressSheet> getListInPackage(String packageId) {
-        List<String> expressId=transPackageContentDao.getExpressId(packageId);
+        List<TransPackageContent> transPackageContents = transPackageContentDao.getByPackageId(packageId);
         List<ExpressSheet> expressSheets = new ArrayList<>();
-        for(String id:expressId){
-            expressSheets.add(expressSheetDao.get(id));
+        for (TransPackageContent transPackageContent : transPackageContents) {
+            if (transPackageContent.getStatus() == TransPackageContent.STATUS.STATUS_ACTIVE) {
+                expressSheets.add(expressSheetDao.get(transPackageContent.getExpressId()));
+            }
         }
         return expressSheets;
     }
 
     @Override
-    public ExpressSheet getByExpressId(String id) {
+    public ExpressSheet get(String id) {
         return expressSheetDao.get(id);
     }
-
+//    @Override
+//    public ExpressSheet getByExpressId(String id) {
+//        return expressSheetDao.get(id);
+//    }
+//
+//
+//    @Override
+//    public List<ExpressSheet> getByMoreConditions(ExpressSheet expressSheet) {
+//        return expressSheetDao.findByMoreConditions(expressSheet);
+//    }
 
     @Override
-    public List<ExpressSheet> getByMoreConditions(ExpressSheet expressSheet) {
-        return expressSheetDao.findByMoreConditions(expressSheet);
+    public List<ExpressSheet> getByParameters(ExpressSheet expressSheet) {
+        if (expressSheet != null) {
+            return expressSheetDao.getByParameters(expressSheet);
+        } else {
+            return null;
+        }
     }
 
     @Override
-    public int save(ExpressSheet expressSheet) throws Exception{
-        if (expressSheetDao.get(expressSheet.getId()) != null) {
-            throw new Exception("此订单已存在，不能创建");
-        }
+    public List<ExpressSheet> getByAccpterAndStatus(String accepter, Integer status) {
+        ExpressSheet expressSheet = new ExpressSheet();
+        expressSheet.setAccepter(accepter);
+        expressSheet.setStatus(status);
+        return getByParameters(expressSheet);
+    }
+
+    @Override
+    public int create(String expressId, Integer accepter) {
+        ExpressSheet expressSheet = new ExpressSheet();
+        expressSheet.setId(expressId);
+        expressSheet.setAccepter(accepter + "");
         expressSheet.setType(0);
         expressSheet.setStatus(ExpressSheet.STATUS.STATUS_CREATED);
-        int a = expressSheetDao.insert(expressSheet);
-        System.out.println("\n\n\n" + a +"\n\n\n");
-        return 1;
-
+        return expressSheetDao.insert(expressSheet);
     }
 
+    /**
+     * 创建快件信息并将快件添加到揽件员的揽件货篮中
+     *
+     * @param expressSheet
+     * @param accpter
+     * @return 1 快件信息已存在 2 用户不存在 3 成功 4 失败
+     */
+    @Override
+    public int create(ExpressSheet expressSheet, Integer accpter) {
+        if (expressSheetDao.get(expressSheet.getId()) != null) {
+            //快件信息已存在
+            return 1;
+        }
+
+        UserInfo userInfo = userInfoDao.get(accpter);
+        if (userInfo == null) {
+            //用户信息不存在
+            return 2;
+        }
+
+        expressSheet.setAccepter(userInfo.getuId() + "");
+        //将快件状态设置揽收状态
+        expressSheet.setStatus(ExpressSheet.STATUS.STATUS_RECEIVED);
+        return save(expressSheet) *
+                transPackageContentService.moveEsToPackage(userInfo.getReceivePackageId(), expressSheet.getId()) > 0 ? 3 : 4;
+    }
+
+    @Override
+    public int save(ExpressSheet expressSheet) {
+        System.out.println("esService=" + expressSheet);
+        if (expressSheet == null || expressSheetDao.get(expressSheet.getId()) != null) {
+            return 0;
+        } else {
+            expressSheet.setType(0);
+            expressSheet.setStatus(ExpressSheet.STATUS.STATUS_CREATED);
+            expressSheet.setAccepteTime(DateUtil.getCurrentDate());
+            return expressSheetDao.insert(expressSheet);
+        }
+    }
+
+    @Override
+    public List<ExpressSheet> getEsListFromPackage(String pckageId) {
+        return expressSheetDao.selectEsByPackageId(pckageId);
+    }
 
     @Override
     public int receiveExpressSheet(String expressId, int uId) throws Exception {
         ExpressSheet nes = expressSheetDao.get(expressId);
-        if(nes.getStatus() != ExpressSheet.STATUS.STATUS_CREATED){
+        if (nes.getStatus() != ExpressSheet.STATUS.STATUS_CREATED) {
             throw new Exception("快件运单状态错误!无法收件!");
         }
         nes.setAccepter(String.valueOf(uId));
@@ -118,7 +198,7 @@ public class ExpressSheetServiceImpl implements ExpressSheetService {
         nes.setDeliver(String.valueOf(uId));
         nes.setDeliveTime(new Date());
         nes.setStatus(ExpressSheet.STATUS.STATUS_DISPATCHED);
-        if (expressSheetDao.update(nes) == 0 ) {
+        if (expressSheetDao.update(nes) == 0) {
             return 0;
         }
         transPackageContent.setPackageId(userInfoDao.get(uId).getDelivePackageId());

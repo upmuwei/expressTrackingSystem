@@ -14,5 +14,21 @@ public interface PackageRecordService {
 
     public List<PackageRecord> findByuId(int uId);
 
-    public void packOk(String packageId, int uId);
+    /**
+     * 打包操作
+     * @param packageId
+     * @param uId
+     * @return
+     */
+    public int packOk(String packageId, int uId);
+
+    /**
+     * 添加包裹操作记录
+     * @param packageId
+     * @param userId
+     * @param operation
+     * @return
+     */
+    public int addPackageRecord(String packageId,int userId,int operation);
+
 }

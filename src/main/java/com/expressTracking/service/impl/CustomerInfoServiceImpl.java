@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,8 +35,8 @@ public class CustomerInfoServiceImpl implements CustomerInfoService {
     @Override
     public CustomerInfo get(int id) {
         CustomerInfo customerInfo = customerInfoDao.get(id);
-        Region region = regionDao.get(customerInfo.getRegionCode());
-        customerInfo.setRegionString(region.toString());
+//        Region region = regionDao.get(customerInfo.getRegionCode());
+//        customerInfo.setRegionString(region.toString());
         return customerInfo;
     }
 
@@ -50,8 +51,18 @@ public class CustomerInfoServiceImpl implements CustomerInfoService {
     }
 
     @Override
-    public void save(CustomerInfo customerInfo) {
-        customerInfoDao.insert(customerInfo);
+    public List<CustomerInfo> findByParameter(CustomerInfo customerInfo) {
+        List<CustomerInfo> customerInfos = new ArrayList<>();
+        System.out.println(customerInfo);
+        if(customerInfo != null){
+            customerInfos = customerInfoDao.fingByParameter(customerInfo);
+        }
+        return customerInfos;
+    }
+
+    @Override
+    public int save(CustomerInfo customerInfo) {
+        return customerInfoDao.insert(customerInfo);
     }
 
     @Override

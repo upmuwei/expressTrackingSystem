@@ -58,6 +58,14 @@ public class UserPackageServiceImpl implements UserPackageService {
     }
 
     @Override
+    public int newUserPackage(String packageId, int userId) {
+        UsersPackage usersPackage = new UsersPackage();
+        usersPackage.setPackageId(packageId);
+        usersPackage.setUserUid(userId);
+        return usersPackageDao.insert(usersPackage);
+    }
+
+    @Override
     public int remove(int sn) {
         return usersPackageDao.delete(sn);
     }

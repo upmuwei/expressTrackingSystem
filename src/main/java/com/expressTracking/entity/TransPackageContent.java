@@ -1,6 +1,8 @@
 package com.expressTracking.entity;
 
 
+import com.google.gson.annotations.Expose;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -16,12 +18,13 @@ public class TransPackageContent implements Serializable {
 	public TransPackageContent() {
 	}
 
+	@Expose
 	private int sn;
-
+	@Expose
 	private String expressId;
 
 	private String packageId;
-
+	@Expose
 	private int status;
 
 	public void setSn(int value) {
