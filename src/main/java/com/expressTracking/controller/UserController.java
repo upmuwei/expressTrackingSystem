@@ -158,9 +158,7 @@ public class UserController {
         if (file == null) {
             throw  new Exception("上传文件出错");
         } else {
-            FileUtils.copyInputStreamToFile(
-                    file.getInputStream(),
-                    new File(path));
+            FileUtils.copyInputStreamToFile(file.getInputStream(), new File(path));
         }
         return ResponseEntity.ok().header("Type","Save").body(path);
     }

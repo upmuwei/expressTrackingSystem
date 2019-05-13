@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<head>
+    <title>客户编辑</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="stylesheet" href="./css/font.css">
+    <link rel="stylesheet" href="./css/xadmin.css">
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="./lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./js/xadmin.js"></script>
+    <script type="text/javascript" src="./js/cookie.js"></script>
+</head>
+
+<body>
+<script>
+    $(function () {
+        var url = location.search;
+        console.log(url);
+        var id=url.split("=")[1];
+        var str="http://localhost:8080/es/get/"+id;
+        $.ajax({
+            url:str,
+            type:"GET",
+            dataType:'JSON',
+            contentType : "application/json; charset=utf-8",
+            success:function(data){
+                document.getElementById("L_id").value=data.id;
+                document.getElementById("L_type").value=data.type;
+                document.getElementById("L_senderId").value=data.senderId;
+                document.getElementById("L_receverId").value=data.receverId;
+                document.getElementById("L_weight").value=data.weight;
+                document.getElementById("L_tranFee").value=data.tranFee;
+                document.getElementById("L_packageFee").value=data.packageFee;
+                document.getElementById("L_insuFee").value=data.insuFee;
+                document.getElementById("L_accepter").value=data.accepter;
+                document.getElementById("L_deliver").value=data.deliver;
+                document.getElementById("L_accepteTime").value=data.accepteTime;
+                document.getElementById("L_deliveTime").value=data.deliveTime;
+                document.getElementById("L_acc1").value=data.acc1;
+                document.getElementById("L_acc2").value=data.acc2;
+                document.getElementById("L_status").value=data.status;
+            },
+            error:function () {
+                alert("error");
+            }
+        });
+        $("#edit").click(function () {
+            var id = $("#L_id").val();
+            var type = $("#L_type").val();
+            var senderId = $("#L_senderId").val();
+            var receverId = $("#L_receverId").val();
+            var weight = $("#L_weight").val();
+            var tranFee = $("#L_tranFee").val();
+            var packageFee = $("#L_packageFee").val();
+            var insuFee = $("#L_insuFee").val();
+            var accepter = $("#L_accepter").val();
+            var deliver = $("#L_deliver").val();
+            var accepteTime = $("#L_accepteTime").val();
+            var deliveTime = $("#L_deliveTime").val();
+            var acc1 = $("#L_acc1").val();
+            var acc2 = $("#L_acc2").val();
+            var status = $("#L_status").val();
+            console.log(telcode);
+            $.ajax({
+                url: "http://localhost:8080/es/update" ,
+                type: "post",
+                dataType: "JSON",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({
+                    "id":id, "type": type, "senderId": senderId, "receverId": receverId,
+                    "weight": weight,"tranFee": tranFee,"packageFee": packageFee,"insuFee": insuFee,
+                    "accepter": accepter,"deliver": deliver,"accepteTime": accepteTime,"deliveTime": deliveTime,
+                    "acc1": acc1,"acc2": acc2,"status": status
+                }),
+                success: function (data) {
+                    //alert("即将关闭");
+                    layer.msg('已修改!', {icon: 1, time: 1000});
+                    x_admin_father_reload();
+                    x_admin_close();
+                    open(location, '_self').close();
+                },
+                error: function (jqXHR) {
+                    layer.msg(jqXHR.responseText);
+                }
+            });
+        });
+    });
+
+</script>
+<div class="x-body">
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <label for="L_id" class="layui-form-label">
+                <span class="x-red">*</span>快递单号
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="L_id" value="" name="id" required="" lay-verify="id" autocomplete="off" class="layui-input" readonly="readonly">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="L_type" class="layui-form-label">
+                <span class="x-red">*</span>类型
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="L_type" name="type" required="" lay-verify="type" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="L_sender" class="layui-form-label">
+                <span class="x-red">*</span>寄件人
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="L_sender" name="sender" required="sender" lay-verify="sender" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="L_recever" class="layui-form-label">
+                <span class="x-red">*</span>收件人
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="L_recever" name="recever" required="recever" lay-verify="recever" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="L_weight" class="layui-form-label">
+                <span class="x-red">*</span>重量
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="L_weight" name="weight" required="weight" lay-verify="weight" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="L_tranFee" class="layui-form-label">
+                <span class="x-red">*</span>快递费
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="L_tranFee" name="tranFee" required="tranFee" lay-verify="tranFee" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="L_packageFee" class="layui-form-label">
+                <span class="x-red">*</span>包装费
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="L_packageFee" name="packageFee" required="packageFee" lay-verify="packageFee" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="L_insuFee" class="layui-form-label">
+                <span class="x-red">*</span>保险费
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="L_insuFee" name="insuFee" required="insuFee" lay-verify="insuFee" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="L_accepter" class="layui-form-label">
+                <span class="x-red">*</span>揽收人
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="L_accepter" name="accepter" required="accepter" lay-verify="accepter" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="L_deliver" class="layui-form-label">
+                <span class="x-red">*</span>交付人
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="L_deliver" name="deliver" required="deliver" lay-verify="deliver" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="L_accepteTime" class="layui-form-label">
+                <span class="x-red">*</span>收件时间
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="L_accepteTime" name="accepteTime" required="accepteTime" lay-verify="accepteTime" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="L_deliveTime" class="layui-form-label">
+                <span class="x-red">*</span>寄件时间
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="L_deliveTime" name="deliveTime" required="deliveTime" lay-verify="deliveTime" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="L_acc1" class="layui-form-label">
+                <span class="x-red">*</span>寄件附件
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="L_acc1" name="acc1" required="acc1" lay-verify="acc1" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="L_acc2" class="layui-form-label">
+                <span class="x-red">*</span>收件附件
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="L_acc2" name="acc2" required="acc2" lay-verify="acc2" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="L_status" class="layui-form-label">
+                <span class="x-red">*</span>状态
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="L_status" name="status" required="status" lay-verify="status" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+            </label>
+            <button id="edit"  class="layui-btn" lay-filter="edit" lay-submit="">修改</button>
+        </div>
+    </form>
+</div>
+<script>
+    layui.use(['form','layer'], function(){
+        $ = layui.jquery;
+        var form = layui.form
+            ,layer = layui.layer;
+
+        //自定义验证规则
+        form.verify({
+            id: function(value){
+                if(value === '' || value === null){
+                    return '单号不能为空';
+                }
+            }
+            ,type: function(value){
+                if(value === '' || value === null){
+                    return '类型不能为空';
+                }
+            }
+            ,senderId: function(value){
+                if(value === '' || value === null){
+                    return '寄件人编号不能为空';
+                }
+            }
+            ,receverId: function(value){
+                if(value === '' || value === null){
+                    return '收件人编号不能为空';
+                }
+            }
+            ,weight: function(value){
+                if(value === '' || value === null){
+                    return '重量不能为空';
+                }
+            }
+            ,tranFee: function(value){
+                if(value === '' || value === null){
+                    return '运费不能为空';
+                }
+            }
+            ,packageFee: function(value){
+                if(value === '' || value === null){
+                    return '包装费不能为空';
+                }
+            }
+            ,insuFee: function(value){
+                if(value === '' || value === null){
+                    return '保险费不能为空';
+                }
+            }
+            ,accepter: function(value){
+                if(value === '' || value === null){
+                    return '揽收人不能为空';
+                }
+            }
+            ,deliver: function(value){
+                if(value === '' || value === null){
+                    return '交付人不能为空';
+                }
+            }
+            ,accepteTime: function(value){
+                if(value === '' || value === null){
+                    return '揽收时间不能为空';
+                }
+            }
+            ,deliverTime: function(value){
+                if(value === '' || value === null){
+                    return '交付时间不能为空';
+                }
+            }
+            ,acc1: function(value){
+                if(value === '' || value === null){
+                    return '寄件附件不能为空';
+                }
+            }
+            ,acc2: function(value){
+                if(value === '' || value === null){
+                    return '收件附件不能为空';
+                }
+            }
+            ,status: function(value){
+                if(value === '' || value === null){
+                    return '状态不能为空';
+                }
+            }
+        });
+        //监听提交
+        form.on('submit(edit)', function(){
+
+            layer.alert("修改成功", {icon: 6},function () {
+                //关闭当前frame
+                x_admin_close();
+                // 可以对父窗口进行刷新
+                x_admin_father_reload();
+            });
+            return false;
+        });
+    });
+</script>
+</body>
+</html>
