@@ -15,6 +15,7 @@ import java.util.Date;
  */
 public class TransHistory implements Serializable {
 
+
     private static final long serialVersionUID = 6973429316324711538L;
 
     public TransHistory() {
