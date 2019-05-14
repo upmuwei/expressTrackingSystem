@@ -56,7 +56,9 @@ public class MD5Utils {
     }
 
     public static void main(String[] args) {
-        System.out.println(MD5Utils.getSaltMD5("1"));
+        System.out.println(MD5Utils.getSaltMD5("000000"));
+        System.out.println(getSaltverifyMD5("000000", "56ff4d340205e4d730d0e49b98c14208c785609f8565c803"));
+
     }
 
 }

@@ -11,6 +11,7 @@
 <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript" src="./lib/layui/layui.js" charset="utf-8"></script>
 <script type="text/javascript" src="./js/xadmin.js"></script>
+<script type="text/javascript" src="js/address.js"></script>
 <script type="text/javascript" src="./js/cookie.js"></script>
 </head>
 
@@ -20,19 +21,19 @@
         var url = location.search;
         console.log(url);
         var id=url.split("=")[1];
-        var str="http://localhost:8080/customer/get/"+id;
+        var str= address + "customer/get/" + id;
         $.ajax({
             url:str,
             type:"GET",
             dataType:'JSON',
             contentType : "application/json; charset=utf-8",
             success:function(data){
-                document.getElementById("L_name").value=data.name;
-                document.getElementById("L_telCode").value=data.telCode;
-                document.getElementById("L_department").value=data.department;
-                document.getElementById("L_regionCode").value=data.regionCode;
-                document.getElementById("L_address").value=data.address;
-                document.getElementById("L_postCode").value=data.postCode;
+                document.getElementById("L_name").value=data.customer.name;
+                document.getElementById("L_telCode").value=data.customer.telCode;
+                document.getElementById("L_department").value=data.customer.department;
+                document.getElementById("L_regionCode").value=data.customer.regionCode;
+                document.getElementById("L_address").value=data.customer.address;
+                document.getElementById("L_postCode").value=data.customer.postCode;
             },
             error:function () {
                 alert("error");
@@ -43,20 +44,19 @@
             var telcode = $("#L_telCode").val();
             var department = $("#L_department").val();
             var regioncode = $("#L_regionCode").val();
-            var address = $("#L_address").val();
+            var myAddress = $("#L_address").val();
             var postcode = $("#L_postCode").val();
-            console.log(telcode);
+
             $.ajax({
-                url: "http://localhost:8080/customer/update" ,
+                url: address + "customer/update" ,
                 type: "post",
                 dataType: "JSON",
                 contentType: "application/json; charset=utf-8",
                 data: JSON.stringify({
                     "id":id, "name": name, "telCode": telcode, "department": department,
-                    "regionCode": regioncode, "address": address, "postCode": postcode
+                    "regionCode": regioncode, "address": myAddress, "postCode": postcode
                 }),
                 success: function (data) {
-                    //alert("即将关闭");
                     layer.msg('已更新!', {icon: 1, time: 1000});
                     x_admin_father_reload();
                     x_admin_close();
@@ -123,7 +123,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">
             </label>
-            <button id="edit"  class="layui-btn" lay-filter="edit" lay-submit="">编辑</button>
+            <button id="edit"  class="layui-btn" lay-filter="edit" lay-submit="">修改</button>
         </div>
     </form>
 </div>

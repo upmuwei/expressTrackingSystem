@@ -10,7 +10,7 @@
     <!--<mvc:default-servlet-handler/>-->
 
     <mvc:resources mapping="/**" location="static/"/>
-    <mvc:resources mapping="/expressSheet/images/**" location="D:/expressTracking/expressSheet/images/"/>
+    <!--<mvc:resources mapping="/expressSheet/images/**" location="D:/expressTracking/expressSheet/images/"/>-->
 
     <mvc:interceptors>
         <mvc:interceptor>

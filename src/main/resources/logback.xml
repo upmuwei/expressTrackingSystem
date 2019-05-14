@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <configuration debug="false">
 
-    <property name="LOG_HOME" value="F:\code\extrace_workspace\expressTrackingSystem\log" />
+    <property name="LOG_HOME" value="E:\code\extrace_workspace\expressTrackingSystem\log" />
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">

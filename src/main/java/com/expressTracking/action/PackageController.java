@@ -30,17 +30,23 @@ public class PackageController {
 
     @Autowired
     private PackageRecordService packageRecordService;
+
     @Autowired
     private PackageRouteService packageRouteService;
+
     @Autowired
     private TransPackageContentService tPackageContentService;
+
     @Autowired
     @Qualifier("transPackageService")
     private TransPackageService transPackageService;
+
     @Autowired
     private UserPackageService userPackageService;
+
     @Autowired
     private ExpressSheetService expressSheetService;
+
     @Autowired
     private UserInfoService userInfoService;
 

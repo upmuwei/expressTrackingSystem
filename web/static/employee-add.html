@@ -13,6 +13,7 @@
         <script type="text/javascript" src="lib/layui/layui.js" charset="utf-8"></script>
         <script type="text/javascript" src="js/xadmin.js"></script>
         <script type="text/javascript" src="js/cookie.js"></script>
+        <script type="text/javascript" src="js/address.js"></script>
         <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
         <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
    </head>
@@ -21,27 +22,19 @@
    <script>
        $(function () {
            $("#add").click(function (){
-               var password=$("#L_pwd").val();
                var name=$("#L_name").val();
                var urull=$("#L_urull").val();
                var telcode=$("#L_telCode").val();
-               var status=$("#L_status").val();
                var dptid=$("#L_dptid").val();
-               var receivepackageid=$("#L_receivepackageid").val();
-               var delivepackageid=$("#L_delivepackageid").val();
-               var transpackageid=$("#L_transpackageid").val();
                $.ajax({
-                   url: "http://localhost:8080/user/addUserInfo",
+                   url: address + "user/add",
                    type: "post",
                    dataType: "JSON",
                    contentType : "application/json; charset=utf-8",
-                   data: JSON.stringify({"password":password,"name":name,"uRull":urull,"telCode":telcode,"status":status,"dptId":dptid,
-                       "receivePackageId":receivepackageid,"delivePackageId":delivepackageid,"transPackageId":transpackageid}),
+                   data: JSON.stringify({"name":name,
+                       "uRull":urull,"telCode":telcode,"status":status,"dptId":dptid }),
                    success : function(data) {
-                       console.log(JSON.stringify({"password":password,"name":name,"uRull":urull,"telCode":telcode,"status":status,"dptId":dptid,
-                           "receivePackageId":receivepackageid,"delivePackageId":delivepackageid,"transPackageId":transpackageid}));
                        layer.msg('已添加!',{icon:1,time:1000});
-                       alert("关闭该页面");
                        x_admin_close();
                    },
                    error : function(error) {
@@ -54,15 +47,6 @@
    </script>
         <div class="x-body">
              <form class="layui-form">
-                  <div class="layui-form-item">
-                      <label for="L_pwd" class="layui-form-label">
-                          <span class="x-red">*</span>密码
-                      </label>
-                      <div class="layui-input-inline">
-                          <input type="text" id="L_pwd" name="password" required="" lay-verify="password"
-                          autocomplete="off" class="layui-input">
-                      </div>
-                  </div>
                   <div class="layui-form-item">
                       <label for="L_name" class="layui-form-label">
                           <span class="x-red">*</span>姓名
@@ -91,47 +75,11 @@
                      </div>
                  </div>
                  <div class="layui-form-item">
-                     <label for="L_status" class="layui-form-label">
-                         <span class="x-red">*</span>状态
-                     </label>
-                     <div class="layui-input-inline">
-                         <input type="text" id="L_status" name="status" required="" lay-verify="status"
-                                autocomplete="off" class="layui-input">
-                     </div>
-                 </div>
-                 <div class="layui-form-item">
                      <label for="L_dptid" class="layui-form-label">
                          <span class="x-red">*</span>部门编号
                      </label>
                      <div class="layui-input-inline">
                          <input type="text" id="L_dptid" name="dptId" required="" lay-verify="dptId"
-                                autocomplete="off" class="layui-input">
-                     </div>
-                 </div>
-                 <div class="layui-form-item">
-                     <label for="L_receivepackageid" class="layui-form-label">
-                         <span class="x-red">*</span>揽收包裹编号
-                     </label>
-                     <div class="layui-input-inline">
-                         <input type="text" id="L_receivepackageid" name="receivePackageId" required="" lay-verify="receivePackageId"
-                                autocomplete="off" class="layui-input">
-                     </div>
-                 </div>
-                 <div class="layui-form-item">
-                     <label for="L_delivepackageid" class="layui-form-label">
-                         <span class="x-red">*</span>派送包裹编号
-                     </label>
-                     <div class="layui-input-inline">
-                         <input type="text" id="L_delivepackageid" name="delivePackageId" required="" lay-verify="delivePackageId"
-                                autocomplete="off" class="layui-input">
-                     </div>
-                 </div>
-                 <div class="layui-form-item">
-                     <label for="L_transpackageid" class="layui-form-label">
-                         <span class="x-red">*</span>传送包裹编号
-                     </label>
-                     <div class="layui-input-inline">
-                         <input type="text" id="L_transpackageid" name="transPackageId" required="" lay-verify="transPackageId"
                                 autocomplete="off" class="layui-input">
                      </div>
                  </div>
@@ -150,12 +98,7 @@
 
                 //自定义验证规则
                 form.verify({
-                    password: function(value){
-                        if(value === '' || value === null){
-                            return '密码不能为空';
-                        }
-                    }
-                    ,name: function(value){
+                    name: function(value){
                         if(value === '' || value === null){
                             return '姓名不能为空';
                         }
@@ -170,34 +113,13 @@
                             return '电话号码不能为空';
                         }
                     }
-                    ,status: function(value){
-                        if(value === '' || value === null){
-                            return '状态不能为空';
-                        }
-                    }
                     ,dptId: function(value){
                         if(value === '' || value === null){
                             return '部门编号不能为空';
                         }
                     }
-                    ,receivePackageId: function(value){
-                        if(value === '' || value === null){
-                            return '揽收包裹编号不能为空';
-                        }
-                    }
-                    ,delivePackageId: function(value){
-                        if(value === '' || value === null){
-                            return '派送包裹编号不能为空';
-                        }
-                    }
-                    ,transPackageId: function(value){
-                        if(value === '' || value === null){
-                            return '传送包裹编号不能为空';
-                        }
-                    }
                 });
 
-                  //监听提交
                 form.on('submit(add)', function(data){
                     console.log(data);
                     //发异步，把数据提交给php

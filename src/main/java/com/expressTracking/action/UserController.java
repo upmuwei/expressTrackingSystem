@@ -9,6 +9,8 @@ import com.expressTracking.utils.JsonUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +29,7 @@ import java.util.Map;
 @RestController("userControllerV1")
 @RequestMapping("/user")
 public class UserController {
+
     @Autowired
     public UserInfoService userInfoService;
 
@@ -79,7 +82,8 @@ public class UserController {
             jsonObject.put("user", JSON.parse(JsonUtils.toJson(userInfo)));
             String sessionId = userInfo.getTelCode().hashCode() + "" + System.currentTimeMillis();
             jsonObject.put("sessionId", sessionId);
-            session.setAttribute(userInfo.getuId() + "", session);
+//            session.setAttribute(userInfo.getuId() + "", session);
+            session.setAttribute(sessionId, userInfo);
         } else {
             code.setCode(ResponseCode.Result.FAIL);
         }
@@ -117,13 +121,15 @@ public class UserController {
      * @return
      */
     @RequestMapping(value = "/logout/{userId}", method = RequestMethod.GET)
-    public JSONObject logout(@PathVariable("userId") Integer userId, HttpSession session) {
+    public JSONObject logout(@PathVariable("userId") Integer userId, HttpSession session, HttpHeaders headers) {
         ResponseCode code = new ResponseCode();
         UserInfo userInfo = userInfoService.get(userId);
         JSONObject jsonObject = new JSONObject();
         if (userInfo != null) {
-            session.removeAttribute(userId + "");
+//            session.removeAttribute(userId + "");
             code.setCode(ResponseCode.Result.SUCESS);
+            String sessionId = headers.getFirst("sessionId");
+            session.removeAttribute(sessionId);
             code.setMessage("用户" + userInfo.getTelCode() + "退出登录");
         } else {
             code.setCode(ResponseCode.Result.FAIL);

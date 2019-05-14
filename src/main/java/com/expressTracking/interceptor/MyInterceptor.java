@@ -19,7 +19,7 @@ public class MyInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String sessionId = request.getHeader("Session");
+        String sessionId = request.getHeader("sessionId");
        /* if (sessionId == null) {
             PrintWriter writer = response.getWriter();
             writer.print("{\"message\":\"非法访问,请登录\"}");

@@ -11,13 +11,14 @@
     <script type="text/javascript" src="lib/layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="js/xadmin.js"></script>
     <script type="text/javascript" src="js/cookie.js"></script>
+    <script type="text/javascript" src="js/address.js"></script>
     <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
     <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
 </head>
 <script>
     $(function(){
         $("#submit").click(function () {
-            var str="http://localhost:8080/user/getUserList/"+$("#select").val()+"/"+$("#selectway").val()+"/"+$("#input").val();
+            var str= address + "user/list/"+$("#select").val()+"/"+$("#selectway").val()+"/"+$("#input").val();
             $.ajax({
                 url:str,
                 type:"GET",
@@ -25,28 +26,28 @@
                 contentType : "application/json; charset=utf-8",
                 success:function(data){
                     var tableData;
-                    $("#numspan").text("显示数据："+(data.length).toString()+"条");
-                    for(var i=0;i<data.length;i++){
+                    var user = data.userList;
+                    $("#numspan").text("显示数据："+(user.length).toString()+"条");
+                    for(var i=0;i<user.length;i++){
                         var str="<td class='td-manage'>"+
-                            '<a title="编辑"  href="javascript:;"  onclick="x_admin_show( \'编辑\',\'employee-edit.html? Data='+data[i].uId+'\',600,400)">'+
+                            '<a title="编辑"  href="javascript:;"  onclick="x_admin_show( \'编辑\',\'employee-edit.html? Data='+user[i].uId+'\',600,400)">'+
                             "<i class=\"layui-icon\">&#xe642;</i>" +
                             "</a>" +
-                            '<a title="删除" href="javascript:;" onclick="employee_del(this,'+data[i].uId+')">'+
+                            '<a title="删除" href="javascript:;" onclick="employee_del(this,'+user[i].uId+')">'+
                             "<i class='layui-icon'>&#xe640;</i> " +
                             "</a> "+
                             "</td>"
 
                             tableData+="<tr> " +
-                                "<td>"+data[i].uId +"</td> " +
-                                "<td>"+data[i].password +"</td> " +
-                                "<td>"+data[i].name +"</td>" +
-                                "<td>"+data[i].uRull +"</td>" +
-                                "<td>"+data[i].telCode +" </td>" +
-                                "<td>"+data[i].status +"</td>" +
-                                "<td>"+data[i].dptId +"</td>" +
-                                "<td>"+data[i].receivePackageId +"</td> "+
-                                "<td>"+data[i].delivePackageId +"</td> "+
-                                "<td>"+data[i].transPackageId +"</td> "
+                                "<td>"+user[i].uId +"</td> " +
+                                "<td>"+user[i].name +"</td>" +
+                                "<td>"+user[i].uRull +"</td>" +
+                                "<td>"+user[i].telCode +" </td>" +
+                                "<td>"+user[i].status +"</td>" +
+                                "<td>"+user[i].dptId +"</td>" +
+                                "<td>"+user[i].receivePackageId +"</td> "+
+                                "<td>"+user[i].delivePackageId +"</td> "+
+                                "<td>"+user[i].transPackageId +"</td> "
                                 +str+
                             "</tr>";
                     }
@@ -102,7 +103,6 @@
         <thead>
         <tr>
             <th>UID</th>
-            <th>密码</th>
             <th>姓名</th>
             <th>Urull</th>
             <th>电话号码</th>
@@ -140,10 +140,10 @@
     });
 
     /*用户-删除*/
-    function employee_del(obj,uId){
+    function employee_del(obj, uId){
         layer.confirm('确认要删除吗？',function(index){
             //发异步删除数据
-            var str="http://localhost:8080/user/deleteUserInfo/"+uId;
+            var str= address + "user/deleteUserInfo/" + uId;
             $.ajax({
                 url:str,
                 type:"GET",

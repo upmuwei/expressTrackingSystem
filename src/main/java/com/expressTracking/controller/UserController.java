@@ -23,8 +23,8 @@ import java.util.List;
  * @author muwei
  * @date 2019/4/5
  */
-@RestController
-@RequestMapping(value = "/user")
+//@RestController
+//@RequestMapping(value = "/user")
 public class UserController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
