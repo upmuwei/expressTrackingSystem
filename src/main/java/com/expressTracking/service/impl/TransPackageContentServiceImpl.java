@@ -162,13 +162,27 @@ public class TransPackageContentServiceImpl implements TransPackageContentServic
 
     @Override
     public TransPackageContent findByExpressIdAndStatus(String expressId, int status) {
-        return transPackageContentDao.findByExpressIdAndStatus(expressId, status);
+        List<TransPackageContent> transPackageContents = transPackageContentDao.findByExpressIdAndStatus(expressId, status);
+        if(transPackageContents != null && !transPackageContents.isEmpty()) {
+            return transPackageContents.get(0);
+        }
+        return null;
     }
 
     @Override
     public List<TransPackageContent> findByPackageIdAndStatus(String packageId, int status) {
         return transPackageContentDao.findByPackageIdAndStatus(packageId, status);
     }
+
+    @Override
+    public List<TransPackageContent> findByExpressId(String expressId) {
+        return transPackageContentDao.findByExpressIdAndStatus(expressId,null);
+    }
+
+//    @Override
+//    public List<TransPackageContent> findByPackageId(String packageId) {
+//        return null;
+//    }
 
     @Override
     public TransPackageContent containExpress(String packageId, String esId) {

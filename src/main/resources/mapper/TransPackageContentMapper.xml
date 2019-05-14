@@ -60,7 +60,14 @@
 
     <select id="findByExpressIdAndStatus" resultMap="transPackageContentMap">
         <include refid="transPackageContent_get"/>
-        where ExpressID = #{expressId} and Status = #{status}
+        <where>
+            <if test="expressId != null">
+                and ExpressID = #{expressId}
+            </if>
+            <if test="status != null">
+                Status = #{status}
+            </if>
+        </where>
     </select>
     <select id="findByPackageIdAndEsId" resultMap="transPackageContentMap">
         <include refid="transPackageContent_get"/>

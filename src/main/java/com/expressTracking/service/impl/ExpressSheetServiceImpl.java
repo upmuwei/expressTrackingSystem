@@ -218,10 +218,14 @@ public class ExpressSheetServiceImpl implements ExpressSheetService {
         if (expressSheetDao.update(nes) == 0) {
             return 0;
         }
-        TransPackageContent transPackageContent = transPackageContentDao.findByExpressIdAndStatus(expressId,
+        List<TransPackageContent> transPackageContentList = transPackageContentDao.findByExpressIdAndStatus(expressId,
                 TransPackageContent.STATUS.STATUS_ACTIVE);
-        transPackageContent.setStatus(TransPackageContent.STATUS.STATUS_OUTOF_PACKAGE);
-        transPackageContentDao.update(transPackageContent);
+        if(transPackageContentList != null && !transPackageContentList.isEmpty()){
+            TransPackageContent transPackageContent = transPackageContentList.get(0);
+            transPackageContent.setStatus(TransPackageContent.STATUS.STATUS_OUTOF_PACKAGE);
+            transPackageContentDao.update(transPackageContent);
+        }
+
         return 1;
     }
 }

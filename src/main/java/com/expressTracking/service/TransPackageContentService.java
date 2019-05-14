@@ -41,6 +41,11 @@ public interface TransPackageContentService {
 
     public List<TransPackageContent> findByPackageIdAndStatus(String packageId, int status);
 
+    public List<TransPackageContent> findByExpressId(String expressId);
+
+//    public List<TransPackageContent> findByPackageId(String packageId);
+
+
     /**
      * 通过 包裹编号和快件编号查找包裹内容
      *

@@ -96,6 +96,7 @@ public class TransPackage implements Serializable {
     //包裹已拆包，被废弃的状态
     public static final int PACKAGE_COMPLETE = 6;
 
+
     public void setId(String value) {
         this.id = value;
     }
