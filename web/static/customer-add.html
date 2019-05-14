@@ -11,6 +11,7 @@
      <link rel="stylesheet" href="css/xadmin.css">
      <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
      <script type="text/javascript" src="lib/layui/layui.js" charset="utf-8"></script>
+     <script type="text/javascript" src="js/address.js"></script>
      <script type="text/javascript" src="js/xadmin.js"></script>
      <script type="text/javascript" src="js/cookie.js"></script>
 </head>
@@ -23,18 +24,20 @@
             var telcode=$("#L_telCode").val();
             var department=$("#L_department").val();
             var regioncode=$("#L_regionCode").val();
-            var address=$("#L_address").val();
+            var myAddress=$("#L_address").val();
             var postcode=$("#L_postCode").val();
-            //alert(postcode);
+
             $.ajax({
-                url: "http://localhost:8080/customer/add",
+                url: address + "customer/add",
                 type: "post",
                 dataType: "JSON",
                 contentType : "application/json; charset=utf-8",
                 data: JSON.stringify({"name":name,"telCode":telcode,"department":department,
-                    "regionCode":regioncode,"address":address,"postCode":postcode}),
+                    "regionCode":regioncode,"address":myAddress,"postCode":postcode}),
                 success : function(data) {
                     layer.msg('已添加!',{icon:1,time:1000});
+                    x_admin_father_reload();
+                    x_admin_close();
                 },
                 error : function() {
                     alert("error");

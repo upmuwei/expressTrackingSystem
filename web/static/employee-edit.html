@@ -13,6 +13,7 @@
     <script type="text/javascript" src="lib/layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="js/xadmin.js"></script>
     <script type="text/javascript" src="js/cookie.js"></script>
+    <script type="text/javascript" src="js/address.js"></script>
     <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
     <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
 </head>
@@ -22,47 +23,38 @@
     $(function () {
         var url = location.search;
         var uId=url.split("=")[1];
-        var str="http://localhost:8080/user/getUserList/"+"UID/"+"eq/"+uId;
+        var str= address + "user/get/" + uId;
         $.ajax({
             url:str,
             type:"GET",
             dataType:'JSON',
             contentType : "application/json; charset=utf-8",
             success:function(data){
-                document.getElementById("L_pwd").value=data[0].password;
-                document.getElementById("L_name").value=data[0].name;
-                document.getElementById("L_urull").value=data[0].uRull;
-                document.getElementById("L_telCode").value=data[0].telCode;
-                document.getElementById("L_status").value=data[0].status;
-                document.getElementById("L_dptid").value=data[0].dptId;
-                document.getElementById("L_receivepackageid").value=data[0].receivePackageId;
-                document.getElementById("L_delivepackageid").value=data[0].delivePackageId;
-                document.getElementById("L_transpackageid").value=data[0].transPackageId;
+                var user = data.user;
+                document.getElementById("L_name").value=user.name;
+                document.getElementById("L_urull").value=user.uRull;
+                document.getElementById("L_telCode").value=user.telCode;
+                document.getElementById("L_status").value=user.status;
+                document.getElementById("L_dptid").value=user.dptId;
             },
             error:function (error) {
                 alert(error);
             }
         });
         $("#edit").click(function (){
-            var password=$("#L_pwd").val();
             var name=$("#L_name").val();
             var urull=$("#L_urull").val();
             var telcode=$("#L_telCode").val();
             var status=$("#L_status").val();
             var dptid=$("#L_dptid").val();
-            var receivepackageid=$("#L_receivepackageid").val();
-            var delivepackageid=$("#L_delivepackageid").val();
-            var transpackageid=$("#L_transpackageid").val();
             $.ajax({
-                url: "http://localhost:8080/user/updateUserInfo",
+                url:  address + "user/update",
                 type: "post",
                 dataType: "JSON",
                 contentType : "application/json; charset=utf-8",
-                data: JSON.stringify({"uId":uId,"password":password,"name":name,"uRull":urull,"telCode":telcode,"status":status,"dptId":dptid,
-                    "receivePackageId":receivepackageid,"delivePackageId":delivepackageid,"transPackageId":transpackageid}),
+                data: JSON.stringify({"uId":uId, "name":name,"uRull":urull,"telCode":telcode,"status":status,"dptId":dptid}),
                 success : function(data) {
                     x_admin_close();
-                    alert("即将关闭");
                     layer.msg('已更新!', {icon: 1, time: 1000});
                     x_admin_father_reload();
                     open(location, '_self').close();
@@ -78,15 +70,6 @@
 </script>
 <div class="x-body">
     <form class="layui-form">
-        <div class="layui-form-item">
-            <label for="L_pwd" class="layui-form-label">
-                <span class="x-red">*</span>密码
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" id="L_pwd" name="password" required="" lay-verify="password"
-                       autocomplete="off" class="layui-input">
-            </div>
-        </div>
         <div class="layui-form-item">
             <label for="L_name" class="layui-form-label">
                 <span class="x-red">*</span>姓名
@@ -133,33 +116,6 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label for="L_receivepackageid" class="layui-form-label">
-                <span class="x-red">*</span>揽收包裹编号
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" id="L_receivepackageid" name="receivePackageId" required="" lay-verify="receivePackageId"
-                       autocomplete="off" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label for="L_delivepackageid" class="layui-form-label">
-                <span class="x-red">*</span>派送包裹编号
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" id="L_delivepackageid" name="delivePackageId" required="" lay-verify="delivePackageId"
-                       autocomplete="off" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label for="L_transpackageid" class="layui-form-label">
-                <span class="x-red">*</span>传送包裹编号
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" id="L_transpackageid" name="transPackageId" required="" lay-verify="transPackageId"
-                       autocomplete="off" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
             <label class="layui-form-label"></label>
             <button id="edit" class="layui-btn" lay-filter="add" lay-submit="">
                 编辑
@@ -177,12 +133,6 @@
             uId: function(value){
                 if(value === '' || value === null){
                     return 'ID不能为空';
-                }
-            }
-            ,
-            password: function(value){
-                if(value === '' || value === null){
-                    return '密码不能为空';
                 }
             }
             ,name: function(value){
@@ -208,21 +158,6 @@
             ,dptId: function(value){
                 if(value === '' || value === null){
                     return '部门编号不能为空';
-                }
-            }
-            ,receivePackageId: function(value){
-                if(value === '' || value === null){
-                    return '滥收包裹编号不能为空';
-                }
-            }
-            ,delivePackageId: function(value){
-                if(value === '' || value === null){
-                    return '派送包裹编号不能为空';
-                }
-            }
-            ,transPackageId: function(value){
-                if(value === '' || value === null){
-                    return '传送包裹编号不能为空';
                 }
             }
         });

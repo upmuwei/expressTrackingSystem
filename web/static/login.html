@@ -12,6 +12,7 @@
     <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
     <script src="lib/layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="js/xadmin.js"></script>
+    <script type="text/javascript" src="js/address.js"></script>
     <script type="text/javascript" src="js/cookie.js"></script>
 </head>
 <body class="login-bg">
@@ -37,13 +38,13 @@
                 var id=$("#id").val();
                 var password=$("#password").val();
                 $.ajax({
-                    url: "http://localhost:8080/user/doLogin",
+                    url: address + "user/login",
                     dataType:"json",
                     type:"post",
                     contentType : "application/json; charset=utf-8",
-                    data: JSON.stringify({"id":id,"password":password}),
-                    success:function () {
-                        window.location.href="index.html";
+                    data: JSON.stringify({"phone":id,"password":password}),
+                    success:function (data) {
+                        window.location.href="index.html?" + data.sessionId;
                     },
                     error:function () {
                         alert("error");

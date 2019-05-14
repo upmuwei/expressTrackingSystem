@@ -8,14 +8,46 @@
       <link rel="stylesheet" href="css/xadmin.css">
       <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
       <script type="text/javascript" src="lib/layui/layui.js" charset="utf-8"></script>
+      <script type="text/javascript" src="js/address.js"></script>
       <script type="text/javascript" src="js/xadmin.js"></script>
       <script type="text/javascript" src="js/cookie.js"></script>
   </head>
   <script>
       $(function(){
           $("#submit").click(function () {
-              var str="http://localhost:8080/customer/list/"+$("#name").val()+"/"+$("#phone").val()+"/"+$("#regionCode").val();
-              alert(str);
+              var str=  address + "customer/list";
+              var name = $("#name").val();
+              var phone = $("#phone").val();
+              var regionCode = $("#regionCode").val();
+              var bool = false;
+              if (name !== '' && name !== null) {
+                  str = str + "?name=" + name;
+                  bool = true;
+              }
+              if (bool === true) {
+                  bool = false;
+                  if (phone !== '' && phone !== null) {
+                      str = str + "&phone=" + phone;
+                      bool = true;
+                  }
+              } else {
+                  if (phone !== '' && phone !== null) {
+                      str = str + "?phone=" + phone;
+                      bool = true;
+                  }
+              }
+              if (bool === true) {
+                  bool = false;
+                  if (regionCode !== '' && regionCode !== null) {
+                      str = str + "&regionCode=" + regionCode;
+                      bool = true;
+                  }
+              } else {
+                  if (regionCode !== '' && regionCode !== null) {
+                      str = str + "?regionCode=" + regionCode;
+                      bool = true;
+                  }
+              }
               $.ajax({
                   url:str,
                   type:"GET",
@@ -23,25 +55,28 @@
                   contentType : "application/json; charset=utf-8",
                   success:function(data){
                       var tableData;
-
-                      $("#numspan").text("显示数据："+(data.length).toString()+"条");
-                      for(var i=0;i<data.length;i++){
+                      var customerList = data.customerList;
+                      $("#numspan").text("显示数据："+(customerList.length).toString()+"条");
+                      for(var i=0;i<customerList.length;i++){
+                          if (customerList[i].department === undefined) {
+                              customerList[i].department = '';
+                          }
                           var str="<td class='td-manage'>"+
-                              '<a title="编辑"  href="javascript:;"  onclick="x_admin_show( \'编辑\',\'customer-edit.html?Data='+data[i].id+'\',600,400)">'+
+                              '<a title="编辑"  href="javascript:;"  onclick="x_admin_show( \'编辑\',\'customer-edit.html?Data='+customerList[i].id+'\',600,400)">'+
                               "<i class=\"layui-icon\">&#xe642;</i>" +
                               "</a>" +
-                              '<a title="删除" href="javascript:;" onclick="customer_del(this,'+data[i].id+')">'+
+                              '<a title="删除" href="javascript:;" onclick="customer_del(this,'+customerList[i].id+')">'+
                               "<i class='layui-icon'>&#xe640;</i> " +
                               "</a> "+
                               "</td>";
                               tableData+="<tr> " +
-                                  "<td>"+data[i].id +"</td> " +
-                                  "<td>"+data[i].name +"</td>" +
-                                  "<td>"+data[i].telCode +"</td>" +
-                                  "<td>"+data[i].department +" </td>" +
-                                  "<td>"+data[i].regionCode +"</td>" +
-                                  "<td>"+data[i].address +"</td>" +
-                                  "<td>"+data[i].postCode +"</td> " +str+
+                                  "<td>"+customerList[i].id +"</td> " +
+                                  "<td>"+customerList[i].name +"</td>" +
+                                  "<td>"+customerList[i].telCode +"</td>" +
+                                  "<td>"+customerList[i].department +" </td>" +
+                                  "<td>"+customerList[i].regionCode +"</td>" +
+                                  "<td>"+customerList[i].address +"</td>" +
+                                  "<td>"+customerList[i].postCode +"</td> " +str+
                               "</tr>";
                       }
                       $("#firsttbody").html(tableData);
@@ -114,7 +149,7 @@
       function customer_del(obj,id){
           layer.confirm('确认要删除吗？',function(){
               //发异步删除数据
-              var str="http://localhost:8080/customer/delete/"+id;
+              var str= address + "customer/delete/" + id;
               $.ajax({
                   url:str,
                   type:"GET",

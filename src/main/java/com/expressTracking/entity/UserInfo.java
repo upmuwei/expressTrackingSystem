@@ -25,7 +25,7 @@ public class UserInfo implements Serializable {
 
 	/**
 	 * 审核状态
-	 * 未审核未0
+	 * 未审核为0
 	 * 审核通过为1
 	 */
 	@Expose
