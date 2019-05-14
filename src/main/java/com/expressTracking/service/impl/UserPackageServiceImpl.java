@@ -53,8 +53,16 @@ public class UserPackageServiceImpl implements UserPackageService {
     }
 
     @Override
-    public void save(UsersPackage userPackage) {
-        usersPackageDao.insert(userPackage);
+    public int save(UsersPackage userPackage) {
+        return usersPackageDao.insert(userPackage);
+    }
+
+    @Override
+    public int save(String packageId, int userId) {
+        UsersPackage usersPackage = new UsersPackage();
+        usersPackage.setPackageId(packageId);
+        usersPackage.setUserUid(userId);
+        return save(usersPackage);
     }
 
     @Override
@@ -78,14 +86,14 @@ public class UserPackageServiceImpl implements UserPackageService {
         if (usersPackage == null) {
             throw new Exception("未查到包裹Id");
         }
-        if(usersPackageDao.delete(usersPackage.getSn()) == 0) {
+        if (usersPackageDao.delete(usersPackage.getSn()) == 0) {
             return 0;
         }
         usersPackage.setUserUid(userId2);
         usersPackage.setSn(0);
         usersPackageDao.insert(usersPackage);
         TransHistory transHistory = new TransHistory(packageId,
-                new Date(), userId1, userId2, transNode.getX() ,transNode.getY());
+                new Date(), userId1, userId2, transNode.getX(), transNode.getY());
         transHistoryDao.insert(transHistory);
         return 1;
     }
@@ -99,8 +107,8 @@ public class UserPackageServiceImpl implements UserPackageService {
         TransNode transNode = transNodeDao.get(userInfo.getDptId());
         if (usersPackage == null) {
             throw new Exception("包裹id不存在");
-        }else if (transPackage.getStatus() == 2) {
-            throw  new Exception("包裹处于转运状态，不能为其指派转运员");
+        } else if (transPackage.getStatus() == 2) {
+            throw new Exception("包裹处于转运状态，不能为其指派转运员");
         }
         TransHistory transHistory = new TransHistory(packageId, new Date(), nodeUId,
                 userId, transNode.getX(), transNode.getY());
@@ -112,5 +120,28 @@ public class UserPackageServiceImpl implements UserPackageService {
         usersPackage.setSn(0);
         usersPackageDao.insert(usersPackage);
         return 1;
+    }
+
+    /*==============================================李伟===========================================================*/
+
+
+    @Override
+    public List<UsersPackage> getUserPackageList(String packageId, Integer userId) throws Exception {
+        return usersPackageDao.get(packageId, userId);
+    }
+
+    @Override
+    public UsersPackage getUserPackage(String packageId, Integer userId) throws Exception {
+        List<UsersPackage> usersPackageList = getUserPackageList(packageId, userId);
+        if (usersPackageList != null && !usersPackageList.isEmpty()) {
+            return usersPackageList.get(0);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public int remove(String packageId) throws Exception {
+        return usersPackageDao.remove(packageId);
     }
 }

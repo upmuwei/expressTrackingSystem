@@ -19,4 +19,10 @@ public interface UsersPackageDao {
     public UsersPackage getByPackageId(@Param("packageId") String packageId);
 
 
+    /*==============================================李伟===========================================================*/
+
+    public List<UsersPackage> get(@Param("packageId") String packageId,@Param("userId") Integer userId);
+
+    public int remove(String pakcageId);
+
 }

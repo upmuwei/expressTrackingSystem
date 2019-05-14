@@ -3,9 +3,11 @@ package com.expressTracking.service.impl;
 import com.expressTracking.controller.DomainController;
 import com.expressTracking.dao.*;
 import com.expressTracking.entity.*;
+import com.expressTracking.exception.ServiceException;
 import com.expressTracking.service.PackageRecordService;
 import com.expressTracking.service.TransPackageService;
 import com.expressTracking.service.UserInfoService;
+import com.expressTracking.service.UserPackageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +35,7 @@ public class TransPackageServiceImpl implements TransPackageService {
     @Autowired
     private ExpressSheetDao expressSheetDao;
     @Autowired
-    private UsersPackageDao usersPackageDao;
+    private UserPackageService userPackageService;
     @Autowired
     private UserInfoService userInfoService;
     @Autowired
@@ -86,6 +88,27 @@ public class TransPackageServiceImpl implements TransPackageService {
     }
 
 
+    @Override
+    public int packTransPackage(String packageId, String expressId) throws Exception {
+        TransPackage transPackage = transPackageDao.get(packageId);
+        if (transPackage.getStatus() == 1 || transPackage.getStatus() == 2) {
+            throw new Exception("包裹状态信息错误");
+        }
+        if (transPackage.getStatus() == 0) {
+            transPackage.setStatus(1);
+        }
+        if (transPackageDao.update(transPackage) == 0) {
+            return 0;
+        }
+        TransPackageContent transPackageContent = new TransPackageContent();
+        transPackageContent.setPackageId(packageId);
+        transPackageContent.setExpressId(expressId);
+        transPackageContent.setStatus(TransPackageContent.STATUS.STATUS_ACTIVE);
+        transPackageContentDao.insert(transPackageContent);
+        return 1;
+    }
+    /*==============================================李伟===================================================*/
+
     /**
      * 拆包
      * 步骤
@@ -128,96 +151,73 @@ public class TransPackageServiceImpl implements TransPackageService {
         update(transPackage);
         //成功
         return 3;
-
-//        TransPackage transPackage = get(packageId);
-//        //不能修改分拣货篮，揽收货篮，派送货篮的状态
-////        if(transPackage.getStatus() = )
-//        return transPackageDao.updatePackageStatus(packageId, TransPackage.PACKAGE_COMPLETE)
-//                * packageRecordService.addPackageRecord(packageId, userId, PackageRecord.PACKAGE_UNPACK);
     }
 
+
+    /**
+     * 专员包裹
+     *
+     * @param packageId 包裹Id
+     * @param userId    用户id
+     * @return
+     * @throws Exception
+     */
     @Override
-    public int openTransPackage(int uId, String packageId) throws Exception {
-        UserInfo userInfo = userInfoService.get(uId);
+    public int transportPackage(String packageId, int userId) throws Exception {
+        //检查用户信息是否存在
+        UserInfo userInfo = userInfoService.get(userId);
         if (userInfo == null) {
-            throw new Exception("用户信息不存在");
+            throw new ServiceException(1000);
         }
+        //检查包裹信息是否存在
         TransPackage transPackage = transPackageDao.get(packageId);
-        if (transPackage.getStatus() == TransPackage.PACKAGE_NEW) {
-            throw new Exception("包裹处于新建状态，未装入快件");
-        } else if (transPackage.getStatus() == TransPackage.PACKAGE_COMPLETE) {
-            throw new Exception("包裹已拆包");
+        if (transPackage == null) {
+            throw new ServiceException(3000);
+        }
+        switch (transPackage.getStatus()) {
+            case TransPackage.PACKAGE_NEW:
+                throw new ServiceException(3001, "包裹未被打包，无法转运");
+            case TransPackage.PACKAGE_COMPLETE:
+                throw new ServiceException(3001, "包裹已被废弃，无法转运");
+
+        }
+        //将包裹设为转运状态
+        transPackage.setStatus(TransPackage.PACKAGE_TRANS);
+
+        UsersPackage usersPackage = userPackageService.getUserPackage(packageId, userId);
+        if (usersPackage != null) {
+            throw new ServiceException(4001);
         }
 
-        List<TransPackageContent> transPackageContents = transPackage.getContent();
-        if (transPackageContents.isEmpty()) {
-            throw new Exception("包裹信息不存在");
-        }
-
-        transPackage.setStatus(0);
-        if (transPackageDao.update(transPackage) == 0) {
-            return 0;
-        }
-        PackageRecord packageRecord = new PackageRecord();
-        packageRecord.setPackageId(transPackage.getId());
-        packageRecord.setuId(uId);
-        packageRecord.setOperation(PackageRecord.PACKAGE_UNPACK);
-        packageRecordService.addPackageRecord(transPackage.getId(), uId, PackageRecord.PACKAGE_UNPACK);
-        for (TransPackageContent transPackageContent : transPackageContents) {
-            if (transPackageContent.getStatus() == 1) {
-                continue;
-            }
-            transPackageContent.setStatus(TransPackageContent.STATUS.STATUS_OUTOF_PACKAGE);
-            transPackageContentDao.update(transPackageContent);
-            ExpressSheet expressSheet = expressSheetDao.get(transPackageContent.getExpressId());
-            expressSheet.setStatus(ExpressSheet.STATUS.STATUS_PARTATION);
-            expressSheetDao.update(expressSheet);
-        }
-        return 1;
+        //添加UserPackage 和 用户操作包裹的记录 修改包裹状态
+        return userPackageService.save(packageId, userId) *
+                packageRecordService.addPackageRecord(packageId, userId, PackageRecord.PACKAGE_TRANS) *
+                transPackageDao.update(transPackage);
     }
 
     @Override
-    public int deliveryTransPackage(String packageId, int uId) throws Exception {
-        UsersPackage usersPackage = usersPackageDao.getByPackageId(packageId);
-        if (usersPackage.getUserUid() != uId) {
-            throw new Exception("转运人员错误，不能转运");
-        }
-        TransPackage transPackage = transPackageDao.get(packageId);
-        if (transPackage.getStatus() != 1) {
-            throw new Exception("包裹状态信息错误,不能转运");
-        }
-        transPackage.setStatus(2);
-        if (transPackageDao.update(transPackage) == 0) {
-            return 0;
+    public int receivePackage(String packageId, int userId) throws Exception {
+        //检查用户信息是否存在
+        UserInfo userInfo = userInfoService.get(userId);
+        if (userInfo == null) {
+            throw new ServiceException(1000);
         }
 
-        packageRecordService.addPackageRecord(transPackage.getId(), uId, PackageRecord.PACKAGE_TRANS);
-        List<TransPackageContent> transPackageContents = transPackage.getContent();
-        for (TransPackageContent transPackageContent : transPackageContents) {
-            ExpressSheet expressSheet = expressSheetDao.get(transPackageContent.getExpressId());
-            expressSheet.setStatus(ExpressSheet.STATUS.STATUS_TRANSPORT);
-            expressSheetDao.update(expressSheet);
-        }
-        return 1;
-    }
-
-    @Override
-    public int packTransPackage(String packageId, String expressId) throws Exception {
+        //检查包裹信息是否存在
         TransPackage transPackage = transPackageDao.get(packageId);
-        if (transPackage.getStatus() == 1 || transPackage.getStatus() == 2) {
-            throw new Exception("包裹状态信息错误");
+        if (transPackage == null) {
+            throw new ServiceException(3000);
         }
-        if (transPackage.getStatus() == 0) {
-            transPackage.setStatus(1);
+
+        if (transPackage.getStatus() != TransPackage.PACKAGE_TRANS) {
+            throw new ServiceException(3001, "包裹没有被转运");
         }
-        if (transPackageDao.update(transPackage) == 0) {
-            return 0;
+
+        UsersPackage usersPackage = userPackageService.getUserPackage(packageId, null);
+        if (usersPackage == null) {
+            throw new ServiceException(3002);
         }
-        TransPackageContent transPackageContent = new TransPackageContent();
-        transPackageContent.setPackageId(packageId);
-        transPackageContent.setExpressId(expressId);
-        transPackageContent.setStatus(TransPackageContent.STATUS.STATUS_ACTIVE);
-        transPackageContentDao.insert(transPackageContent);
-        return 1;
+        return userPackageService.remove(packageId) *
+                packageRecordService.addPackageRecord(packageId, userId, PackageRecord.PACKAGE_RECEIVE);
     }
 }

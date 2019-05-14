@@ -1,6 +1,6 @@
 package com.expressTracking.interceptor;
 
-import com.expressTracking.exception.MyExceptionHandler;
+import com.expressTracking.exception.GlobalExceptionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
@@ -12,7 +12,7 @@ import java.io.PrintWriter;
 
 public class MyInterceptor extends HandlerInterceptorAdapter {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MyExceptionHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     public MyInterceptor() {
     }

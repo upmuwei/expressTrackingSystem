@@ -318,7 +318,7 @@ public class DomainController {
     @RequestMapping(value = "/openTransPackage/{uId}/{packageId}", method = RequestMethod.GET)
     public ResponseEntity<String> openTransPackage(@PathVariable("uId")int uId,
                                                    @PathVariable("packageId")String packageId) throws Exception {
-        if (transPackageService.openTransPackage(uId, packageId) == 0) {
+        if (transPackageService.unPackTransPckage(packageId,uId) == 0) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .header("Type", "Error")
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -341,7 +341,7 @@ public class DomainController {
     public ResponseEntity<String> deliveryTransPackage(@PathVariable("transPackageId") String transPackageId,
                                                        @PathVariable("uId")int uId) throws Exception {
 
-        if (transPackageService.deliveryTransPackage(transPackageId, uId) == 0) {
+        if (transPackageService.transportPackage(transPackageId, uId) == 0) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .header("Type", "Error")
                     .contentType(MediaType.APPLICATION_JSON_UTF8)

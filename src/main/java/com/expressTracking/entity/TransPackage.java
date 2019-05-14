@@ -49,7 +49,7 @@ public class TransPackage implements Serializable {
      * 0,新建
      * 1,打包
      * 2,转运
-     * 3,分拣(分拣货篮)
+     * 3,分拣
      * 4,揽收货篮
      * 5,派送货篮
      * 6,已拆包
@@ -87,7 +87,7 @@ public class TransPackage implements Serializable {
     public static final int PACKAGE_PACK = 1;
     //转运
     public static final int PACKAGE_TRANS = 2;
-    //分拣货篮
+    //分拣
     public static final int PACKAGE_SORTING = 3;
     //揽收货篮
     public static final int PACKAGE_COLLECT = 4;

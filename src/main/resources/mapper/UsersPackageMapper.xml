@@ -15,19 +15,44 @@
     </sql>
 
     <select id="getByUserUId" parameterType="int" resultMap="userPackageMap">
-         <include refid="usersPackage_get"/> where UserUID=#{userUId,jdbcType=INTEGER} ;
+        <include refid="usersPackage_get"/>
+        where UserUID=#{userUId,jdbcType=INTEGER} ;
     </select>
 
     <select id="getByPackageId" parameterType="string" resultMap="userPackageMap">
-        <include refid="usersPackage_get"/> where PackageID = #{packageId,jdbcType=VARCHAR}  ;
+        <include refid="usersPackage_get"/>
+        where PackageID = #{packageId,jdbcType=VARCHAR} ;
     </select>
-    <insert id="insert" parameterType="UsersPackage" >
+
+    <insert id="insert" parameterType="UsersPackage" useGeneratedKeys="true" keyColumn="SN" keyProperty="sn">
         insert into userspackage(UserUID, PackageID)
-        values (#{userUid,jdbcType=INTEGER} ,#{packageId,jdbcType=VARCHAR}  );
+        values (#{userUid,jdbcType=INTEGER}, #{packageId,jdbcType=VARCHAR});
     </insert>
 
     <delete id="delete" parameterType="int">
-        delete from userspackage where sn=#{sn,jdbcType=INTEGER} ;
+        delete
+        from userspackage
+        where sn = #{sn,jdbcType=INTEGER};
     </delete>
 
+
+    <!--    ==============================================李伟===========================================================-->
+
+    <select id="get" resultMap="userPackageMap">
+        <include refid="usersPackage_get"/>
+        <where>
+            <if test="packageId != null">
+                and PackageID = #{packageId}
+            </if>
+            <if test="userId != null">
+                and UserUID = #{userId}
+            </if>
+        </where>
+    </select>
+
+    <delete id="remove" parameterType="java.lang.String">
+        delete
+        from userspackage
+        where PackageID = #{pakcageId}
+    </delete>
 </mapper>

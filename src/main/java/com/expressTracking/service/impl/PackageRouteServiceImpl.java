@@ -154,7 +154,7 @@ public class PackageRouteServiceImpl implements PackageRouteService {
         //检查快件信息是否存在
         ExpressSheet expressSheet = expressSheetService.get(esId);
         if (expressSheet == null) {
-            throw new ServiceException(2001, "快件不存在");
+            throw new ServiceException(2000, "快件不存在");
         }
 
         //获取包裹位置信息

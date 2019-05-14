@@ -18,6 +18,8 @@ public class PackageRecord implements Serializable {
     public static final int PACKAGE_TRANS = 2;
     //拆包
     public static final int PACKAGE_UNPACK = 3;
+    //接收包裹
+    public static final int PACKAGE_RECEIVE = 4;
 
     private int sn;
 

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.expressTracking.entity.PackageRoute;
 import com.expressTracking.entity.ResponseCode;
+import com.expressTracking.exception.ServiceException;
 import com.expressTracking.service.PackageRouteService;
 import com.expressTracking.utils.JsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ public class RouteController {
      * @return
      */
     @RequestMapping(value = "/save", method = RequestMethod.GET)
-    public JSONObject save(Integer userId, Float x, Float y, Date tm) throws Exception {
+    public JSONObject save(Integer userId, Float x, Float y, Date tm) throws ServiceException, Exception {
         JSONObject jsonObject = new JSONObject();
         ResponseCode code = new ResponseCode();
         code.setCode(ResponseCode.Result.FAIL);
@@ -63,7 +64,7 @@ public class RouteController {
      * @throws Exception
      */
     @RequestMapping(value = "/getRouteList/{type}/{id}", method = RequestMethod.GET)
-    public JSONObject getPackageRoute(@PathVariable("type") String type, @PathVariable("id") String id) throws Exception {
+    public JSONObject getPackageRoute(@PathVariable("type") String type, @PathVariable("id") String id) throws ServiceException, Exception {
         JSONObject jsonObject = new JSONObject();
         ResponseCode code = new ResponseCode();
         code.setCode(ResponseCode.Result.FAIL);

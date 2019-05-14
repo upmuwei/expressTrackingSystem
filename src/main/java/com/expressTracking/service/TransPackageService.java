@@ -16,7 +16,7 @@ public interface TransPackageService {
 
     public TransPackage get(String id);
 
-    public List<TransPackage> getByUserId(Integer userId,Integer operation, Integer status);
+    public List<TransPackage> getByUserId(Integer userId, Integer operation, Integer status);
 
     public int save(TransPackage transPackage);
 
@@ -24,56 +24,61 @@ public interface TransPackageService {
 
     /**
      * 新建包裹
+     *
      * @param transPackage 包裹
-     * @param uId 工作人员Id
+     * @param uId          工作人员Id
      * @return
      * @throws Exception
      */
     public int newTransPackage(TransPackage transPackage, int uId);
 
+
+
+
+    /**
+     * 转运包裹
+     *
+     * @param packageId 包裹Id
+     * @param userId    工作人员Id
+     * @return
+     * @throws Exception
+     */
+    public int transportPackage(String packageId, int userId) throws Exception;
+
     /**
      * 新建包裹
+     *
      * @param packageId 包裹编号
-     * @param userId 创建的用户编号
+     * @param userId    创建的用户编号
      * @return
      */
-    public int newTransPackage(String packageId,int userId);
+    public int newTransPackage(String packageId, int userId);
 
     /**
      * 拆包
+     *
      * @param packageId
      * @param userId
      * @return
      */
     public int unPackTransPckage(String packageId, int userId);
 
-
     /**
-     * 打开包裹
-     * @param uId 工作人员Id
-     * @param packageId 包裹Id
+     * 接收包裹
+     * @param packageId
+     * @param userId
      * @return
-     * @throws Exception
      */
-    public int openTransPackage(int uId, String packageId) throws Exception;
-
-    /**
-     * 转运包裹
-     * @param packageId 包裹Id
-     * @param uId 工作人员Id
-     * @return
-     * @throws Exception
-     */
-    public int deliveryTransPackage(String packageId, int uId) throws Exception;
+    public int receivePackage(String packageId,int userId) throws  Exception;
 
     /**
      * 打包
+     *
      * @param packageId 包裹Id
      * @param expressId 快件Id
      * @return
      */
     public int packTransPackage(String packageId, String expressId) throws Exception;
-
 
 
 }
