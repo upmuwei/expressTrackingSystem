@@ -138,8 +138,9 @@ public class ExpressSheetController {
      * @param expressSheet
      * @return
      */
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @RequestMapping(value = "/update", method = RequestMethod.POST )
     public JSONObject update(@RequestBody ExpressSheet expressSheet) {
+        System.out.println(expressSheet);
         JSONObject jsonObject = new JSONObject();
         ResponseCode code = new ResponseCode();
         if (expressSheet != null) {

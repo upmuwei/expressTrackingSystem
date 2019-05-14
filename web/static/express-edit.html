@@ -18,7 +18,6 @@
 <script>
     $(function () {
         var url = location.search;
-        console.log(url);
         var id=url.split("=")[1];
         var str="http://localhost:8080/es/get/"+id;
         $.ajax({
@@ -31,8 +30,8 @@
                     var obj = data.es;
                     document.getElementById("L_id").value = obj.id;
                     document.getElementById("L_type").value = obj.type;
-                    document.getElementById("L_senderId").value = obj.senderId;
-                    document.getElementById("L_receverId").value = obj.receverId;
+                    document.getElementById("L_sender").value = obj.senderId;
+                    document.getElementById("L_recever").value = obj.receverId;
                     document.getElementById("L_weight").value = obj.weight;
                     document.getElementById("L_tranFee").value = obj.tranFee;
                     document.getElementById("L_packageFee").value = obj.packageFee;
@@ -55,8 +54,8 @@
         $("#edit").click(function () {
             var id = $("#L_id").val();
             var type = $("#L_type").val();
-            var senderId = $("#L_senderId").val();
-            var receverId = $("#L_receverId").val();
+            var sender = $("#L_sender").val();
+            var recever = $("#L_recever").val();
             var weight = $("#L_weight").val();
             var tranFee = $("#L_tranFee").val();
             var packageFee = $("#L_packageFee").val();
@@ -68,18 +67,15 @@
             var acc1 = $("#L_acc1").val();
             var acc2 = $("#L_acc2").val();
             var status = $("#L_status").val();
-            console.log(telcode);
             $.ajax({
                 url: "http://localhost:8080/es/update" ,
                 type: "post",
                 dataType: "JSON",
                 contentType: "application/json; charset=utf-8",
-                data: JSON.stringify({
-                    "id":id, "type": type, "senderId": senderId, "receverId": receverId,
+                data: {"id":id, "type": type, "sender": sender, "recever": recever,
                     "weight": weight,"tranFee": tranFee,"packageFee": packageFee,"insuFee": insuFee,
                     "accepter": accepter,"deliver": deliver,"accepteTime": accepteTime,"deliveTime": deliveTime,
-                    "acc1": acc1,"acc2": acc2,"status": status
-                }),
+                    "acc1": acc1,"acc2": acc2,"status": status},
                 success: function (data) {
                     if(data.code.code === 0){
                         alert("修改成功");
@@ -222,7 +218,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">
             </label>
-            <button id="edit"  class="layui-btn" lay-filter="edit" lay-submit="">修改</button>
+            <button id="edit" type="button"  class="layui-btn" lay-filter="edit" lay-submit="">修改</button>
         </div>
     </form>
 </div>

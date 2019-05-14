@@ -10,13 +10,9 @@ Accept: application/json
 
 ###
 
-POST http://127.0.0.1:8080/domain/newTransPackage/11
+POST http://127.0.0.1:8080/es/list
 Content-Type: application/json
-
 {
-  "id": "1111113334",
-  "sourceNode": "410101",
-  "targetNode": "410101",
   "status": 2
 }
 ###
