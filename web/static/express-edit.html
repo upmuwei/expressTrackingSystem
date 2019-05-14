@@ -2,7 +2,7 @@
 <html lang="en">
 <meta charset="UTF-8">
 <head>
-    <title>客户编辑</title>
+    <title>快件编辑</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
@@ -27,21 +27,26 @@
             dataType:'JSON',
             contentType : "application/json; charset=utf-8",
             success:function(data){
-                document.getElementById("L_id").value=data.id;
-                document.getElementById("L_type").value=data.type;
-                document.getElementById("L_senderId").value=data.senderId;
-                document.getElementById("L_receverId").value=data.receverId;
-                document.getElementById("L_weight").value=data.weight;
-                document.getElementById("L_tranFee").value=data.tranFee;
-                document.getElementById("L_packageFee").value=data.packageFee;
-                document.getElementById("L_insuFee").value=data.insuFee;
-                document.getElementById("L_accepter").value=data.accepter;
-                document.getElementById("L_deliver").value=data.deliver;
-                document.getElementById("L_accepteTime").value=data.accepteTime;
-                document.getElementById("L_deliveTime").value=data.deliveTime;
-                document.getElementById("L_acc1").value=data.acc1;
-                document.getElementById("L_acc2").value=data.acc2;
-                document.getElementById("L_status").value=data.status;
+                if(data.code.code === 0) {
+                    var obj = data.es;
+                    document.getElementById("L_id").value = obj.id;
+                    document.getElementById("L_type").value = obj.type;
+                    document.getElementById("L_senderId").value = obj.senderId;
+                    document.getElementById("L_receverId").value = obj.receverId;
+                    document.getElementById("L_weight").value = obj.weight;
+                    document.getElementById("L_tranFee").value = obj.tranFee;
+                    document.getElementById("L_packageFee").value = obj.packageFee;
+                    document.getElementById("L_insuFee").value = obj.insuFee;
+                    document.getElementById("L_accepter").value = obj.accepter;
+                    document.getElementById("L_deliver").value = obj.deliver;
+                    document.getElementById("L_accepteTime").value = obj.accepteTime;
+                    document.getElementById("L_deliveTime").value = obj.deliveTime;
+                    document.getElementById("L_acc1").value = obj.acc1;
+                    document.getElementById("L_acc2").value = obj.acc2;
+                    document.getElementById("L_status").value = obj.status;
+                }else {
+                    alert(data.code.message);
+                }
             },
             error:function () {
                 alert("error");
@@ -76,14 +81,16 @@
                     "acc1": acc1,"acc2": acc2,"status": status
                 }),
                 success: function (data) {
-                    //alert("即将关闭");
-                    layer.msg('已修改!', {icon: 1, time: 1000});
-                    x_admin_father_reload();
-                    x_admin_close();
-                    open(location, '_self').close();
+                    if(data.code.code === 0){
+                        alert("修改成功");
+                        x_admin_father_reload();
+                        x_admin_close();
+                    }else{
+                        alert(data.code.message);
+                    }
                 },
-                error: function (jqXHR) {
-                    layer.msg(jqXHR.responseText);
+                error: function () {
+                    alert("error");
                 }
             });
         });
@@ -302,17 +309,6 @@
                     return '状态不能为空';
                 }
             }
-        });
-        //监听提交
-        form.on('submit(edit)', function(){
-
-            layer.alert("修改成功", {icon: 6},function () {
-                //关闭当前frame
-                x_admin_close();
-                // 可以对父窗口进行刷新
-                x_admin_father_reload();
-            });
-            return false;
         });
     });
 </script>

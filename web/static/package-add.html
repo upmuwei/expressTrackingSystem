@@ -22,26 +22,27 @@
             var id=$("#L_id").val();
             var sourceNode=$("#L_sourceNode").val();
             var targetNode=$("#L_targetNode").val();
-            var createTime=$("#L_createTime").val();
             var status=$("#L_status").val();
             var uid=$("#L_uid").val();
             $.ajax({
-                url: "http://localhost:8080/domain/newTransPackage/"+uid,
+                url: "http://localhost:8080/package/save/"+uid,
                 type: "post",
                 dataType: "JSON",
                 contentType : "application/json; charset=utf-8",
-                data: JSON.stringify({"id":id,"sourceNode":sourceNode,"targetNode":targetNode,
-                    "createTime":createTime,"status":status}),
+                data: JSON.stringify({"id":id,"sourceNode":sourceNode,"targetNode":targetNode, "status":status}),
                 success : function(data) {
-                    alert("success");
-                    layer.msg('已添加!',{icon:1,time:1000});
-                    alert("关闭该页面");
-                    x_admin_close();
+                    var obj=data;
+                    if(obj.code.code === 0){
+                        alert("添加成功");
+                        x_admin_father_reload();
+                        x_admin_close();
+                    }else {
+                        alert(obj.code.message);
+                    }
                 },
                 error : function() {
                     alert("error");
                 }
-
             });
         });
     });
@@ -85,7 +86,7 @@
                 <span class="x-red">*</span>状态
             </label>
             <div class="layui-input-inline">
-                <input type="text" id="L_status" name="status" required="status" lay-verify="status" autocomplete="off" class="layui-input">
+                <input type="text" value="0" readonly="readonly" id="L_status" name="status" required="status" lay-verify="status" autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
@@ -98,7 +99,7 @@
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label"></label>
-            <button  class="layui-btn" id="add" lay-filter="add" lay-submit="">添加</button>
+            <button type="button"  class="layui-btn" id="add" lay-filter="add" lay-submit="" style="width: 100px;margin-left: 20px">添加</button>
         </div>
     </form>
     <table id="table">
@@ -139,21 +140,7 @@
                 }
             }
         });
-        //监听提交
-        form.on('submit(add)', function(data){
-            console.log(data);
-            //发异步，把数据提交给php
-            layer.alert("增加成功", {icon: 6},function () {
-                //关闭当前frame
-                x_admin_close();
-
-                // 可以对父窗口进行刷新
-                x_admin_father_reload();
-            });
-            return false;
-        });
     });
 </script>
 </body>
-
 </html>

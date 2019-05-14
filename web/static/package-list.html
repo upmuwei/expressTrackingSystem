@@ -15,28 +15,42 @@
 <script>
     $(function(){
         $("#submit").click(function () {
-            var str="http://localhost:8080/domain/getTransPackageList/"+$("#select").val()+"/"+$("#selectway").val()+"/"+$("#input").val();
+            var str="http://localhost:8080/package/get_package_list/"+$("#select").val()+"/"+$("#selectway").val()+"/"+$("#input").val();
             $.ajax({
                 url:str,
                 type:"GET",
                 dataType:'JSON',
                 contentType : "application/json; charset=utf-8",
                 success:function(data){
-                    var tableData;
-                    $("#numspan").text("显示数据："+(data.length).toString()+"条");
-                    for(var i=0;i<data.length;i++){
-                        tableData+="<tr> " +
-                                "<td>"+data[i].id +"</td> " +
-                                "<td>"+data[i].sourceNode +"</td> " +
-                                "<td>"+data[i].targetNode +"</td>" +
-                                "<td>"+data[i].createTime +"</td>" +
-                                "<td>"+data[i].status +" </td>"+
-                            "</tr>";
+                    var obj = data;
+                    if(obj.code.code === 0){
+                        var tableData;
+                        var list=obj.packageList;
+                        $("#numspan").text("显示数据："+list.length+"条");
+                        for(var i=0;i<list.length;i++){
+
+                            var str="<td class='td-manage'>"+
+                                '<a title="编辑"  href="javascript:;"  onclick="x_admin_show( \'编辑\',\'package-edit.html?Data='+list[i].id+'\',600,400)">'+
+                                "<i class=\"layui-icon\">&#xe642;</i>" +
+                                "</a>" +
+                                "</td>";
+
+                            tableData+="<tr> " +
+                                "<td>"+list[i].id +"</td> " +
+                                "<td>"+list[i].sourceNode +"</td> " +
+                                "<td>"+list[i].targetNode +"</td>" +
+                                "<td>"+list[i].createTime +"</td>" +
+                                "<td>"+list[i].status +" </td>"+str+
+                                "</tr>";
+                        }
+                        $("#firsttbody").html(tableData);
                     }
-                    $("#firsttbody").html(tableData);
+                    else if(obj.code.code === 2){
+                        layer.msg(obj.code.message);
+                    }
                 },
                 error:function(){
-                    alert("error");
+                    layer.msg("error",{time:1000});
                 }
             });
         });
@@ -52,6 +66,7 @@
         </a>
     </div>
     <div class="x-body">
+
         <div class="layui-row">
             <form class="layui-form layui-col-md12 x-so" method="#">
                 <div class="layui-input-inline" style="margin-left: 380px">
@@ -74,7 +89,7 @@
             </form>
         </div>
         <xblock>
-            <button class="layui-btn" onclick="x_admin_show('添加包裹','./package-add.html',600,400)"><i class="layui-icon"></i>添加</button>
+            <button class="layui-btn" onclick="x_admin_show('添加包裹','./package-add.html',400,350)"><i class="layui-icon"></i>添加</button>
             <span class="x-right" id="numspan" style="line-height:40px">显示数据：0条</span>
         </xblock>
         <table class="layui-table x-admin">
@@ -91,13 +106,13 @@
 
             </tbody>
         </table>
-        <div class="page">
-            <div>
-                <a class="prev" href="">&lt;&lt;</a>
-                <a class="num" href="">1</a>
-                <a class="next" href="">&gt;&gt;</a>
-           </div>
-        </div>
+        <!--<div class="page">-->
+            <!--<div>-->
+                <!--<a class="prev" href="">&lt;&lt;</a>-->
+                <!--<a class="num" href="">1</a>-->
+                <!--<a class="next" href="">&gt;&gt;</a>-->
+           <!--</div>-->
+        <!--</div>-->
     </div>
 <script>
     /*用户-删除*/

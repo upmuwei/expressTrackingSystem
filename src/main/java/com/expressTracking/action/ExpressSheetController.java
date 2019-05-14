@@ -142,7 +142,6 @@ public class ExpressSheetController {
     public JSONObject update(@RequestBody ExpressSheet expressSheet) {
         JSONObject jsonObject = new JSONObject();
         ResponseCode code = new ResponseCode();
-        System.out.println(expressSheet);
         if (expressSheet != null) {
             if (esService.update(expressSheet) > 0) {
                 code.setCode(ResponseCode.Result.SUCESS);

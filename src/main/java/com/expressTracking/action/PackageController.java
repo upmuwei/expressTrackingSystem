@@ -117,7 +117,6 @@ public class PackageController {
             code.setCode(ResponseCode.Result.ERROR);
             code.setMessage("参数错误");
         }
-
         jsonObject.put("code", code);
         return jsonObject;
     }
@@ -130,6 +129,7 @@ public class PackageController {
      */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public JSONObject updatePackage(@RequestBody TransPackage transPackage) {
+        System.out.println(transPackage);
         JSONObject jsonObject = new JSONObject();
         ResponseCode code = new ResponseCode();
         if (transPackage != null) {

@@ -2,7 +2,7 @@
 <html class="x-admin-sm">
   <head>
       <meta charset="UTF-8">
-      <title>快件查询</title>
+      <title>快件列表</title>
       <meta name="renderer" content="webkit">
       <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
       <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
@@ -19,43 +19,57 @@
       <script>
           $(function(){
               $("#submit").click(function () {
-                  var str="http://localhost:8080/domain/getExpressList/"+$("#select").val()+"/"+$("#selectway").val()+"/"+$("#input").val();
+                  var str="http://localhost:8080/es/list";
+                  var property=$("#select").val();
+                  var inputValue=$("#input").val();
+                  alert("{\"" + property + "\":" + inputValue + "}");
                   $.ajax({
                       url:str,
-                      type:"GET",
+                      type:"post",
                       dataType:'JSON',
+                      data:"{\"" + property + "\":" + inputValue + "}",
                       contentType : "application/json; charset=utf-8",
                       success:function(data){
-                          $("#numspan").text("显示数据："+(data.length).toString()+"条");
-                          var tableData;
-                          for(var i=0;i<data.length;i++){
-                              var str="<td class='td-manage'>"+
-                                  '<a title="编辑"  href="javascript:;"  onclick="x_admin_show( \'编辑\',\'express-edit.html?Data='+data[i].id+'\',600,400)">'+
-                                  "<i class=\"layui-icon\">&#xe642;</i>" +
-                                  "</a>" +
-                                  '<a title="删除" href="javascript:;" onclick="express_del(this,'+data[i].id+')">'+
-                                  "<i class='layui-icon'>&#xe640;</i> " +
-                                  "</a> "+
-                                  "</td>";
-                              tableData+="<tr> " +
-                                      "<td>"+data[i].id +"</td> " +
-                                      "<td>"+data[i].type +"</td> " +
-                                      "<td>"+data[i].senderId +"</td>" +
-                                      "<td>"+data[i].receverId +"</td>" +
-                                      "<td>"+data[i].weight +" </td>" +
-                                      "<td>"+data[i].tranFee +"</td>" +
-                                      "<td>"+data[i].packageFee +"</td>" +
-                                      "<td>"+data[i].insuFee +"</td> "+
-                                      "<td>"+data[i].accepter +"</td> "+
-                                      "<td>"+data[i].deliver +"</td> "+
-                                      "<td>"+data[i].accepteTime +"</td> "+
-                                      "<td>"+data[i].deliveTime +"</td> "+
-                                      "<td>"+data[i].acc1 +"</td> "+
-                                      "<td>"+data[i].acc2 +"</td> "+
-                                      "<td>"+data[i].status +"</td> "+
-                                  "</tr>"+str;
+                          var obj = data;
+                          if(obj.code.code === 0){
+                              var list=obj.esList;
+                              $("#numspan").text("显示数据："+list.length+"条");
+                              var tableData;
+                              for(var i=0;i<list.length;i++){
+                                  var str="<td class='td-manage'>"+
+                                      '<a title="编辑"  href="javascript:;"  onclick="x_admin_show( \'编辑\',\'express-edit.html?Data='+list[i].id+'\',600,400)">'+
+                                      "<i class=\"layui-icon\">&#xe642;</i>" +
+                                      "</a>" +
+                                      '<a title="删除" href="javascript:;" onclick="express_del(this,'+list[i].id+')">'+
+                                      "<i class='layui-icon'>&#xe640;</i> " +
+                                      "</a> "+
+                                      '<a title="位置信息" href="javascript:;" onclick="x_admin_show( \'详情\',\'express-location.html?Data='+list[i].id+'\',600,400)">'+
+                                      "<i class='layui-icon'>&#xe60f;</i> " +
+                                      "</a> "+
+                                      "</td>";
+                                  tableData+="<tr> " +
+                                      "<td>"+list[i].id +"</td> " +
+                                      "<td>"+list[i].type +"</td> " +
+                                      "<td>"+list[i].senderId +"</td>" +
+                                      "<td>"+list[i].receverId +"</td>" +
+                                      "<td>"+list[i].weight +" </td>" +
+                                      "<td>"+list[i].tranFee +"</td>" +
+                                      "<td>"+list[i].packageFee +"</td>" +
+                                      "<td>"+list[i].insuFee +"</td> "+
+                                      "<td>"+list[i].accepter +"</td> "+
+                                      "<td>"+list[i].deliver +"</td> "+
+                                      "<td>"+list[i].accepteTime +"</td> "+
+                                      "<td>"+list[i].deliveTime +"</td> "+
+                                      "<td>"+list[i].acc1 +"</td> "+
+                                      "<td>"+list[i].acc2 +"</td> "+
+                                      "<td>"+list[i].status +"</td> "+str+
+                                      "</tr>";
+                              }
+                              $("#firsttbody").html(tableData);
                           }
-                          $("#firsttbody").html(tableData);
+                          else{
+                              alert(obj.code.message);
+                          }
                       },
                       error:function(){
                           alert("error");
@@ -74,26 +88,27 @@
               <form class="layui-form layui-col-md12 x-so" method="#">
                   <div class="layui-input-inline" style="margin-left: 380px">
                       <select id="select">
-                          <option value="ID">快递单号</option>
-                          <option value="Sender">寄件人</option>
-                          <option value="Recever">收件人</option>
-                          <option value="Accepter">揽收人</option>
-                          <option value="Deliver">交付人</option>
-                          <option value="Status">快递状态</option>
+                          <option value="id">按快递单号搜索</option>
+                          <option value="sender">按寄件人编号搜索</option>
+                          <option value="recever">按收件人编号搜索</option>
+                          <option value="accepter">按揽收人搜索</option>
+                          <option value="deliver">按交付人搜索</option>
+                          <option value="status">按快递状态搜索</option>
                       </select>
                   </div>
-                  <div class="layui-input-inline">
-                      <select id="selectway">
-                          <option value="eq">等值查找</option>
-                          <option value="like">模糊查找</option>
-                      </select>
-                  </div>
-                  <input id="input" class="layui-input" type="text" name="customername" placeholder="请输入快递单号" autocomplete="off" value="">
+                  <!--<div class="layui-input-inline">-->
+                      <!--<select id="selectway">-->
+                          <!--<option value="eq">等值查找</option>-->
+                          <!--<option value="like">模糊查找</option>-->
+                      <!--</select>-->
+                  <!--</div>-->
+                  <input id="input" class="layui-input" type="text" name="customername" placeholder="请输入选中的搜索方式" autocomplete="off" value="">
                   <button class="layui-btn" id="submit" type="button"><i class="layui-icon">&#xe615;</i></button>
               </form>
           </div>
           <xblock>
               <button class="layui-btn" onclick="x_admin_show('新建快件','./express-add.html',600,400)"><i class="layui-icon"></i>添加</button>
+              <button class="layui-btn" onclick="x_admin_show('查询包裹快件','./express-search.html',1300,400)"><i class="layui-icon"></i>查询快件</button>
               <span id="numspan" class="x-right" style="line-height:40px">共有数据：0 条</span>
           </xblock>
           <table class="layui-table">
@@ -120,13 +135,13 @@
 
               </tbody>
           </table>
-          <div class="page">
-              <div>
-                  <a class="prev" href="">&lt;&lt;</a>
-                  <a class="num" href="">1</a>
-                  <a class="next" href="">&gt;&gt;</a>
-              </div>
-          </div>
+          <!--<div class="page">-->
+              <!--<div>-->
+                  <!--<a class="prev" href="">&lt;&lt;</a>-->
+                  <!--<a class="num" href="">1</a>-->
+                  <!--<a class="next" href="">&gt;&gt;</a>-->
+              <!--</div>-->
+          <!--</div>-->
       </div>
       <script>
           /*用户-删除*/
@@ -140,19 +155,18 @@
                       dataType:'JSON',
                       contentType : "application/json; charset=utf-8",
                       success:function(data){
-                          if(data.code!=null){
-                              layer.msg(data.code.getMessage(),{icon:1,time:1000});
+                          if(data.code === 0){
+                              $(obj).parents("tr").remove();
+                              alert("删除成功");
                           }
                           else{
-
+                              alert(data.code.message);
                           }
-
                       },
                       error:function(){
                           alert("error");
                       }
                   });
-                  $(obj).parents("tr").remove();
               });
           }
       </script>
