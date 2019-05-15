@@ -33,8 +33,6 @@ public interface TransPackageService {
     public int newTransPackage(TransPackage transPackage, int uId);
 
 
-
-
     /**
      * 转运包裹
      *
@@ -65,11 +63,12 @@ public interface TransPackageService {
 
     /**
      * 接收包裹
+     *
      * @param packageId
      * @param userId
      * @return
      */
-    public int receivePackage(String packageId,int userId) throws  Exception;
+    public int receivePackage(String packageId, int userId) throws Exception;
 
     /**
      * 打包
@@ -80,5 +79,22 @@ public interface TransPackageService {
      */
     public int packTransPackage(String packageId, String expressId) throws Exception;
 
+    /**
+     * 查询用户正在转运的包裹信息
+     *
+     * @param userId
+     * @return
+     */
+    public List<TransPackage> getTransPackage(Integer userId) throws Exception;
+
+
+    /**
+     * 移除正在转运的包裹
+     *
+     * @param userId
+     * @param packageId
+     * @return
+     */
+    public int removeTransportingPackage(Integer userId, String packageId) throws Exception;
 
 }

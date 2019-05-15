@@ -12,8 +12,8 @@
         <result property="status" column="Status"/>
         <association property="user" column="id" javaType="UsersPackage"
                     select="com.expressTracking.dao.UsersPackageDao.getByPackageId"/>
-        <collection property="route" column="id" ofType="PackageRoute"
-                    select="com.expressTracking.dao.PackageRouteDao.getByPackageId"/>
+<!--        <collection property="route" column="id" ofType="PackageRoute"-->
+<!--                    select="com.expressTracking.dao.PackageRouteDao.getByPackageId"/>-->
         <collection property="content" column="id" ofType="TransPackageContent"
                     select="com.expressTracking.dao.TransPackageContentDao.getByPackageId"/>
         <collection property="history" column="id" ofType="TransHistory"

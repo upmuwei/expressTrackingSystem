@@ -23,9 +23,9 @@ public class PackageRoute implements Serializable {
 
     private String packageId;
     @Expose
-    private float x;
+    private double x;
     @Expose
-    private float y;
+    private double y;
     @Expose
     private Date tm;
 
@@ -37,19 +37,19 @@ public class PackageRoute implements Serializable {
         return sn;
     }
 
-    public void setX(float value) {
+    public void setX(double value) {
         this.x = value;
     }
 
-    public float getX() {
+    public double getX() {
         return x;
     }
 
-    public void setY(float value) {
+    public void setY(double value) {
         this.y = value;
     }
 
-    public float getY() {
+    public double getY() {
         return y;
     }
 

@@ -94,7 +94,10 @@ public class TransPackageContentServiceImpl implements TransPackageContentServic
             }
         }
 
-
+        if(transPackage.getStatus() == TransPackage.PACKAGE_NEW){
+            transPackage.setStatus(TransPackage.PACKAGE_PACK);
+            transPackageService.update(transPackage);
+        }
         return addTransPackageContent(packageId, esId) > 0 ? 6 : 5;
     }
 

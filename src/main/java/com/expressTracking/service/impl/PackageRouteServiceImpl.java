@@ -45,7 +45,7 @@ public class PackageRouteServiceImpl implements PackageRouteService {
      * @return
      */
     @Override
-    public int save(Integer userId, float x, float y, Date time) {
+    public int save(Integer userId, double x, double y, Date time) {
         UserInfo userInfo = userInfoService.get(userId);
         if (userInfo == null) {
             throw new ServiceException(1000, "用户不存在");

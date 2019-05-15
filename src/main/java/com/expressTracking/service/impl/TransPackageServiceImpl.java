@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -155,7 +156,7 @@ public class TransPackageServiceImpl implements TransPackageService {
 
 
     /**
-     * 专员包裹
+     * 转运包裹
      *
      * @param packageId 包裹Id
      * @param userId    用户id
@@ -186,7 +187,7 @@ public class TransPackageServiceImpl implements TransPackageService {
 
         UsersPackage usersPackage = userPackageService.getUserPackage(packageId, userId);
         if (usersPackage != null) {
-            throw new ServiceException(4001);
+            throw new ServiceException(4001, "包裹已经被转运");
         }
 
         //添加UserPackage 和 用户操作包裹的记录 修改包裹状态
@@ -219,5 +220,36 @@ public class TransPackageServiceImpl implements TransPackageService {
         }
         return userPackageService.remove(packageId) *
                 packageRecordService.addPackageRecord(packageId, userId, PackageRecord.PACKAGE_RECEIVE);
+    }
+
+    /**
+     * 获取正在转运的包裹信息
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<TransPackage> getTransPackage(Integer userId) throws Exception {
+        List<UsersPackage> usersPackageList = userPackageService.getUserPackageList(null, userId);
+
+        List<TransPackage> transPackageList = new ArrayList<>();
+        if (usersPackageList != null && !usersPackageList.isEmpty()) {
+            for (UsersPackage usersPackage : usersPackageList) {
+                transPackageList.add(transPackageDao.get(usersPackage.getPackageId()));
+            }
+        }
+        return transPackageList;
+    }
+
+    /**
+     * 移出正在转运的包裹
+     *
+     * @param userId
+     * @param packageId
+     * @return
+     */
+    @Override
+    public int removeTransportingPackage(Integer userId, String packageId) throws Exception {
+        return userPackageService.remove(packageId);
     }
 }

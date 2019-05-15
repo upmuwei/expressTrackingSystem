@@ -34,17 +34,17 @@ public class RouteController {
      * @param userId 用户编号
      * @param x      位置 x
      * @param y      位置 y
-     * @param tm     时间
      * @return
      */
     @RequestMapping(value = "/save", method = RequestMethod.GET)
-    public JSONObject save(Integer userId, Float x, Float y, Date tm) throws ServiceException, Exception {
+    public JSONObject save(Integer userId, Float x, Float y) throws ServiceException, Exception {
         JSONObject jsonObject = new JSONObject();
         ResponseCode code = new ResponseCode();
         code.setCode(ResponseCode.Result.FAIL);
+        System.out.println("userId = " + userId + " x=" + x + " y=" + y);
 
         if (userId != null && x != null && y != null) {
-            if (packageRouteService.save(userId, x, y, tm) > 0) {
+            if (packageRouteService.save(userId, x, y, null) > 0) {
                 code.setCode(ResponseCode.Result.SUCESS);
             }
         } else {

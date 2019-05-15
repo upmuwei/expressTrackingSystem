@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface PackageRouteService {
 
-    public int save(Integer userId, float x, float y, Date time) throws ServiceException,Exception;
+    public int save(Integer userId, double x, double y, Date time) throws ServiceException,Exception;
 
     public int save(List<PackageRoute> routes);
 

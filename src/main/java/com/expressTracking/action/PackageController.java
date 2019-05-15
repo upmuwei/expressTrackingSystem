@@ -408,4 +408,56 @@ public class PackageController {
         return jsonObject;
     }
 
+    /**
+     * 获取用户正在转运的包裹
+     *
+     * @param userId
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/transportingpackage/{userId}")
+    public JSONObject getTransportingPackage(@PathVariable("userId") Integer userId) throws Exception {
+        JSONObject jsonObject = new JSONObject();
+        ResponseCode code = new ResponseCode();
+        code.setCode(ResponseCode.Result.FAIL);
+        if (userId != null) {
+            List<TransPackage> transPackageList = transPackageService.getTransPackage(userId);
+            code.setCode(ResponseCode.Result.SUCESS);
+            jsonObject.put("packageList", JSON.parse(JsonUtils.toJson(transPackageList)));
+        } else {
+            code.setCode(ResponseCode.Result.ERROR);
+            code.setMessage("参数错误");
+        }
+        jsonObject.put("code", code);
+        return jsonObject;
+    }
+
+    /**
+     * 判断用户是否含有正在转运的包裹
+     * <p>
+     * 返回的是 当前该用户正在转运的包裹数量
+     *
+     * @param userId
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/isTransporting/{userId}")
+    public JSONObject isExistTransportingPackage(@PathVariable("userId") Integer userId) throws Exception {
+        JSONObject jsonObject = new JSONObject();
+        ResponseCode code = new ResponseCode();
+        code.setCode(ResponseCode.Result.FAIL);
+        if (userId != null) {
+            List<UsersPackage> usersPackageList = userPackageService.getUserPackageList(null, userId);
+            code.setCode(ResponseCode.Result.SUCESS);
+            jsonObject.put("package_num", usersPackageList != null ? usersPackageList.size() : 0);
+        } else {
+            code.setCode(ResponseCode.Result.ERROR);
+            code.setMessage("参数错误");
+        }
+
+        jsonObject.put("code", code);
+        return jsonObject;
+    }
+
+
 }

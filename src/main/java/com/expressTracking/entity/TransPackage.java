@@ -61,8 +61,8 @@ public class TransPackage implements Serializable {
     /**
      * 包裹的位置信息
      */
-    @Expose
-    private List<PackageRoute> route = new ArrayList<>();
+//    @Expose
+//    private List<PackageRoute> route = new ArrayList<>();
     /**
      * 包裹的操作者
      */
@@ -141,13 +141,13 @@ public class TransPackage implements Serializable {
         return status;
     }
 
-    public void setRoute(List<PackageRoute> value) {
-        this.route = value;
-    }
-
-    public List<PackageRoute> getRoute() {
-        return route;
-    }
+//    public void setRoute(List<PackageRoute> value) {
+//        this.route = value;
+//    }
+//
+//    public List<PackageRoute> getRoute() {
+//        return route;
+//    }
 
     public void setUser(UsersPackage value) {
         this.user = value;
@@ -191,7 +191,7 @@ public class TransPackage implements Serializable {
             sb.append("TargetNode=").append(getTargetNode()).append(" ");
             sb.append("CreateTime=").append(getCreateTime()).append(" ");
             sb.append("Status=").append(getStatus()).append(" ");
-            sb.append("Route.size=").append(getRoute().size()).append(" ");
+//            sb.append("Route.size=").append(getRoute().size()).append(" ");
             if (getUser() != null) {
                 sb.append("User.Persist_ID=").append(getUser().toString(true)).append(" ");
             } else {
