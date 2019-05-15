@@ -30,8 +30,8 @@
                     var obj = data.es;
                     document.getElementById("L_id").value = obj.id;
                     document.getElementById("L_type").value = obj.type;
-                    document.getElementById("L_sender").value = obj.senderId;
-                    document.getElementById("L_recever").value = obj.receverId;
+                    document.getElementById("L_sender").value = obj.sender;
+                    document.getElementById("L_recever").value = obj.recever;
                     document.getElementById("L_weight").value = obj.weight;
                     document.getElementById("L_tranFee").value = obj.tranFee;
                     document.getElementById("L_packageFee").value = obj.packageFee;
@@ -240,12 +240,12 @@
                     return '类型不能为空';
                 }
             }
-            ,senderId: function(value){
+            ,sender: function(value){
                 if(value === '' || value === null){
                     return '寄件人编号不能为空';
                 }
             }
-            ,receverId: function(value){
+            ,recever: function(value){
                 if(value === '' || value === null){
                     return '收件人编号不能为空';
                 }

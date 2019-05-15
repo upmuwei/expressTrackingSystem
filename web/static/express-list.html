@@ -36,9 +36,9 @@
                               var tableData;
                               for(var i=0;i<list.length;i++){
                                   var str="<td class='td-manage'>"+
-                                      '<a title="编辑"  href="javascript:;"  onclick="x_admin_show( \'编辑\',\'express-edit.html?Data='+list[i].id+'\',600,400)">'+
-                                      "<i class=\"layui-icon\">&#xe642;</i>" +
-                                      "</a>" +
+                                      // '<a title="编辑"  href="javascript:;"  onclick="x_admin_show( \'编辑\',\'express-edit.html?Data='+list[i].id+'\',600,400)">'+
+                                      // "<i class=\"layui-icon\">&#xe642;</i>" +
+                                      // "</a>" +
                                       '<a title="删除" href="javascript:;" onclick="express_del(this,'+list[i].id+')">'+
                                       "<i class='layui-icon'>&#xe640;</i> " +
                                       "</a> "+
@@ -49,8 +49,8 @@
                                   tableData+="<tr> " +
                                       "<td>"+list[i].id +"</td> " +
                                       "<td>"+list[i].type +"</td> " +
-                                      "<td>"+list[i].senderId +"</td>" +
-                                      "<td>"+list[i].receverId +"</td>" +
+                                      "<td>"+list[i].sender.name +"</td>" +
+                                      "<td>"+list[i].recever.name +"</td>" +
                                       "<td>"+list[i].weight +" </td>" +
                                       "<td>"+list[i].tranFee +"</td>" +
                                       "<td>"+list[i].packageFee +"</td>" +
@@ -79,14 +79,14 @@
       </script>
       <div class="x-nav">
           <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
-              <i class="layui-icon" style="line-height:30px">刷新</i>
+              <i class="layui-icon" style="line-height:30px;">刷新</i>
           </a>
       </div>
       <div class="x-body">
           <div class="layui-row">
               <form class="layui-form layui-col-md12 x-so" method="#">
                   <div class="layui-input-inline" style="margin-left: 380px">
-                      <select id="select">
+                      <select id="select" >
                           <option value="id">按快递单号搜索</option>
                           <option value="sender">按寄件人编号搜索</option>
                           <option value="recever">按收件人编号搜索</option>
