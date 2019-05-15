@@ -17,7 +17,28 @@
   </head>
   <body>
       <script>
+          function status(num){
+              if(num === 0){
+                  return "新建";
+              }
+              else if(num === 1){
+                  return "揽收";
+              }
+              else if(num === 2){
+                  return "分拣";
+              }
+              else if(num === 3){
+                  return "转运";
+              }
+              else if(num === 4){
+                  return "派送";
+              }
+              else if(num === 5){
+                  return "交付";
+              }
+          }
           $(function(){
+
               $("#submit").click(function () {
                   var str="http://localhost:8080/es/list";
                   var property=$("#select").val();
@@ -42,7 +63,7 @@
                                       '<a title="删除" href="javascript:;" onclick="express_del(this,'+list[i].id+')">'+
                                       "<i class='layui-icon'>&#xe640;</i> " +
                                       "</a> "+
-                                      '<a title="位置信息" href="javascript:;" onclick="x_admin_show( \'详情\',\'express-location.html?Data='+list[i].id+'\',600,400)">'+
+                                      '<a title="位置信息" href="javascript:;" onclick="x_admin_show( \'详情\',\'express-location.html?Data='+list[i].id+'\',900,600)">'+
                                       "<i class='layui-icon'>&#xe60f;</i> " +
                                       "</a> "+
                                       "</td>";
@@ -51,21 +72,22 @@
                                       "<td>"+list[i].type +"</td> " +
                                       "<td>"+list[i].sender.name +"</td>" +
                                       "<td>"+list[i].recever.name +"</td>" +
-                                      "<td>"+list[i].weight +" </td>" +
-                                      "<td>"+list[i].tranFee +"</td>" +
-                                      "<td>"+list[i].packageFee +"</td>" +
-                                      "<td>"+list[i].insuFee +"</td> "+
+                                      // "<td>"+list[i].weight +" </td>" +
+                                      // "<td>"+list[i].tranFee +"</td>" +
+                                      // "<td>"+list[i].packageFee +"</td>" +
+                                      // "<td>"+list[i].insuFee +"</td> "+
                                       "<td>"+list[i].accepter +"</td> "+
                                       "<td>"+list[i].deliver +"</td> "+
                                       "<td>"+list[i].accepteTime +"</td> "+
                                       "<td>"+list[i].deliveTime +"</td> "+
-                                      "<td>"+list[i].acc1 +"</td> "+
-                                      "<td>"+list[i].acc2 +"</td> "+
-                                      "<td>"+list[i].status +"</td> "+str+
-                                      "</tr>";
-                              }
+                                      // "<td>"+list[i].acc1 +"</td> "+
+                                      // "<td>"+list[i].acc2 +"</td> "+
+                                      "<td>"+status(list[i].status)+"</td> "+str+
+                                          "</tr>";
+                                      }
                               $("#firsttbody").html(tableData);
-                          }
+                              }
+
                           else{
                               alert(obj.code.message);
                           }
@@ -95,12 +117,6 @@
                           <option value="status">按快递状态搜索</option>
                       </select>
                   </div>
-                  <!--<div class="layui-input-inline">-->
-                      <!--<select id="selectway">-->
-                          <!--<option value="eq">等值查找</option>-->
-                          <!--<option value="like">模糊查找</option>-->
-                      <!--</select>-->
-                  <!--</div>-->
                   <input id="input" class="layui-input" type="text" name="customername" placeholder="请输入选中的搜索方式" autocomplete="off" value="">
                   <button class="layui-btn" id="submit" type="button"><i class="layui-icon">&#xe615;</i></button>
               </form>
@@ -117,17 +133,18 @@
                       <th>类型</th>
                       <th>寄件人</th>
                       <th>收件人</th>
-                      <th>重量</th>
-                      <th>运费</th>
-                      <th>包装费</th>
-                      <th>保险费</th>
+                      <!--<th>重量</th>-->
+                      <!--<th>运费</th>-->
+                      <!--<th>包装费</th>-->
+                      <!--<th>保险费</th>-->
                       <th>揽收人</th>
                       <th>交付人</th>
                       <th>揽收时间</th>
                       <th>交付时间</th>
-                      <th>寄件附件</th>
-                      <th>收件附件</th>
+                      <!--<th>寄件附件</th>-->
+                      <!--<th>收件附件</th>-->
                       <th>快递状态</th>
+                      <th>编辑</th>
                   </tr>
               </thead>
               <tbody id="firsttbody">

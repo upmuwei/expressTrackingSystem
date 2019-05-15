@@ -16,7 +16,28 @@
     <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
 </head>
 <body>
+<!--通过包裹ID查找该包裹内的快件信息-->
 <script>
+    function status(num){
+        if(num === 0){
+            return "新建";
+        }
+        else if(num === 1){
+            return "揽收";
+        }
+        else if(num === 2){
+            return "分拣";
+        }
+        else if(num === 3){
+            return "转运";
+        }
+        else if(num === 4){
+            return "派送";
+        }
+        else if(num === 5){
+            return "交付";
+        }
+    }
     $(function(){
         $("#submit").click(function () {
             var str="http://localhost:8080/es/getEsFormPakcage/"+$("#input").val();
@@ -35,19 +56,19 @@
                             tableData+="<tr> " +
                                 "<td>"+list[i].id +"</td> " +
                                 "<td>"+list[i].type +"</td> " +
-                                "<td>"+list[i].senderId +"</td>" +
-                                "<td>"+list[i].receverId +"</td>" +
-                                "<td>"+list[i].weight +" </td>" +
-                                "<td>"+list[i].tranFee +"</td>" +
-                                "<td>"+list[i].packageFee +"</td>" +
-                                "<td>"+list[i].insuFee +"</td> "+
+                                "<td>"+list[i].sender.name +"</td>" +
+                                "<td>"+list[i].recever.name +"</td>" +
+                                // "<td>"+list[i].weight +" </td>" +
+                                // "<td>"+list[i].tranFee +"</td>" +
+                                // "<td>"+list[i].packageFee +"</td>" +
+                                // "<td>"+list[i].insuFee +"</td> "+
                                 "<td>"+list[i].accepter +"</td> "+
                                 "<td>"+list[i].deliver +"</td> "+
                                 "<td>"+list[i].accepteTime +"</td> "+
                                 "<td>"+list[i].deliveTime +"</td> "+
-                                "<td>"+list[i].acc1 +"</td> "+
-                                "<td>"+list[i].acc2 +"</td> "+
-                                "<td>"+list[i].status +"</td> "+
+                                // "<td>"+list[i].acc1 +"</td> "+
+                                // "<td>"+list[i].acc2 +"</td> "+
+                                "<td>"+status(list[i].status)+"</td> "+
                                 "</tr>";
                         }
                         $("#firsttbody").html(tableData);
@@ -85,16 +106,16 @@
             <th>类型</th>
             <th>寄件人</th>
             <th>收件人</th>
-            <th>重量</th>
-            <th>运费</th>
-            <th>包装费</th>
-            <th>保险费</th>
+            <!--<th>重量</th>-->
+            <!--<th>运费</th>-->
+            <!--<th>包装费</th>-->
+            <!--<th>保险费</th>-->
             <th>揽收人</th>
             <th>交付人</th>
             <th>揽收时间</th>
             <th>交付时间</th>
-            <th>寄件附件</th>
-            <th>收件附件</th>
+            <!--<th>寄件附件</th>-->
+            <!--<th>收件附件</th>-->
             <th>快递状态</th>
         </tr>
         </thead>
