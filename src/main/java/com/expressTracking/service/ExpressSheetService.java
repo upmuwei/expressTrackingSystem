@@ -70,7 +70,7 @@ public interface ExpressSheetService {
      * @param uId       员工Id
      * @return 成功返回1，失败返回0
      */
-    public int dispatchExpressSheet(String expressId, int uId) throws Exception;
+    public int dispatchExpressSheet(String expressId, int uId);
 
     /**
      * 交付快递
@@ -79,7 +79,7 @@ public interface ExpressSheetService {
      * @param uId       员工Id
      * @return 成功返回1，失败返回0
      */
-    public int deliveryExpressSheet(String expressId, int uId) throws Exception;
+    public int deliveryExpressSheet(String expressId, int uId) ;
 
 
     /**

@@ -6,6 +6,7 @@ import com.expressTracking.dao.UserInfoDao;
 import com.expressTracking.entity.ExpressSheet;
 import com.expressTracking.entity.TransPackageContent;
 import com.expressTracking.entity.UserInfo;
+import com.expressTracking.exception.ServiceException;
 import com.expressTracking.service.ExpressSheetService;
 import com.expressTracking.service.TransPackageContentService;
 import com.expressTracking.utils.DateUtil;
@@ -189,43 +190,54 @@ public class ExpressSheetServiceImpl implements ExpressSheetService {
     }
 
     @Override
-    public int dispatchExpressSheet(String expressId, int uId) throws Exception {
-        TransPackageContent transPackageContent = new TransPackageContent();
+    public int dispatchExpressSheet(String expressId, int uId) {
+       // TransPackageContent transPackageContent = new TransPackageContent();
+        UserInfo userInfo = userInfoDao.get(uId);
         ExpressSheet nes = expressSheetDao.get(expressId);
-        if (nes.getStatus() != ExpressSheet.STATUS.STATUS_TRANSPORT) {
-            throw new Exception("快递状态信息错误");
+        if (userInfo == null) {
+            throw new ServiceException(1000,"用户" + uId + "不存在");
         }
-        nes.setDeliver(String.valueOf(uId));
+        if (nes == null) {
+            throw new ServiceException(2000, "快件" + expressId + "不存在");
+        }
+        if (nes.getStatus() != ExpressSheet.STATUS.STATUS_TRANSPORT) {
+            throw new ServiceException(2001, "包裹不处于分拣状态");
+        }
+        nes.setDeliver(uId + "");
         nes.setDeliveTime(new Date());
         nes.setStatus(ExpressSheet.STATUS.STATUS_DISPATCHED);
-        if (expressSheetDao.update(nes) == 0) {
-            return 0;
-        }
-        transPackageContent.setPackageId(userInfoDao.get(uId).getDelivePackageId());
+        return expressSheetDao.update(nes);
+        /*transPackageContent.setPackageId(userInfoDao.get(uId).getDelivePackageId());
         transPackageContent.setExpressId(nes.getId());
         transPackageContent.setStatus(TransPackageContent.STATUS.STATUS_ACTIVE);
-        transPackageContentDao.update(transPackageContent);
-        return 1;
+        transPackageContentDao.update(transPackageContent);*/
+
     }
 
     @Override
-    public int deliveryExpressSheet(String expressId, int uId) throws Exception {
+    public int deliveryExpressSheet(String expressId, int uId) {
+        UserInfo userInfo = userInfoDao.get(uId);
         ExpressSheet nes = expressSheetDao.get(expressId);
+        if (userInfo == null) {
+            throw new ServiceException(1000,"用户" + uId + "不存在");
+        }
+        if (nes == null) {
+            throw new ServiceException(2000, "快件" + expressId + "不存在");
+        }
         if (nes.getStatus() != ExpressSheet.STATUS.STATUS_DISPATCHED) {
-            throw new Exception("快递未派送，不能交付");
+            throw new ServiceException(2001, "快递未派送，不能交付");
         }
         nes.setStatus(ExpressSheet.STATUS.STATUS_DELIVERIED);
-        if (expressSheetDao.update(nes) == 0) {
-            return 0;
-        }
-        List<TransPackageContent> transPackageContentList = transPackageContentDao.findByExpressIdAndStatus(expressId,
+
+        return expressSheetDao.update(nes);
+
+      /*  List<TransPackageContent> transPackageContentList = transPackageContentDao.findByExpressIdAndStatus(expressId,
                 TransPackageContent.STATUS.STATUS_ACTIVE);
         if(transPackageContentList != null && !transPackageContentList.isEmpty()){
             TransPackageContent transPackageContent = transPackageContentList.get(0);
             transPackageContent.setStatus(TransPackageContent.STATUS.STATUS_OUTOF_PACKAGE);
             transPackageContentDao.update(transPackageContent);
-        }
+        }*/
 
-        return 1;
     }
 }

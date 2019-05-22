@@ -11,6 +11,9 @@ import com.expressTracking.service.UserInfoService;
 import com.expressTracking.utils.JsonUtils;
 import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -195,6 +198,35 @@ public class ExpressSheetController {
         return jsonObject;
     }
 
+
+    /**
+     * 派送快件
+     * @param esId
+     * @param deliver
+     * @return
+     */
+    @RequestMapping(value = "/dispatchExpressSheet/{esId}/{deliver}", method = RequestMethod.GET)
+    public JSONObject dispatchExpressSheet(@PathVariable("esId")String esId,
+                                                       @PathVariable("deliver")Integer deliver) {
+        JSONObject jsonObject = new JSONObject();
+        ResponseCode code = new ResponseCode();
+        code.setCode(ResponseCode.Result.FAIL);
+        if (esId != null && deliver != null) {
+            if (esService.dispatchExpressSheet(esId, deliver) > 0) {
+                code.setCode(ResponseCode.Result.SUCESS);
+            } else {
+                code.setMessage("派送失败");
+            }
+        } else {
+            code.setCode(ResponseCode.Result.ERROR);
+            code.setMessage("参数错误");
+        }
+        jsonObject.put("code", JSON.parse(JsonUtils.toJson(code)));
+
+        return jsonObject;
+    }
+
+
     /**
      * 交付快件
      *
@@ -206,19 +238,14 @@ public class ExpressSheetController {
     public JSONObject deliverEs(@PathVariable("esId") String esId, @PathVariable("deliver") Integer deliver) {
         JSONObject jsonObject = new JSONObject();
         ResponseCode code = new ResponseCode();
+        code.setCode(ResponseCode.Result.FAIL);
         if (esId != null && deliver != null) {
-            ExpressSheet expressSheet = esService.get(esId);
-            UserInfo deliverInfo = userInfoService.get(deliver);
-            if (expressSheet == null) {
-                code.setCode(ResponseCode.Result.FAIL);
-                code.setMessage("快件" + esId + "不存在");
-            } else if (deliverInfo == null) {
-                code.setCode(ResponseCode.Result.FAIL);
-                code.setMessage("用户" + deliver + "不存在");
+            if(esService.dispatchExpressSheet(esId, deliver) > 0) {
+                code.setCode(ResponseCode.Result.SUCESS);
             } else {
-                expressSheet.setStatus(ExpressSheet.STATUS.STATUS_DELIVERIED);
-                expressSheet.setDeliver(deliver + "");
+                code.setMessage("交付失败");
             }
+
         } else {
             code.setCode(ResponseCode.Result.ERROR);
             code.setMessage("参数错误");
