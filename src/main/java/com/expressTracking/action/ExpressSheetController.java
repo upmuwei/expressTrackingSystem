@@ -5,8 +5,11 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.expressTracking.entity.ExpressSheet;
 import com.expressTracking.entity.ResponseCode;
+import com.expressTracking.entity.TransPackage;
 import com.expressTracking.entity.UserInfo;
 import com.expressTracking.service.ExpressSheetService;
+import com.expressTracking.service.TransPackageContentService;
+import com.expressTracking.service.TransPackageService;
 import com.expressTracking.service.UserInfoService;
 import com.expressTracking.utils.JsonUtils;
 import com.google.gson.JsonObject;
@@ -16,6 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,6 +37,10 @@ public class ExpressSheetController {
     private ExpressSheetService esService;
     @Autowired
     private UserInfoService userInfoService;
+    @Autowired
+    private TransPackageContentService transPackageContentService;
+    @Autowired
+    private TransPackageService transPackageService;
 
     /**
      * 创建快件信息
@@ -358,5 +366,30 @@ public class ExpressSheetController {
         jsonObject.put("code", code);
         return jsonObject;
     }
-
+    /**
+     *
+     * 根据快递单号查找包裹列表
+     * @param expressId
+     */
+    @RequestMapping("/getPackageListByesId/{expressId}")
+    public JSONObject  getPackageListByesId(@PathVariable("expressId") String expressId){
+        JSONObject jsonObject = new JSONObject();
+        ResponseCode code = new ResponseCode();
+        code.setCode(ResponseCode.Result.FAIL);
+        if (expressId != null){
+            List<TransPackage> packageList=new ArrayList<>();
+            List<String> packageIdList =transPackageContentService.getPackageId(expressId);
+            for(int i=0;i<packageIdList.size();i++){
+                TransPackage pkg=transPackageService.get(packageIdList.get(i));
+                packageList.add(pkg);
+            }
+            code.setCode(ResponseCode.Result.SUCESS);
+            jsonObject.put("packageList",JSON.parse(JsonUtils.toJson(packageList)));
+        }else{
+            code.setCode(ResponseCode.Result.ERROR);
+            code.setMessage("参数错误");
+        }
+        jsonObject.put("code", code);
+        return jsonObject;
+    }
 }

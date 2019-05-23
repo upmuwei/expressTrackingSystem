@@ -191,4 +191,8 @@ public class TransPackageContentServiceImpl implements TransPackageContentServic
     public TransPackageContent containExpress(String packageId, String esId) {
         return transPackageContentDao.findByPackageIdAndEsId(packageId, esId);
     }
+    @Override
+    public List<String> getPackageId(String expressId){
+        return transPackageContentDao.getPackageId(expressId);
+    }
 }

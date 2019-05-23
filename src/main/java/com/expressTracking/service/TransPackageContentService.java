@@ -55,5 +55,8 @@ public interface TransPackageContentService {
      */
     public TransPackageContent containExpress(String packageId, String esId);
 
-
+    /**
+     *通过快递单号查找包裹单号
+     */
+    public List<String> getPackageId(String expressId);
 }

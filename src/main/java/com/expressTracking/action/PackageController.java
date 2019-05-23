@@ -300,7 +300,6 @@ public class PackageController {
         jsonObject.put("code", code);
         return jsonObject;
     }
-
     /**
      * 获取由 userID 执行 operation 且状态为status的包裹信息
      *
@@ -454,10 +453,7 @@ public class PackageController {
             code.setCode(ResponseCode.Result.ERROR);
             code.setMessage("参数错误");
         }
-
         jsonObject.put("code", code);
         return jsonObject;
     }
-
-
 }
