@@ -7,10 +7,7 @@ import com.expressTracking.entity.TransNode;
 import com.expressTracking.service.TransNodeService;
 import com.expressTracking.utils.JsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -38,6 +35,7 @@ public class TransNodeController {
      */
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     public JSONObject getTransNodeList(@RequestBody TransNode transNode) {
+        System.out.println(transNode);
         JSONObject jsonObject = new JSONObject();
         ResponseCode code = new ResponseCode();
         if (transNode != null) {
@@ -58,6 +56,31 @@ public class TransNodeController {
     }
 
     /**
+     * 通过ID查询网点
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
+    public JSONObject getTransNodeById(@PathVariable String id) {
+        JSONObject jsonObject = new JSONObject();
+        ResponseCode code = new ResponseCode();
+        if (id != null) {
+            TransNode transNode = transNodeService.get(id);
+            if (transNode != null) {
+                code.setCode(ResponseCode.Result.SUCESS);
+                jsonObject.put("transNode", JSON.parse(JsonUtils.toJson(transNode)));
+            } else {
+                code.setCode(ResponseCode.Result.FAIL);
+                code.setMessage("查询失败");
+            }
+        } else {
+            code.setCode(ResponseCode.Result.ERROR);
+            code.setMessage("参数错误");
+        }
+        jsonObject.put("code", JSON.parse(JsonUtils.toJson(code)));
+        return jsonObject;
+    }
+    /**
      * 添加网点信息
      *
      * @param transNode
@@ -65,6 +88,7 @@ public class TransNodeController {
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public JSONObject add(@RequestBody TransNode transNode) {
+        System.out.println(transNode);
         JSONObject jsonObject = new JSONObject();
         ResponseCode code = new ResponseCode();
         if (transNode != null) {
