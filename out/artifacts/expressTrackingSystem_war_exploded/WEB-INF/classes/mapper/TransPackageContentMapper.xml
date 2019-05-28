@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.expressTracking.dao.TransPackageContentDao">
+    <resultMap id="transPackageContentMap" type="TransPackageContent">
+        <id property="sn" column="SN"/>
+        <result property="expressId" column="ExpressID"/>
+        <result property="packageId" column="PackageID"/>
+        <result property="status" column="status"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="TransPackageContent">
+        insert into transpackagecontent(ExpressID, PackageID, Status)
+        values (#{expressId}, #{packageId}, #{status})
+    </insert>
+
+    <update id="update" parameterType="TransPackageContent">
+        update transpackagecontent
+        <set>
+            <if test="expressId != null">ExpressID=#{expressId},</if>
+            <if test="packageId != null">PackageID=#{packageId},</if>
+            <if test="status != null">Status=#{status}</if>
+        </set>
+        where SN = #{sn}
+    </update>
+
+    <update id="updateStatusByPackageId">
+        update transpackagecontent
+        set Status = #{status,jdbcType=INTEGER}
+        where PackageID = #{packageId,jdbcType=VARCHAR}
+    </update>
+
+    <sql id="transPackageContent_get">
+        select SN, ExpressID, PackageID, Status
+        from transpackagecontent
+    </sql>
+
+    <select id="findByPackageIdAndStatus" resultMap="transPackageContentMap">
+        <include refid="transPackageContent_get"/>
+        where PackageID = #{packageId} and Status = #{status}
+    </select>
+
+    <select id="getPackageId" parameterType="string" resultType="string">
+        select PackageID
+        from transpackagecontent
+        where ExpressID = #{expressId}
+    </select>
+
+    <select id="getByPackageId" parameterType="string" resultMap="transPackageContentMap">
+        <include refid="transPackageContent_get"/>
+        where Status = 0 and PackageID = #{packageId}
+    </select>
+
+    <select id="getExpressId" parameterType="string" resultType="string">
+        select ExpressID
+        from transpackagecontent
+        where PackageID = #{packageId}
+    </select>
+
+    <select id="findByExpressIdAndStatus" resultMap="transPackageContentMap">
+        <include refid="transPackageContent_get"/>
+        <where>
+            <if test="expressId != null">
+                and ExpressID = #{expressId}
+            </if>
+            <if test="status != null">
+                Status = #{status}
+            </if>
+        </where>
+    </select>
+    <select id="findByPackageIdAndEsId" resultMap="transPackageContentMap">
+        <include refid="transPackageContent_get"/>
+        where PackageID = #{packageId} and ExpressID = #{esId}
+    </select>
+</mapper>

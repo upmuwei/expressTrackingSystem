@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.expressTracking.dao.TransPackageDao">
+
+    <resultMap id="transPackageMap" type="TransPackage">
+        <id property="id" column="ID"/>
+        <result property="sourceNode" column="sourceNode"/>
+        <result property="targetNode" column="TargetNode"/>
+        <result property="createTime" column="CreateTime"/>
+        <result property="status" column="Status"/>
+        <association property="user" column="id" javaType="UsersPackage"
+                    select="com.expressTracking.dao.UsersPackageDao.getByPackageId"/>
+<!--        <collection property="route" column="id" ofType="PackageRoute"-->
+<!--                    select="com.expressTracking.dao.PackageRouteDao.getByPackageId"/>-->
+        <collection property="content" column="id" ofType="TransPackageContent"
+                    select="com.expressTracking.dao.TransPackageContentDao.getByPackageId"/>
+        <collection property="history" column="id" ofType="TransHistory"
+                    select="com.expressTracking.dao.TransHistoryDao.get"/>
+    </resultMap>
+
+    <select id="get" parameterType="String" resultMap="transPackageMap">
+        select id, sourcenode, targetnode, createtime, status from transpackage where id=#{id}
+    </select>
+
+    <select id="getByUserId" parameterType="Integer" resultMap="transPackageMap">
+        SELECT
+            id, sourcenode, targetnode, createtime, status
+        FROM
+            transpackage
+        WHERE
+            ID IN ( SELECT PackageID FROM packagerecord WHERE Operation = #{operation,jdbcType=INTEGER}  AND UID = #{userId,jdbcType=INTEGER}  )
+          AND status = #{status,jdbcType=INTEGER}
+
+    </select>
+
+    <update id="update" parameterType="TransPackage">
+        update transpackage
+        <set>
+            <if test="id != null and id != ''"> id=#{id}, </if>
+            <if test="sourceNode != null and sourceNode != ''"> SourceNode=#{sourceNode} , </if>
+            <if test="targetNode != null and targetNode != ''"> TargetNode=#{targetNode}, </if>
+            <if test="createTime != null"> CreateTime=#{createTime} ,</if>
+            <if test="status != null"> Status=#{status}</if>
+        </set>
+            where ID=#{id}
+    </update>
+    <update id="updatePackageStatus">
+      update transpackage set Status=#{status} where ID=#{packageId,jdbcType=VARCHAR}
+    </update>
+
+    <insert id="insert" parameterType="TransPackage">
+        insert into transpackage(id, sourcenode, targetnode, createtime, status)
+        values (#{id},#{sourceNode} ,#{targetNode} ,#{createTime} ,#{status} )
+    </insert>
+    <sql id="transPackage_get">
+        select id, sourcenode, targetnode, createtime, status
+        from transpackage
+    </sql>
+
+    <select id="findBy" resultMap="transPackageMap">
+        <include refid="transPackage_get"/>
+        <where>
+            <choose>
+                <when test="propertyName == 'ID'">
+                    ID = #{value,jdbcType=VARCHAR}
+                </when>
+                <when test="propertyName == 'SourceNode'">
+                    and SourceNode = #{value,jdbcType=VARCHAR}
+                </when>
+                <when test="propertyName == 'TargetNode'">
+                    and TargetNode = #{value,jdbcType=VARCHAR}
+                </when>
+                <when test="propertyName == 'Status'">
+                    and Status = #{value}
+                </when>
+            </choose>
+        </where>
+    </select>
+
+    <select id="findLike" resultMap="transPackageMap">
+        <include refid="transPackage_get"/>
+        <where>
+            <choose>
+                <when test="propertyName == 'ID'">
+                    ID like #{value}
+                </when>
+                <when test="propertyName == 'SourceNode'">
+                    and SourceNode like #{value,jdbcType=VARCHAR}
+                </when>
+                <when test="propertyName == 'TargetNode'">
+                    and TargetNode like #{value,jdbcType=VARCHAR}
+                </when>
+                <when test="propertyName == 'Status'">
+                    and Status like #{value}
+                </when>
+            </choose>
+        </where>
+    </select>
+
+</mapper>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.expressTracking.dao.TransNodeDao">
+
+    <resultMap id="transNodeMap" type="TransNode">
+        <id property="id" column="ID"/>
+        <result property="nodeName" column="NodeName"/>
+        <result property="nodeType" column="NodeType"/>
+        <result property="regionCode" column="RegionCode"/>
+        <result property="telCode" column="TelCode"/>
+        <result property="x" column="x"/>
+        <result property="y" column="y"/>
+        <association property="regionString" javaType="java.lang.String" column="RegionCode"
+                     select="com.expressTracking.dao.RegionDao.getRegionString"/>
+    </resultMap>
+
+    <sql id="transNode_get">
+        select ID, NodeName, NodeType, RegionCode, TelCode, x, y
+        from transnode
+    </sql>
+
+    <select id="getById" parameterType="String" resultMap="transNodeMap">
+        <include refid="transNode_get"/> where id=#{id};
+    </select>
+
+    <select id="getByParameters" parameterType="TransNode" resultMap="transNodeMap">
+        <include refid="transNode_get"/>
+        <where>
+            <choose>
+                <when test="id != null and id != ''">
+                    and ID = #{id,jdbcType=VARCHAR}
+                </when>
+                <when test="regionCode != null and regionCode != ''">
+                    and RegionCode = #{regionCode,jdbcType=VARCHAR}
+                </when>
+                <when test="telCode != null and telCode != ''">
+                    and TelCode = #{telCode,jdbcType=VARCHAR}
+                </when>
+                <when test="nodeName != null and nodeName != ''">
+                    and NodeName = #{nodeName,jdbcType=VARCHAR}
+                </when>
+                <when test="nodeType != null">
+                    and NodeType = #{nodeType,jdbcType=INTEGER}
+                </when>
+                <when test="x != null">
+                    and x = #{x,jdbcType=FLOAT}
+                </when>
+                <when test="y != null">
+                    and y = #{y,jdbcType=FLOAT}
+                </when>
+                <otherwise>
+                    and 1 = 1
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+
+    <update id="update" parameterType="TransNode">
+        update transnode
+        <set>
+            <if test="nodeName != null and nodeName != ''">
+                NodeName = #{nodeName,jdbcType=VARCHAR},
+            </if>
+            <if test="nodeType != null">
+                NodeType = #{nodeType,jdbcType=INTEGER},
+            </if>
+            <if test="telCode != null and telCode != ''">
+                TelCode = #{telCode,jdbcType=VARCHAR},
+            </if>
+            <if test="regionCode != null and regionCode != ''">
+                RegionCode = #{regionCode,jdbcType=VARCHAR},
+            </if>
+            <if test="x != null">
+                x = #{x,jdbcType=FLOAT} ,
+            </if>
+            <if test="y != null">
+                y = #{y,jdbcType=FLOAT}
+            </if>
+        </set>
+        <where>
+            ID = #{id,jdbcType=VARCHAR}
+        </where>
+    </update>
+
+    <insert id="insert" parameterType="TransNode">
+         insert into transnode(ID, NodeName, NodeType, RegionCode, TelCode, x, y)
+         values (#{id}, #{nodeName}, #{nodeType}, #{regionCode}, #{telCode}, #{x}, #{y});
+    </insert>
+
+</mapper>

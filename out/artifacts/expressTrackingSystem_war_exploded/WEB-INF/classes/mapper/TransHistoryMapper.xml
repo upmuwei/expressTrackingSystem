@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.expressTracking.dao.TransHistoryDao">
+    <resultMap id="transHistoryMap" type="TransHistory">
+        <id property="sn" column="SN"/>
+        <result property="x" column="x"/>
+        <result property="y" column="y"/>
+        <result property="actTime" column="ActTime"/>
+        <result property="uIdFrom" column="UIDFrom"/>
+        <result property="uIdTo" column="UIDTo" />
+        <result property="packageId" column="PackageID"/>
+    </resultMap>
+
+    <select id="get" parameterType="String" resultMap="transHistoryMap">
+        select SN, PackageID, ActTime, UIDFrom, UIDTo, x, y
+        from transhistory where PackageID=#{id};
+    </select>
+
+    <insert id="insert" parameterType="TransHistory">
+        insert into transhistory(PackageID, ActTime, UIDFrom, UIDTo, x, y)
+        values(#{packageId} , #{actTime} ,#{uIdFrom} , #{uIdTo} , #{x} ,#{y} );
+    </insert>
+
+</mapper>
