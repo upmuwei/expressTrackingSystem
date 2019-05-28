@@ -14,18 +14,32 @@
 
     <mvc:interceptors>
         <mvc:interceptor>
-            <mvc:mapping path="/misc/*"/>
-            <mvc:mapping path="/misc/*/*"/>
-            <mvc:mapping path="/misc/*/*/*"/>
-            <mvc:mapping path="/domain/*"/>
-            <mvc:mapping path="/domain/*/*"/>
-            <mvc:mapping path="/domain/*/*/*"/>
-            <mvc:mapping path="/domain/*/*/*/*"/>
-            <mvc:mapping path="/domain/*/*/*/*/*"/>
+            <mvc:mapping path="/customer/*"/>
+            <mvc:mapping path="/customer/*/*"/>
+            <mvc:mapping path="/customer/*/*/*"/>
+            <mvc:mapping path="/es/*"/>
+            <mvc:mapping path="/es/*/*"/>
+            <mvc:mapping path="/es/*/*/*"/>
+            <mvc:mapping path="/es/*/*/*/*"/>
+            <mvc:mapping path="/es/*/*/*/*/*"/>
+            <mvc:mapping path="/user/*"/>
             <mvc:mapping path="/user/*/*"/>
             <mvc:mapping path="/user/*/*/*"/>
             <mvc:mapping path="/user/*/*/*/*"/>
-            <mvc:exclude-mapping path="/user/doLogin/*/*"/>
+            <mvc:mapping path="/package/*"/>
+            <mvc:mapping path="/package/*/*"/>
+            <mvc:mapping path="/package/*/*/*"/>
+            <mvc:mapping path="/package/*/*/*/*"/>
+            <mvc:mapping path="/route/*"/>
+            <mvc:mapping path="/route/*/*"/>
+            <mvc:mapping path="/route/*/*/*"/>
+            <mvc:mapping path="/route/*/*/*/*"/>
+            <mvc:mapping path="/transNode/*"/>
+            <mvc:mapping path="/transNode/*/*"/>
+            <mvc:mapping path="/transNode/*/*/*"/>
+            <mvc:mapping path="/transNode/*/*/*/*"/>
+            <mvc:exclude-mapping path="/user/login"/>
+            <mvc:exclude-mapping path="/user/add"/>
             <bean class="com.expressTracking.interceptor.MyInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>

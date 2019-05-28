@@ -84,7 +84,10 @@ public class UserController {
             String sessionId = userInfo.getTelCode().hashCode() + "" + System.currentTimeMillis();
             jsonObject.put("sessionId", sessionId);
 //            session.setAttribute(userInfo.getuId() + "", session);
-            session.setAttribute(sessionId, userInfo);
+          //  session.setAttribute(sessionId, userInfo);
+
+            session.getServletContext().setAttribute(sessionId, userInfo);
+            System.out.println(sessionId);
         } else {
             code.setCode(ResponseCode.Result.FAIL);
         }
@@ -129,7 +132,7 @@ public class UserController {
         if (userInfo != null) {
             code.setCode(ResponseCode.Result.SUCESS);
             String sessionId = request.getHeader("sessionId");
-            session.removeAttribute(sessionId);
+            session.getServletContext().removeAttribute(sessionId);
             code.setMessage("用户" + userInfo.getTelCode() + "退出登录");
         } else {
             code.setCode(ResponseCode.Result.FAIL);

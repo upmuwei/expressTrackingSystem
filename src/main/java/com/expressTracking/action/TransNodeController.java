@@ -2,11 +2,8 @@ package com.expressTracking.action;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.expressTracking.entity.CustomerInfo;
-import com.expressTracking.entity.ExpressSheet;
 import com.expressTracking.entity.ResponseCode;
 import com.expressTracking.entity.TransNode;
-import com.expressTracking.service.ExpressSheetService;
 import com.expressTracking.service.TransNodeService;
 import com.expressTracking.utils.JsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +44,7 @@ public class TransNodeController {
             List<TransNode> transNodeList = transNodeService.getByParameters(transNode);
             if (transNodeList != null) {
                 code.setCode(ResponseCode.Result.SUCESS);
-                jsonObject.put("esList", JSON.parse(JsonUtils.toJson(transNodeList)));
+                jsonObject.put("transNodeList", JSON.parse(JsonUtils.toJson(transNodeList)));
             } else {
                 code.setCode(ResponseCode.Result.FAIL);
                 code.setMessage("查询失败");
@@ -73,7 +70,7 @@ public class TransNodeController {
         if (transNode != null) {
             if (transNodeService.save(transNode) > 0) {
                 code.setCode(ResponseCode.Result.SUCESS);
-                jsonObject.put("customer", JSON.parse(JsonUtils.toJson(transNode)));
+                jsonObject.put("transNode", JSON.parse(JsonUtils.toJson(transNode)));
             } else {
                 code.setCode(ResponseCode.Result.FAIL);
             }
@@ -99,7 +96,7 @@ public class TransNodeController {
             if (transNodeService.update(transNode) > 0) {
                 code.setCode(ResponseCode.Result.SUCESS);
                 transNode = transNodeService.get(transNode.getId());
-                jsonObject.put("customer", transNode);
+                jsonObject.put("transNode", transNode);
             } else {
                 code.setCode(ResponseCode.Result.FAIL);
                 code.setMessage("修改失败");

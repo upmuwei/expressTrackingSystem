@@ -1,6 +1,9 @@
 package com.expressTracking.interceptor;
 
+import com.alibaba.fastjson.JSON;
+import com.expressTracking.entity.ResponseCode;
 import com.expressTracking.exception.GlobalExceptionHandler;
+import com.expressTracking.utils.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
@@ -24,20 +27,14 @@ public class MyInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String sessionId = request.getHeader("sessionId");
-        if (sessionId == null) {
+
+        ResponseCode code = new ResponseCode();
+        if (sessionId == null || request.getSession().getServletContext().getAttribute(sessionId) == null) {
+            code.setCode(2);
+            code.setMessage("非法访问");
             PrintWriter writer = response.getWriter();
-            writer.print("{\"message\":\"非法访问,请登录\"}");
+            writer.print(JsonUtils.toJson(code));
             response.setContentType("application/json;charset=UTF-8");
-            response.setHeader("Type", "Error");
-            response.setStatus(401);
-            LOGGER.error(request.getRequestURI() + "非法访问");
-            return false;
-        } else if (request.getSession().getAttribute(sessionId) == null) {
-            PrintWriter writer = response.getWriter();
-            writer.print("{\"message\":\"非法访问,请登录\"}");
-            response.setContentType("application/json;charset=UTF-8");
-            response.sendError(401, "非法访问,请登录");
-            response.setHeader("Type", "Error");
             LOGGER.error(request.getRequestURI() + "非法访问");
             return false;
         }
