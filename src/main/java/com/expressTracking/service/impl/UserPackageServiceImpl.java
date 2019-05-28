@@ -82,7 +82,7 @@ public class UserPackageServiceImpl implements UserPackageService {
     public int arriveDestination(String packageId, int userId1, int userId2) throws Exception {
         UsersPackage usersPackage = usersPackageDao.getByPackageId(packageId);
         UserInfo userInfo = userInfoDao.get(userId2);
-        TransNode transNode = transNodeDao.get(userInfo.getDptId());
+        TransNode transNode = transNodeDao.getById(userInfo.getDptId());
         if (usersPackage == null) {
             throw new Exception("未查到包裹Id");
         }
@@ -104,7 +104,7 @@ public class UserPackageServiceImpl implements UserPackageService {
         UsersPackage usersPackage = usersPackageDao.getByPackageId(packageId);
         TransPackage transPackage = transPackageDao.get(packageId);
         UserInfo userInfo = userInfoDao.get(nodeUId);
-        TransNode transNode = transNodeDao.get(userInfo.getDptId());
+        TransNode transNode = transNodeDao.getById(userInfo.getDptId());
         if (usersPackage == null) {
             throw new Exception("包裹id不存在");
         } else if (transPackage.getStatus() == 2) {

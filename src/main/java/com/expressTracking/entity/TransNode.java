@@ -1,6 +1,7 @@
 package com.expressTracking.entity;
 
-import org.springframework.lang.NonNull;
+
+import com.google.gson.annotations.Expose;
 
 import java.io.Serializable;
 
@@ -11,30 +12,30 @@ public class TransNode implements Serializable {
 
 	private static final long serialVersionUID = -3696487402698365947L;
 
-	public TransNode() {
-	}
-
-	@NonNull
+	@Expose
 	private String id;
 
-	@NonNull
+	@Expose
 	private String nodeName;
 
-	@NonNull
+	@Expose
 	private Integer nodeType;
 
-	@NonNull
+	@Expose
 	private String regionCode;
 
-	@NonNull
+	@Expose
+	private String regionString;
+
+	@Expose
 	private String telCode;
 
-	@NonNull
+	@Expose
 	private Float x;
 
-	@NonNull
+	@Expose
 	private Float y;
-	
+
 	public void setId(String value) {
 		this.id = value;
 	}
@@ -70,7 +71,15 @@ public class TransNode implements Serializable {
 	public String getRegionCode() {
 		return regionCode;
 	}
-	
+
+	public String getRegionString() {
+		return regionString;
+	}
+
+	public void setRegionString(String regionString) {
+		this.regionString = regionString;
+	}
+
 	public void setTelCode(String value) {
 		this.telCode = value;
 	}

@@ -6,9 +6,12 @@ import java.util.List;
 
 public interface TransNodeService {
 
-    public TransNode get(String id);
+    public List<TransNode> getByParameters(TransNode transNode);
 
-    public List<TransNode> findByRegionCodeAndType(String regionCode,int type);
+    public int save(TransNode transNode);
 
-    public void save(TransNode transNode);
+    public int update(TransNode transNode);
+
+    public TransNode get(String transNodeId);
+
 }

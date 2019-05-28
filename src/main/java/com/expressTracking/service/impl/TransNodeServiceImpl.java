@@ -18,6 +18,7 @@ import java.util.List;
 @Service
 @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
 public class TransNodeServiceImpl implements TransNodeService {
+
     private final TransNodeDao transNodeDao;
 
     @Autowired
@@ -26,16 +27,22 @@ public class TransNodeServiceImpl implements TransNodeService {
     }
 
     @Override
-    public TransNode get(String id) {
-        return transNodeDao.get(id);
-    }
-    @Override
-    public List<TransNode> findByRegionCodeAndType(String regionCode, int type) {
-        return transNodeDao.findByRegionCodeAndType(regionCode,type);
+    public List<TransNode> getByParameters(TransNode transNode) {
+        return transNodeDao.getByParameters(transNode);
     }
 
     @Override
-    public void save(TransNode transNode) {
-        transNodeDao.insert(transNode);
+    public int save(TransNode transNode) {
+        return transNodeDao.insert(transNode);
+    }
+
+    @Override
+    public int update(TransNode transNode) {
+        return transNodeDao.update(transNode);
+    }
+
+    @Override
+    public TransNode get(String transNodeId) {
+        return transNodeDao.getById(transNodeId);
     }
 }

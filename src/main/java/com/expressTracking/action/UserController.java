@@ -14,6 +14,7 @@ import org.springframework.http.HttpRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
@@ -121,14 +122,13 @@ public class UserController {
      * @return
      */
     @RequestMapping(value = "/logout/{userId}", method = RequestMethod.GET)
-    public JSONObject logout(@PathVariable("userId") Integer userId, HttpSession session, HttpHeaders headers) {
+    public JSONObject logout(@PathVariable("userId") Integer userId, HttpSession session, HttpServletRequest request) {
         ResponseCode code = new ResponseCode();
         UserInfo userInfo = userInfoService.get(userId);
         JSONObject jsonObject = new JSONObject();
         if (userInfo != null) {
-//            session.removeAttribute(userId + "");
             code.setCode(ResponseCode.Result.SUCESS);
-            String sessionId = headers.getFirst("sessionId");
+            String sessionId = request.getHeader("sessionId");
             session.removeAttribute(sessionId);
             code.setMessage("用户" + userInfo.getTelCode() + "退出登录");
         } else {

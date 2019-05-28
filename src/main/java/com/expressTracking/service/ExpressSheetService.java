@@ -34,6 +34,8 @@ public interface ExpressSheetService {
 
     public List<ExpressSheet> getByAccpterAndStatus(String accepter, Integer status);
 
+    public List<ExpressSheet> getByDeliverAndStatus(String deliver, Integer status);
+
     /**
      * 创建快件信息
      *

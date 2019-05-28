@@ -248,7 +248,7 @@ public class ExpressSheetController {
         ResponseCode code = new ResponseCode();
         code.setCode(ResponseCode.Result.FAIL);
         if (esId != null && deliver != null) {
-            if(esService.dispatchExpressSheet(esId, deliver) > 0) {
+            if(esService.deliveryExpressSheet(esId, deliver) > 0) {
                 code.setCode(ResponseCode.Result.SUCESS);
             } else {
                 code.setMessage("交付失败");
@@ -346,6 +346,36 @@ public class ExpressSheetController {
         jsonObject.put("code", JSON.parse(JsonUtils.toJson(code)));
         return jsonObject;
     }
+
+    /**
+     * 获取由userId派送的状态为status的快件列表信息
+     * @param userId
+     * @param status
+     * @return
+     */
+    @RequestMapping(value = "/listByDispatch",method = RequestMethod.GET)
+    public JSONObject getEsListByDispatch(Integer userId, Integer status) {
+        JSONObject jsonObject = new JSONObject();
+        ResponseCode code = new ResponseCode();
+        if (userId != null && status != null) {
+            UserInfo userInfo = userInfoService.get(userId);
+            if(userInfo != null){
+                List<ExpressSheet> expressSheets = esService.getByDeliverAndStatus(userId + "",status);
+                code.setCode(ResponseCode.Result.SUCESS);
+                jsonObject.put("expressSheetList",JSON.parse(JsonUtils.toJson(expressSheets)));
+            }else{
+                code.setCode(ResponseCode.Result.FAIL);
+                code.setMessage("用户信息不存在");
+            }
+        } else {
+            code.setCode(ResponseCode.Result.ERROR);
+            code.setMessage("参数错误");
+        }
+        jsonObject.put("code", JSON.parse(JsonUtils.toJson(code)));
+        return jsonObject;
+    }
+
+
     /**
      * 查询包裹中的快件信息
      * @param packageId

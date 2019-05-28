@@ -10,6 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 
+/**
+ * @author muwei
+ * @date 2019/5/28
+ */
 public class MyInterceptor extends HandlerInterceptorAdapter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionHandler.class);
@@ -20,7 +24,7 @@ public class MyInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String sessionId = request.getHeader("sessionId");
-       /* if (sessionId == null) {
+        if (sessionId == null) {
             PrintWriter writer = response.getWriter();
             writer.print("{\"message\":\"非法访问,请登录\"}");
             response.setContentType("application/json;charset=UTF-8");
@@ -36,7 +40,7 @@ public class MyInterceptor extends HandlerInterceptorAdapter {
             response.setHeader("Type", "Error");
             LOGGER.error(request.getRequestURI() + "非法访问");
             return false;
-        }*/
+        }
         return true;
     }
 

@@ -9,10 +9,11 @@ import java.util.List;
 @Repository
 public interface TransNodeDao {
 
-    public void insert(TransNode transNode);
+    public int insert(TransNode transNode);
 
-    public TransNode get(String id);
+    public List<TransNode> getByParameters(TransNode transNode);
 
-    public List<TransNode> findByRegionCodeAndType(@Param("regionCode") String regionCode,
-                                                   @Param("type") int type);
+    public TransNode getById(String id);
+
+    public int update(TransNode transNode);
 }

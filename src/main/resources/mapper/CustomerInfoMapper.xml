@@ -13,7 +13,7 @@
         <result property="address" column="Address"/>
         <result property="postCode" column="PostCode"/>
         <association property="regionString" javaType="java.lang.String" column="RegionCode"
-                     select="com.expressTracking.dao.RegionDao.getRegionString"></association>
+                     select="com.expressTracking.dao.RegionDao.getRegionString"/>
     </resultMap>
 
     <sql id="user_get">

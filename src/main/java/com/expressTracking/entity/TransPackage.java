@@ -191,7 +191,6 @@ public class TransPackage implements Serializable {
             sb.append("TargetNode=").append(getTargetNode()).append(" ");
             sb.append("CreateTime=").append(getCreateTime()).append(" ");
             sb.append("Status=").append(getStatus()).append(" ");
-//            sb.append("Route.size=").append(getRoute().size()).append(" ");
             if (getUser() != null) {
                 sb.append("User.Persist_ID=").append(getUser().toString(true)).append(" ");
             } else {

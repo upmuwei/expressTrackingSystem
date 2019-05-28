@@ -114,6 +114,14 @@ public class ExpressSheetServiceImpl implements ExpressSheetService {
     }
 
     @Override
+    public List<ExpressSheet> getByDeliverAndStatus(String deliver, Integer status) {
+        ExpressSheet expressSheet = new ExpressSheet();
+        expressSheet.setDeliver(deliver);
+        expressSheet.setStatus(status);
+        return getByParameters(expressSheet);
+    }
+
+    @Override
     public int create(String expressId, Integer accepter) {
         ExpressSheet expressSheet = new ExpressSheet();
         expressSheet.setId(expressId);
@@ -191,7 +199,7 @@ public class ExpressSheetServiceImpl implements ExpressSheetService {
 
     @Override
     public int dispatchExpressSheet(String expressId, int uId) {
-       // TransPackageContent transPackageContent = new TransPackageContent();
+
         UserInfo userInfo = userInfoDao.get(uId);
         ExpressSheet nes = expressSheetDao.get(expressId);
         if (userInfo == null) {
@@ -207,11 +215,6 @@ public class ExpressSheetServiceImpl implements ExpressSheetService {
         nes.setDeliveTime(new Date());
         nes.setStatus(ExpressSheet.STATUS.STATUS_DISPATCHED);
         return expressSheetDao.update(nes);
-        /*transPackageContent.setPackageId(userInfoDao.get(uId).getDelivePackageId());
-        transPackageContent.setExpressId(nes.getId());
-        transPackageContent.setStatus(TransPackageContent.STATUS.STATUS_ACTIVE);
-        transPackageContentDao.update(transPackageContent);*/
-
     }
 
     @Override
@@ -230,14 +233,5 @@ public class ExpressSheetServiceImpl implements ExpressSheetService {
         nes.setStatus(ExpressSheet.STATUS.STATUS_DELIVERIED);
 
         return expressSheetDao.update(nes);
-
-      /*  List<TransPackageContent> transPackageContentList = transPackageContentDao.findByExpressIdAndStatus(expressId,
-                TransPackageContent.STATUS.STATUS_ACTIVE);
-        if(transPackageContentList != null && !transPackageContentList.isEmpty()){
-            TransPackageContent transPackageContent = transPackageContentList.get(0);
-            transPackageContent.setStatus(TransPackageContent.STATUS.STATUS_OUTOF_PACKAGE);
-            transPackageContentDao.update(transPackageContent);
-        }*/
-
     }
 }

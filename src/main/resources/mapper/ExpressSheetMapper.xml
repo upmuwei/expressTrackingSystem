@@ -23,6 +23,25 @@
                      select="com.expressTracking.dao.CustomerInfoDao.get"/>
     </resultMap>
 
+    <sql id="express_get">
+        select ID,
+               Type,
+               Weight,
+               TranFee,
+               PackageFee,
+               InsuFee,
+               Accepter,
+               Deliver,
+               AccepteTime,
+               DeliveTime,
+               Acc1,
+               Acc2,
+               Status,
+               Sender,
+               Recever
+        from expresssheet
+    </sql>
+
     <update id="update" parameterType="ExpressSheet">
         update expresssheet
         <set>
@@ -48,24 +67,7 @@
         set Status= #{status,jdbcType=INTEGER}
         where id = #{esId,jdbcType=VARCHAR}
     </update>
-    <sql id="express_get">
-        select ID,
-               Type,
-               Weight,
-               TranFee,
-               PackageFee,
-               InsuFee,
-               Accepter,
-               Deliver,
-               AccepteTime,
-               DeliveTime,
-               Acc1,
-               Acc2,
-               Status,
-               Sender,
-               Recever
-        from expresssheet
-    </sql>
+
 
     <select id="get" parameterType="String" resultMap="expressSheetMap">
         <include refid="express_get"/>
