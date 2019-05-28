@@ -29,7 +29,7 @@ public class MyInterceptor extends HandlerInterceptorAdapter {
         String sessionId = request.getHeader("sessionId");
 
         ResponseCode code = new ResponseCode();
-        if (sessionId == null || request.getSession().getServletContext().getAttribute(sessionId) == null) {
+        if (sessionId == null || request.getSession().getAttribute(sessionId) == null) {
             code.setCode(2);
             code.setMessage("非法访问");
             PrintWriter writer = response.getWriter();

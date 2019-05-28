@@ -18,6 +18,15 @@ public class UserInfo implements Serializable {
 	private String password;
 	@Expose
 	private String name;
+
+	/**
+	 * 0 待定职位
+	 * 1 经理
+	 * 2 揽收员
+	 * 3 派送员
+	 * 4 转运员
+	 * 5 打包拆包人员
+	 */
 	@Expose
 	private Integer uRull;
 	@Expose
@@ -145,8 +154,19 @@ public class UserInfo implements Serializable {
 	public Set<UsersPackage> getUsersPackage() {
 		return usersPackage;
 	}
-	
-	
+
+	public static final class POSITION {
+		public static final int MANAGER = 1;
+
+		public static final int RECEIVER = 2;
+
+		public static final int DELIVER = 3;
+
+		public static final int TRANSPORTER = 4;
+
+		public static final int PACKINGER = 5;
+	}
+
 	@Override
 	public String toString() {
 		return toString(false);

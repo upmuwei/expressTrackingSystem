@@ -83,11 +83,9 @@ public class UserController {
             jsonObject.put("user", JSON.parse(JsonUtils.toJson(userInfo)));
             String sessionId = userInfo.getTelCode().hashCode() + "" + System.currentTimeMillis();
             jsonObject.put("sessionId", sessionId);
-//            session.setAttribute(userInfo.getuId() + "", session);
-          //  session.setAttribute(sessionId, userInfo);
 
-            session.getServletContext().setAttribute(sessionId, userInfo);
-            System.out.println(sessionId);
+            session.setAttribute(sessionId, userInfo);
+
         } else {
             code.setCode(ResponseCode.Result.FAIL);
         }
