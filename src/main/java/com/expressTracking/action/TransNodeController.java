@@ -35,7 +35,6 @@ public class TransNodeController {
      */
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     public JSONObject getTransNodeList(@RequestBody TransNode transNode) {
-        System.out.println(transNode);
         JSONObject jsonObject = new JSONObject();
         ResponseCode code = new ResponseCode();
         if (transNode != null) {
@@ -88,7 +87,6 @@ public class TransNodeController {
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public JSONObject add(@RequestBody TransNode transNode) {
-        System.out.println(transNode);
         JSONObject jsonObject = new JSONObject();
         ResponseCode code = new ResponseCode();
         if (transNode != null) {

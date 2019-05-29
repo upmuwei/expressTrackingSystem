@@ -27,6 +27,8 @@
             var telCode=$("#L_telCode").val();
             var x=$("#L_x").val();
             var y=$("#L_y").val();
+            // console.log(JSON.stringify({"id":id,"nodeName":nodeName,"nodeType":nodeType,
+            //     "regionCode":regionCode,"telCode":telCode,"x":x,"y":y}));
             $.ajax({
                 url: address+"transNode/add",
                 type: "post",
