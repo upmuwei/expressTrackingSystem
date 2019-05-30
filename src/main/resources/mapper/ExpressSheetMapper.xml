@@ -55,7 +55,7 @@
             <if test="accepter != null and accepter != ''">Accepter=#{accepter,jdbcType=VARCHAR},</if>
             <if test="deliver != null and deliver != ''">Deliver=#{deliver,jdbcType=VARCHAR},</if>
             <if test="accepteTime != null">AccepteTime=#{accepteTime},</if>
-            <if test="deliveTime != null and deliveTime != ''">DeliveTime=#{deliveTime},</if>
+            <if test="deliver != null">DeliveTime=#{deliveTime},</if>
             <if test="acc1 != null and acc1 != ''">acc1=#{acc1,jdbcType=VARCHAR},</if>
             <if test="acc2 != null and acc2 != ''">acc2=#{acc2,jdbcType=VARCHAR},</if>
             <if test="status != null">Status=#{status}</if>
@@ -128,29 +128,24 @@
     <select id="getByParameters" parameterType="ExpressSheet" resultMap="expressSheetMap">
         <include refid="express_get"/>
         <where>
-            <choose>
-                <when test="id != null">
+                <if test="id != null">
                     and ID = #{id,jdbcType=VARCHAR}
-                </when>
-                <when test="sender != null">
+                </if>
+                <if test="sender != null">
                     and Sender = #{sender.id,jdbcType=INTEGER}
-                </when>
-                <when test="recever != null">
-                    and Recever = #{recever.id,jdbcType=INTEGER}
-                </when>
-                <when test="accepter != null">
+                </if>
+                <if test="recever != null">
+                    and Recever = #{recever,jdbcType=INTEGER}
+                </if>
+                <if test="accepter != null">
                     and Accepter = #{accepter,jdbcType=VARCHAR}
-                </when>
-                <when test="deliver != null">
+                </if>
+                <if test="deliver != null">
                     and Deliver = #{deliver,jdbcType=VARCHAR}
-                </when>
-                <when test="status != null">
+                </if>
+                <if test="status != null">
                     and Status = #{status,jdbcType=INTEGER}
-                </when>
-                <otherwise>
-                    and 1 != 1
-                </otherwise>
-            </choose>
+                </if>
         </where>
     </select>
     

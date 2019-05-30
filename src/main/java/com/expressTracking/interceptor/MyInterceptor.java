@@ -27,7 +27,7 @@ public class MyInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String sessionId = request.getHeader("sessionId");
-
+/*
         ResponseCode code = new ResponseCode();
         if (sessionId == null || request.getSession().getAttribute(sessionId) == null) {
             code.setCode(2);
@@ -37,7 +37,7 @@ public class MyInterceptor extends HandlerInterceptorAdapter {
             response.setContentType("application/json;charset=UTF-8");
             LOGGER.error(request.getRequestURI() + "非法访问");
             return false;
-        }
+        }*/
         return true;
     }
 
