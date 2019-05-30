@@ -16,6 +16,17 @@
     <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
 </head>
 <script>
+    function URull(urull){
+        switch(urull){
+            case 0:return "待定职位";break;
+            case 1:return "经理";break;
+            case 2:return "揽收员";break;
+            case 3:return "派送员";break;
+            case 4:return "转运员";break;
+            case 5:return "打包拆包人员";break;
+            default:break;
+        }
+    }
     $(function(){
         $("#submit").click(function () {
             var str= address + "user/list/"+$("#select").val()+"/"+$("#selectway").val()+"/"+$("#input").val();
@@ -25,33 +36,37 @@
                 dataType:'JSON',
                 contentType : "application/json; charset=utf-8",
                 success:function(data){
-                    var tableData;
-                    var user = data.userList;
-                    $("#numspan").text("显示数据："+(user.length).toString()+"条");
-                    for(var i=0;i<user.length;i++){
-                        var str="<td class='td-manage'>"+
-                            '<a title="编辑"  href="javascript:;"  onclick="x_admin_show( \'编辑\',\'employee-edit.html? Data='+user[i].uId+'\',600,400)">'+
-                            "<i class=\"layui-icon\">&#xe642;</i>" +
-                            "</a>" +
-                            '<a title="删除" href="javascript:;" onclick="employee_del(this,'+user[i].uId+')">'+
-                            "<i class='layui-icon'>&#xe640;</i> " +
-                            "</a> "+
-                            "</td>"
+                    if(data.code.code === 0) {
+                        var tableData;
+                        var user = data.userList;
+                        $("#numspan").text("显示数据：" + (user.length).toString() + "条");
+                        for (var i = 0; i < user.length; i++) {
+                            var str = "<td class='td-manage'>" +
+                                '<a title="编辑"  href="javascript:;"  onclick="x_admin_show( \'编辑\',\'employee-edit.html? Data=' + user[i].uId + '\',600,400)">' +
+                                "<i class=\"layui-icon\">&#xe642;</i>" +
+                                "</a>" +
+                                // '<a title="删除" href="javascript:;" onclick="employee_del(this,' + user[i].uId + ')">' +
+                                // "<i class='layui-icon'>&#xe640;</i> " +
+                                // "</a> " +
+                                "</td>";
 
-                            tableData+="<tr> " +
-                                "<td>"+user[i].uId +"</td> " +
-                                "<td>"+user[i].name +"</td>" +
-                                "<td>"+user[i].uRull +"</td>" +
-                                "<td>"+user[i].telCode +" </td>" +
-                                "<td>"+user[i].status +"</td>" +
-                                "<td>"+user[i].dptId +"</td>" +
-                                "<td>"+user[i].receivePackageId +"</td> "+
-                                "<td>"+user[i].delivePackageId +"</td> "+
-                                "<td>"+user[i].transPackageId +"</td> "
-                                +str+
-                            "</tr>";
+                            tableData += "<tr> " +
+                                "<td>" + user[i].uId + "</td> " +
+                                "<td>" + user[i].name + "</td>" +
+                                "<td>" + URull(user[i].uRull)+ "</td>" +
+                                "<td>" + user[i].telCode + " </td>" +
+                                "<td>" + user[i].status + "</td>" +
+                                "<td>" + user[i].dptId + "</td>" +
+                                "<td>" + user[i].receivePackageId + "</td> " +
+                                "<td>" + user[i].delivePackageId + "</td> " +
+                                "<td>" + user[i].transPackageId + "</td> "
+                                + str +
+                                "</tr>";
+                        }
+                        $("#firsttbody").html(tableData);
+                    }else{
+                        alert(data.code.message);
                     }
-                    $("#firsttbody").html(tableData);
                 },
                 error:function(){
                     alert("error");
@@ -76,7 +91,7 @@
                    <select id="select">
                        <option value="UID">用户ID</option>
                        <option value="Name">姓名</option>
-                       <option value="URull">Urull</option>
+                       <option value="URull">职位</option>
                        <option value="TelCode">电话号码</option>
                        <option value="Status">状态</option>
                        <option value="DptID">部门编号</option>
@@ -104,7 +119,7 @@
         <tr>
             <th>UID</th>
             <th>姓名</th>
-            <th>Urull</th>
+            <th>职位</th>
             <th>电话号码</th>
             <th>状态</th>
             <th>部门编号</th>
@@ -122,7 +137,7 @@
         <div class="page">
             <div>
                 <a class="prev" href="">&lt;&lt;</a>
-                <a class="num" href="">1</a>
+                <a class="num"  href="">1</a>
                 <a class="next" href="">&gt;&gt;</a>
             </div>
         </div>

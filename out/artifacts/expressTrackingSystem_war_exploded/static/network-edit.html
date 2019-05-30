@@ -22,6 +22,7 @@
         console.log(url);
         var id=url.split("=")[1];
         var str= address + "transNode/get/" + id;
+
         $.ajax({
             url:str,
             type:"GET",
@@ -34,6 +35,7 @@
                     document.getElementById("L_nodeName").value = transNode.nodeName;
                     document.getElementById("L_nodeType").value = transNode.nodeType;
                     document.getElementById("L_regionCode").value = transNode.regionCode;
+                    document.getElementById("L_telCode").value = transNode.telCode;
                     document.getElementById("L_x").value = transNode.x;
                     document.getElementById("L_y").value = transNode.y;
                 }else{
@@ -144,7 +146,7 @@
         </div>
         <div class="layui-form-item" style="margin-left: 70px">
             <label class="layui-form-label"></label>
-            <button id="edit" class="layui-btn" lay-filter="edit" lay-submit="">
+            <button type="button" id="edit" class="layui-btn" lay-filter="edit" lay-submit="">
                 修改
             </button>
         </div>

@@ -45,8 +45,8 @@
                         }
                         $("#firsttbody").html(tableData);
                     }
-                    else if(obj.code.code === 2){
-                        layer.msg(obj.code.message);
+                    else {
+                        alert(obj.code.message);
                     }
                 },
                 error:function(){

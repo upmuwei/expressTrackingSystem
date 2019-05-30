@@ -37,8 +37,15 @@
                             contentType : "application/json; charset=utf-8",
                             success : function(data) {
                                 //判断是否创建成功
-                                if(data.code)
-                                layer.msg('已创建!',{icon:1,time:1000});
+                                if(data.code.code === 0) {
+                                    alert("添加成功");
+                                    // 可以对父窗口进行刷新
+                                    x_admin_father_reload();
+                                    //关闭当前frame
+                                    x_admin_close();
+                                }else{
+                                    alert(data.code.message);
+                                }
                             },
                             error : function() {
                                 alert("error");
@@ -93,19 +100,6 @@
                     return '电话不能为空';
                 }
             }
-        });
-        //监听提交
-        form.on('submit(add)', function(data){
-            console.log(data);
-            //发异步，把数据提交给php
-            layer.alert("创建成功", {icon: 6},function () {
-                //关闭当前frame
-                x_admin_close();
-
-                // 可以对父窗口进行刷新
-                x_admin_father_reload();
-            });
-            return false;
         });
     });
 </script>

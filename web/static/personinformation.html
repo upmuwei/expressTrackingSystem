@@ -19,18 +19,24 @@
         var url = location.search;
         console.log(url);
         var id=url.split("=")[1];
-        var str="http://localhost:8080/user/getUserList/ID/eq/"+11;
+        //未获取登陆账号的id
+        var str="http://localhost:8080/user/get"+11;
         $.ajax({
             url:str,
             type:"GET",
             dataType:'JSON',
             contentType : "application/json; charset=utf-8",
             success:function(data){
-                document.getElementById("L_uid").value=data[0].uId;
-                document.getElementById("L_name").value=data[0].name;
-                //document.getElementById("L_password").value=data[0].password;
-                document.getElementById("L_telCode").value=data[0].telCode;
-                document.getElementById("L_dptid").value=data[0].dptId;
+                if(data.code.code === 0) {
+                    var user = data.user;
+                    document.getElementById("L_uid").value = user.uId;
+                    document.getElementById("L_name").value = user.name;
+                    //document.getElementById("L_password").value=user.password;
+                    document.getElementById("L_telCode").value = user.telCode;
+                    document.getElementById("L_dptid").value = user.dptId;
+                }else{
+                    alert(data.code.message);
+                }
             },
             error:function () {
                 alert("error");
