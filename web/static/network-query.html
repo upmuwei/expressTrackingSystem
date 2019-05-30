@@ -5,11 +5,11 @@
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 <title>卓越物流管理系统</title>
 <style>
-    #allmap{
-        height:500px;width:100%;
+    #baiduMap{
+        height:500px;width:700px;
     }
-    .div1 {
-        width:900px;
+    .div {
+        width:700px;
         height:500px;
         border:5px solid black;
     }
@@ -24,117 +24,77 @@
 <script type="text/javascript" src="lib/layui/layui.js" charset="utf-8"></script>
 <script type="text/javascript" src="js/xadmin.js"></script>
 <script type="text/javascript" src="js/cookie.js"></script>
+    <script type="text/javascript" src="js/address.js"></script>
 <!--百度地图API-->
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=8nTRAKtZXD0wQ1tzTpcT7lcV1tzgKYTx"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=8nTRAKtZXD0wQ1tzTpcT7lcV1tzgKYTx"></script>
+
 </head>
 
 <body>
 <script>
     $(function(){
-        $("#submit").click(function () {
-            var str="http://localhost:8080/misc/getNode/"+$("#input1").val();
+
+        //百度地图API功能
+        var map = new BMap.Map("baiduMap");
+        map.centerAndZoom(new BMap.Point(113.542879,34.824115),12);
+        map.setCurrentCity("郑州");
+        map.enableScrollWheelZoom(true);
+        // 添加比例尺控件
+        map.addControl(new BMap.ScaleControl());
+
+        var url = location.search;
+        console.log(url);
+        var id=url.split("=")[1];
+        var str= address + "transNode/get/" + id;
             $.ajax({
                 url: str,
                 type: "GET",
                 dataType: "json",
                 contentType : "application/json; charset=utf-8",
                 success:function(data){
-                    $("#firsttbody").append(
-                        "<tr> " +
-                            "<td align='center'>"+data.id +"</td> " +
-                            "<td align='center'>"+data.nodeName +"</td> " +
-                            "<td align='center'>"+data.nodeType +"</td>" +
-                            "<td align='center'>"+data.regionCode +"</td>" +
-                            "<td align='center'>"+data.telCode +" </td>" +
-                            "<td id='x' align='center'>"+data.x +"</td>" +
-                            "<td id='y' align='center'>"+data.y +"</td>" +
-                        "</tr>");
+
+                    if(data.code.code === 0) {
+                        var transNode = data.transNode;
+
+                        // var map = new BMap.Map("allmap");
+                        // map.enableScrollWheelZoom(true);
+
+                        // 用经纬度设置地图中心点
+                        if(transNode.x==null && transNode.y==null){
+                            alert("网点信息错误");
+                        }
+                        if(transNode.x!=null && transNode.y!=null){
+                            //清除地图上生成的信息113.824444  36.190519
+                            map.clearOverlays();
+                            var new_point = new BMap.Point(transNode.x,transNode.y);
+                            // 将创建的标注添加到地图中
+                            map.addOverlay(new BMap.Marker(new_point));
+                            //地图中心
+                            map.panTo(new_point);
+                        }
+                    }else{
+                        alert(data.code.message);
+                    }
                 },
-                error:function(error){
-                    alert(error);
+                error:function(){
+                    alert("error");
                 }
             });
-        });
     });
 </script>
-    <div class="x-nav">
-        <span class="layui-breadcrumb">
-              <a href="">首页</a>
-        </span>
-        <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
-            <i class="layui-icon" style="line-height:30px">刷新</i>
-        </a>
-    </div>
-    <div class="x-body">
-        <div class="layui-row" style="margon:auto;width: 1200px">
-
-            <form class="layui-form layui-col-md12 x-so" method="#" >
-                <div class="layui-inline" style="margin-left: 530px" >
-                    <input id="input1" class="layui-input" type="text" name="customername" placeholder="请输入ID" autocomplete="off" value="">
-                    <button class="layui-btn" id="submit" type="button"><i class="layui-icon">&#xe615;</i></button><br>
-                </div>
-            </form>
-
-        </div>
-
-        <xblock style=" margin:auto;width: 1200px">
-            <button class="layui-btn" onclick="x_admin_show('添加网点信息','./network-add.html',600,400)"><i class="layui-icon"></i>添加</button>
-        </xblock>
-    </div>
     <div id="middle">
          <div class="right"  id="mainFrame">
              <div class="right_cont">
                  <div style=" margin: auto;width: 1200px;">
-                     <table id="nodeinfo" class="layui-table x-admin">
-                         <tr>
-                             <td align="center" nowrap="nowrap" bgcolor="#f1f1f1"><strong>节点ID</strong></td>
-                             <td align="center" nowrap="nowrap" bgcolor="#f1f1f1" style="width:130px"><strong>节点名称</strong></td>
-                             <td align="center" nowrap="nowrap" bgcolor="#f1f1f1" style="width:80px"><strong>节点类型</strong></td>
-                             <td align="center" nowrap="nowrap" bgcolor="#f1f1f1"><strong>地区ID</strong></td>
-                             <td align="center" nowrap="nowrap" bgcolor="#f1f1f1"><strong>电话</strong></td>
-                             <td align="center" nowrap="nowrap" bgcolor="#f1f1f1"><strong>经度</strong></td>
-                             <td align="center" nowrap="nowrap" bgcolor="#f1f1f1"><strong>纬度</strong></td>
-                         </tr>
-                         <!--动态添加-->
-                         <tbody id="firsttbody">
-
-                         </tbody>
-                     </table>
-                     <table  class="margin-bottom-20 table  no-border" >
-                         <td class="text-center">
-                             <input type="button" value="查看位置" class="btn btn-info  " style="width:80px; height: 30px" onclick="theLocation()" />
-                         </td>
-                     </table>
                      <!--地图模块-->
-                     <div id="allmap" class="div1"></div>
+                     <div id="baiduMap" class="div"></div>
                  </div>
-                 <br><br><br><br><br><br><br><br>
+                 <br><br><br><br>
               </div>
          </div>
     </div>
 <script type="text/javascript">
-    //百度地图API功能
-    var map = new BMap.Map("allmap");
-    map.centerAndZoom(new BMap.Point(113.542879,34.824115),12);
-    map.setCurrentCity("郑州");
-    map.enableScrollWheelZoom(true);
-    // 用经纬度设置地图中心点
-    function theLocation(){
-        var x=document.getElementById("x").innerText;
-        var y=document.getElementById("y").innerText;
-        if(x==null && y==null){
-            alert("请先查询网点信息");
-        }
-        if(x!=null && y!=null){
-            //清除地图上生成的信息113.824444  36.190519
-            map.clearOverlays();
-            var new_point = new BMap.Point(x,y);
-            // 将创建的标注添加到地图中
-            map.addOverlay(new BMap.Marker(new_point));
-            //地图中心
-            map.panTo(new_point);
-        }
-    }
+
 </script>
 </body>
 </html>

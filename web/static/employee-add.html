@@ -34,13 +34,17 @@
                    data: JSON.stringify({"name":name,
                        "uRull":urull,"telCode":telcode,"status":status,"dptId":dptid }),
                    success : function(data) {
-                       layer.msg('已添加!',{icon:1,time:1000});
-                       x_admin_close();
+                       if(data.code.code === 0) {
+                           alert("添加成功");
+                           x_admin_father_reload();
+                           x_admin_close();
+                       }else{
+                           alert(data.code.message);
+                       }
                    },
-                   error : function(error) {
-                       alert(error);
+                   error : function() {
+                       alert("error");
                    }
-
                });
            });
        });
@@ -58,11 +62,17 @@
                   </div>
                   <div class="layui-form-item">
                       <label for="L_urull" class="layui-form-label">
-                          <span class="x-red">*</span>uRull
+                          <span class="x-red">*</span>职位
                       </label>
                       <div class="layui-input-inline">
-                          <input type="text" id="L_urull" name="uRull" required="" lay-verify="uRull"
-                          autocomplete="off" class="layui-input">
+                          <select id="L_urull" name="uRull" required="" lay-verify="uRull">
+                              <option value="0">待定职位</option>
+                              <option value="1">经理</option>
+                              <option value="2">揽收员</option>
+                              <option value="3">派送员</option>
+                              <option value="4">转运员</option>
+                              <option value="5">打包拆包人员</option>
+                          </select>
                       </div>
                   </div>
                  <div class="layui-form-item">
@@ -85,7 +95,7 @@
                  </div>
                   <div class="layui-form-item">
                       <label class="layui-form-label"></label>
-                      <button id="add" class="layui-btn" lay-filter="add" lay-submit="">
+                      <button id="add" type="button" class="layui-btn" lay-filter="add" lay-submit="">
                           增加
                       </button>
                   </div>
@@ -118,18 +128,6 @@
                             return '部门编号不能为空';
                         }
                     }
-                });
-
-                form.on('submit(add)', function(data){
-                    console.log(data);
-                    //发异步，把数据提交给php
-                    layer.alert("增加成功", {icon: 6},function () {
-                        //关闭当前frame
-                        x_admin_close();
-                        // 可以对父窗口进行刷新
-                        x_admin_father_reload();
-                    });
-                    return false;
                 });
             });
     </script>
