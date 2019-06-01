@@ -242,7 +242,7 @@ public class ExpressSheetController {
      * @param deliver
      * @return
      */
-    @RequestMapping("/deliver/{esId}/{deliver}")
+    @RequestMapping( value = "/deliver/{esId}/{deliver}", method = RequestMethod.GET)
     public JSONObject deliverEs(@PathVariable("esId") String esId, @PathVariable("deliver") Integer deliver) {
         JSONObject jsonObject = new JSONObject();
         ResponseCode code = new ResponseCode();
@@ -325,7 +325,7 @@ public class ExpressSheetController {
      * @param status
      * @return
      */
-    @RequestMapping(value = "/list",method = RequestMethod.GET)
+    @RequestMapping(value = "/listByCreate",method = RequestMethod.POST)
     public JSONObject getEsList(Integer userId, Integer status) {
         JSONObject jsonObject = new JSONObject();
         ResponseCode code = new ResponseCode();
@@ -353,7 +353,7 @@ public class ExpressSheetController {
      * @param status
      * @return
      */
-    @RequestMapping(value = "/listByDispatch",method = RequestMethod.GET)
+    @RequestMapping(value = "/listByDispatch",method = RequestMethod.POST)
     public JSONObject getEsListByDispatch(Integer userId, Integer status) {
         JSONObject jsonObject = new JSONObject();
         ResponseCode code = new ResponseCode();
@@ -361,6 +361,7 @@ public class ExpressSheetController {
             UserInfo userInfo = userInfoService.get(userId);
             if(userInfo != null){
                 List<ExpressSheet> expressSheets = esService.getByDeliverAndStatus(userId + "",status);
+
                 code.setCode(ResponseCode.Result.SUCESS);
                 jsonObject.put("expressSheetList",JSON.parse(JsonUtils.toJson(expressSheets)));
             }else{

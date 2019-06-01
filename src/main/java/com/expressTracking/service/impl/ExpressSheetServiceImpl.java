@@ -208,7 +208,7 @@ public class ExpressSheetServiceImpl implements ExpressSheetService {
         if (nes == null) {
             throw new ServiceException(2000, "快件" + expressId + "不存在");
         }
-        if (nes.getStatus() != ExpressSheet.STATUS.STATUS_TRANSPORT) {
+        if (nes.getStatus() != ExpressSheet.STATUS.STATUS_PARTATION) {
             throw new ServiceException(2001, "包裹不处于分拣状态");
         }
         nes.setDeliver(uId + "");
