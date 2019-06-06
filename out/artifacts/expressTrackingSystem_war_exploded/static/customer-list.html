@@ -13,11 +13,35 @@
       <script type="text/javascript" src="js/address.js"></script>
       <script type="text/javascript" src="js/xadmin.js"></script>
       <script type="text/javascript" src="js/cookie.js"></script>
+      <script type="text/javascript" src="js/pagination.js"></script>
       <script type="text/javascript" src="js/bootstrap.min.js"></script>
       <script type="text/javascript" src="js/bootstrap-table.js"></script>
 
   </head>
+  <style type="text/css">
+      #pagiDiv span{
+          background:#1e90ff;
+          border-radius: .2em;
+          padding:5px;
+      }
+  </style>
   <script>
+      //全局变量
+      var numCount;       //数据总数量
+      var columnsCounts;  //数据列数量
+      var pageCount;      //每页显示的数量
+      var pageNum;        //总页数
+      var currPageNum;   //当前页数
+
+      //页面标签变量
+      var blockTable;
+      var preSpan;
+      var firstSpan;
+      var nextSpan;
+      var lastSpan;
+      var pageNumSpan;
+      var currPageSpan;
+
       $(function(){
           $("#submit").click(function () {
               var str=  address + "customer/list";
@@ -85,37 +109,29 @@
                               "</tr>";
                       }
                       $("#firsttbody").html(tableData);
+                      //页面标签变量
+                      blockTable = document.getElementById("table");
+                      preSpan = document.getElementById("spanPre");
+                      firstSpan = document.getElementById("spanFirst");
+                      nextSpan = document.getElementById("spanNext");
+                      lastSpan = document.getElementById("spanLast");
+                      pageNumSpan = document.getElementById("spanTotalPage");
+                      currPageSpan = document.getElementById("spanPageNum");
 
+                      numCount = document.getElementById("table").rows.length - 1;       //取table的行数作为数据总数量（减去标题行1）
+
+                      columnsCounts = blockTable.rows[0].cells.length;
+                      pageCount = 6;
+                      pageNum = parseInt(numCount/pageCount);
+                      if(0 != numCount%pageCount){
+                          pageNum += 1;
+                      }
+                      firstPage();
                   },
                   error:function(){
                       alert("error");
                   }
               });
-          });
-          $("#table").bootstrapTable({
-              search:true,
-             columns:[{
-                 field:'id',
-                 title:'ID'
-             },{
-                 field:'name',
-                 title:'姓名'
-             },{
-                 field:'telCode',
-                 title:'电话号码'
-             },{
-                 field:'department',
-                 title:'部门'
-             },{
-                 field:'regionCode',
-                 title:'地区编码'
-             },{
-                 field:'address',
-                 title:'地址'
-             },{
-                 field:'postCode',
-                 title:'邮政编码'
-             },]
           });
       });
   </script>
@@ -148,33 +164,35 @@
           <span class="x-right" id="numspan" style="line-height:40px" type="text">显示数据：0条</span>
       </xblock>
 
-      <table class="table table-bordered" id="table" data-pagination="true" data-side-pagination="client" data-page-size="4">
-          <!--<thead>-->
-              <!--<tr>-->
-                  <!--<th>ID</th>-->
-                  <!--<th>姓名</th>-->
-                  <!--<th>手机</th>-->
-                  <!--<th>部门</th>-->
-                  <!--<th>地区编码</th>-->
-                  <!--<th>地址</th>-->
-                  <!--<th>邮政编码</th>-->
-              <!--</tr>-->
-          <!--</thead>-->
+      <table class="layui-table" id="table" data-pagination="true" data-side-pagination="client" data-page-size="4">
+          <thead>
+              <tr>
+                  <th>ID</th>
+                  <th>姓名</th>
+                  <th>手机</th>
+                  <th>部门</th>
+                  <th>地区编码</th>
+                  <th>地址</th>
+                  <th>邮政编码</th>
+              </tr>
+          </thead>
 
           <tbody id="firsttbody"></tbody>
 
       </table>
 
-      <!--<div class="page">-->
-          <!--<div>-->
-              <!--<a class="prev">&lt;&lt;</a>-->
-              <!--<a class="num">1</a>-->
-              <!--<a class="next">&gt;&gt;</a>-->
-          <!--</div>-->
-      <!--</div>-->
+      <div id="pagiDiv" align="right" style="width:1200px">
+          <span id="spanFirst">First</span>
+          <span id="spanPre">Pre</span>
+          <span id="spanNext">Next</span>
+          <span id="spanLast">Last</span>
+          <span id="spanPageNum"></span>/<span id="spanTotalPage"></span>
+      </div>
 
   </div>
       <script>
+
+
       /*用户-删除*/
       function customer_del(obj,id){
           layer.confirm('确认要删除吗？',function(){
@@ -197,5 +215,10 @@
           });
       }
       </script>
+
+
+  <script type="text/javascript">
+
+  </script>
   </body>
 </html>
