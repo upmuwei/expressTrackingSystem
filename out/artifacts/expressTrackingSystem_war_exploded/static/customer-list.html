@@ -77,11 +77,17 @@
                       bool = true;
                   }
               }
+              console.log(getCookie("sessionId"));
               $.ajax({
                   url:str,
                   type:"GET",
                   dataType:'JSON',
                   contentType : "application/json; charset=utf-8",
+                  headers : {
+                      'sessionId': getCookie("sessionId"),
+                      "Access-Control-Allow-Origin":"http://localhost:8080",
+                      "Access-Control-Allow-Headers":"X-Requested-With"
+                  },
                   success:function(data){
                       var tableData;
                       var customerList = data.customerList;
@@ -128,7 +134,9 @@
                       }
                       firstPage();
                   },
-                  error:function(){
+                  error:function(data){
+                      var obj = data;
+                      alert(obj.code.code);
                       alert("error");
                   }
               });
@@ -203,6 +211,7 @@
                   type:"GET",
                   dataType:'JSON',
                   contentType : "application/json; charset=utf-8",
+
                   success:function(data){
                       layer.msg('已删除!',{icon:1,time:1000});
                   },

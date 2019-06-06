@@ -46,6 +46,9 @@
                 type:"GET",
                 dataType:'JSON',
                 contentType : "application/json; charset=utf-8",
+                headers : {
+                    'sessionId': getCookie("sessionId"),
+                },
                 success:function(data){
                     var obj = data;
                     if(obj.code.code === 0){

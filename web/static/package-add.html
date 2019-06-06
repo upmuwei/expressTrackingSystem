@@ -29,6 +29,9 @@
                 type: "post",
                 dataType: "JSON",
                 contentType : "application/json; charset=utf-8",
+                headers : {
+                    'sessionId': getCookie("sessionId"),
+                },
                 data: JSON.stringify({"id":id,"sourceNode":sourceNode,"targetNode":targetNode, "status":status}),
                 success : function(data) {
                     var obj=data;

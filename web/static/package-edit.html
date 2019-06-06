@@ -26,6 +26,9 @@
             type:"GET",
             dataType:'JSON',
             contentType : "application/json; charset=utf-8",
+            headers : {
+                'sessionId': getCookie("sessionId"),
+            },
             success:function(data){
                 if(data.code.code === 0) {
                     var package=data.package;
@@ -62,6 +65,9 @@
                 type: "post",
                 dataType: "JSON",
                 contentType: "application/json; charset=utf-8",
+                headers : {
+                    'sessionId': getCookie("sessionId"),
+                },
                 data: JSON.stringify({
                     "id":id, "sourceNode": sourceNode, "targetNode": targetNode, "createTime": createTime, "status": status
                 }),

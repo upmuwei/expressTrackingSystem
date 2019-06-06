@@ -27,7 +27,7 @@ public class MyInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String sessionId = request.getHeader("sessionId");
-/*
+       /*
         ResponseCode code = new ResponseCode();
         if (sessionId == null || request.getSession().getAttribute(sessionId) == null) {
             code.setCode(2);

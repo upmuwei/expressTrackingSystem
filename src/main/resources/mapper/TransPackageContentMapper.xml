@@ -62,10 +62,10 @@
         <include refid="transPackageContent_get"/>
         <where>
             <if test="expressId != null">
-                and ExpressID = #{expressId}
+                ExpressID = #{expressId}
             </if>
             <if test="status != null">
-                Status = #{status}
+                and Status = #{status}
             </if>
         </where>
     </select>

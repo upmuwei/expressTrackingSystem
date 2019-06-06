@@ -44,6 +44,8 @@
                     contentType : "application/json; charset=utf-8",
                     data: JSON.stringify({"phone":id,"password":password}),
                     success:function (data) {
+                        var obj = data;
+                        document.cookie = "sessionId=" + obj.sessionId;
                         window.location.href="index.html?" + data.sessionId;
                     },
                     error:function () {

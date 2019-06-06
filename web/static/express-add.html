@@ -26,6 +26,9 @@
                 type: "get",
                 dataType: "JSON",
                 contentType : "application/json; charset=utf-8",
+                headers : {
+                    'sessionId': getCookie("sessionId"),
+                },
                 success : function(data) {
                     var expressSheet=data.es;
                     if(expressSheet != null){

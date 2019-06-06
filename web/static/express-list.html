@@ -63,6 +63,9 @@
                       dataType:'JSON',
                       data:"{\"" + property + "\":" + inputValue + "}",
                       contentType : "application/json; charset=utf-8",
+                      headers : {
+                          'sessionId': getCookie("sessionId"),
+                      },
                       success:function(data){
                           var obj = data;
                           if(obj.code.code === 0){
@@ -211,6 +214,9 @@
                       type:"GET",
                       dataType:'JSON',
                       contentType : "application/json; charset=utf-8",
+                      headers : {
+                          'sessionId': getCookie("sessionId"),
+                      },
                       success:function(data){
                           if(data.code === 0){
                               $(obj).parents("tr").remove();

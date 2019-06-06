@@ -5,7 +5,6 @@ package com.expressTracking.exception;
  */
 public class ServiceException extends RuntimeException {
 
-//    public final int
 
     private int code; //异常码
 

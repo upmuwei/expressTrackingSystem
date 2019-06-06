@@ -44,6 +44,9 @@
                 dataType:"json",
                 type:"post",
                 contentType : "application/json; charset=utf-8",
+                headers : {
+                    'sessionId': getCookie("sessionId"),
+                },
                 data: JSON.stringify({"id":id,"password":password,"password2":password2}),
                 success:function () {
                     window.location.href="login.html";

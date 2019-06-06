@@ -59,6 +59,9 @@
                 type:"GET",
                 dataType:'JSON',
                 contentType : "application/json; charset=utf-8",
+                headers : {
+                    'sessionId': getCookie("sessionId"),
+                },
                 success:function(data){
                     if(data.code.code === 0) {
                         var tableData;
@@ -208,6 +211,9 @@
                 type:"GET",
                 dataType:'JSON',
                 contentType : "application/json; charset=utf-8",
+                headers : {
+                    'sessionId': getCookie("sessionId"),
+                },
                 success:function(data){
                     layer.msg('已删除!',{icon:1,time:1000});
                 },
