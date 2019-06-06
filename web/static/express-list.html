@@ -17,6 +17,17 @@
   </head>
   <body>
       <script>
+          function Status(status){
+              switch (status) {
+                  case 0:return "新建";break;
+                  case 1:return "揽收";break;
+                  case 2:return "分拣";break;
+                  case 3:return "转运";break;
+                  case 4:return "派送";break;
+                  case 5:return "交付";break;
+                  default:break;
+              }
+          }
           $(function(){
               $("#submit").click(function () {
                   var str="http://localhost:8080/es/list";
@@ -51,17 +62,17 @@
                                       "<td>"+list[i].type +"</td> " +
                                       "<td>"+list[i].sender.name +"</td>" +
                                       "<td>"+list[i].recever.name +"</td>" +
-                                      "<td>"+list[i].weight +" </td>" +
-                                      "<td>"+list[i].tranFee +"</td>" +
-                                      "<td>"+list[i].packageFee +"</td>" +
-                                      "<td>"+list[i].insuFee +"</td> "+
+                                      // "<td>"+list[i].weight +" </td>" +
+                                      // "<td>"+list[i].tranFee +"</td>" +
+                                      // "<td>"+list[i].packageFee +"</td>" +
+                                      // "<td>"+list[i].insuFee +"</td> "+
                                       "<td>"+list[i].accepter +"</td> "+
                                       "<td>"+list[i].deliver +"</td> "+
                                       "<td>"+list[i].accepteTime +"</td> "+
                                       "<td>"+list[i].deliveTime +"</td> "+
-                                      "<td>"+list[i].acc1 +"</td> "+
-                                      "<td>"+list[i].acc2 +"</td> "+
-                                      "<td>"+list[i].status +"</td> "+str+
+                                      // "<td>"+list[i].acc1 +"</td> "+
+                                      // "<td>"+list[i].acc2 +"</td> "+
+                                      "<td>"+Status(list[i].status) +"</td> "+str+
                                       "</tr>";
                               }
                               $("#firsttbody").html(tableData);
@@ -120,16 +131,16 @@
                       <th>类型</th>
                       <th>寄件人</th>
                       <th>收件人</th>
-                      <th>重量</th>
-                      <th>运费</th>
-                      <th>包装费</th>
-                      <th>保险费</th>
+                      <!--<th>重量</th>-->
+                      <!--<th>运费</th>-->
+                      <!--<th>包装费</th>-->
+                      <!--<th>保险费</th>-->
                       <th>揽收人</th>
                       <th>交付人</th>
                       <th>揽收时间</th>
                       <th>交付时间</th>
-                      <th>寄件附件</th>
-                      <th>收件附件</th>
+                      <!--<th>寄件附件</th>-->
+                      <!--<th>收件附件</th>-->
                       <th>快递状态</th>
                   </tr>
               </thead>
