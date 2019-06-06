@@ -12,11 +12,35 @@
       <script type="text/javascript" src="lib/layui/layui.js" charset="utf-8"></script>
       <script type="text/javascript" src="js/xadmin.js"></script>
       <script type="text/javascript" src="js/cookie.js"></script>
+      <script type="text/javascript" src="js/pagination.js"></script>
       <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
       <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
   </head>
+  <style type="text/css">
+      #pagiDiv span{
+          color: white;
+          background:#189F92;
+          border-radius: .2em;
+          padding:5px;
+      }
+  </style>
   <body>
       <script>
+          //全局变量
+          var numCount;       //数据总数量
+          var columnsCounts;  //数据列数量
+          var pageCount;      //每页显示的数量
+          var pageNum;        //总页数
+          var currPageNum;   //当前页数
+
+          //页面标签变量
+          var blockTable;
+          var preSpan;
+          var firstSpan;
+          var nextSpan;
+          var lastSpan;
+          var pageNumSpan;
+          var currPageSpan;
           function Status(status){
               switch (status) {
                   case 0:return "新建";break;
@@ -76,6 +100,26 @@
                                       "</tr>";
                               }
                               $("#firsttbody").html(tableData);
+
+                              //页面标签变量
+                              blockTable = document.getElementById("table");
+                              preSpan = document.getElementById("spanPre");
+                              firstSpan = document.getElementById("spanFirst");
+                              nextSpan = document.getElementById("spanNext");
+                              lastSpan = document.getElementById("spanLast");
+                              pageNumSpan = document.getElementById("spanTotalPage");
+                              currPageSpan = document.getElementById("spanPageNum");
+
+                              numCount = document.getElementById("table").rows.length - 1;       //取table的行数作为数据总数量（减去标题行1）
+
+                              columnsCounts = blockTable.rows[0].cells.length;
+                              pageCount = 6;
+                              pageNum = parseInt(numCount/pageCount);
+                              if(0 != numCount%pageCount){
+                                  pageNum += 1;
+                              }
+                              firstPage();
+
                           }
                           else{
                               alert(obj.code.message);
@@ -124,7 +168,7 @@
               <button class="layui-btn" onclick="x_admin_show('查询包裹快件','./express-search.html',1300,400)"><i class="layui-icon"></i>查询快件</button>
               <span id="numspan" class="x-right" style="line-height:40px">共有数据：0 条</span>
           </xblock>
-          <table class="layui-table">
+          <table id="table" class="layui-table">
               <thead>
                   <tr>
                       <th>快递单号</th>
@@ -148,13 +192,13 @@
 
               </tbody>
           </table>
-          <!--<div class="page">-->
-              <!--<div>-->
-                  <!--<a class="prev" href="">&lt;&lt;</a>-->
-                  <!--<a class="num" href="">1</a>-->
-                  <!--<a class="next" href="">&gt;&gt;</a>-->
-              <!--</div>-->
-          <!--</div>-->
+          <div id="pagiDiv" align="center" style="width:1200px">
+              <span id="spanFirst">First</span>
+              <span id="spanPre">Pre</span>
+              <span id="spanNext">Next</span>
+              <span id="spanLast">Last</span>
+              <span id="spanPageNum"></span>/<span id="spanTotalPage"></span>
+          </div>
       </div>
       <script>
           /*用户-删除*/
