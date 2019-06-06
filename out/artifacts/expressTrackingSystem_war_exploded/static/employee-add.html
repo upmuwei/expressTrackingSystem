@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+  
+   <head>
+        <meta charset="UTF-8">
+        <title>添加用户</title>
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+        <link rel="stylesheet" href="css/font.css">
+        <link rel="stylesheet" href="css/xadmin.css">
+        <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+        <script type="text/javascript" src="lib/layui/layui.js" charset="utf-8"></script>
+        <script type="text/javascript" src="js/xadmin.js"></script>
+        <script type="text/javascript" src="js/cookie.js"></script>
+        <script type="text/javascript" src="js/address.js"></script>
+        <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+        <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+   </head>
+  
+   <body>
+   <script>
+       $(function () {
+           $("#add").click(function (){
+               var name=$("#L_name").val();
+               var urull=$("#L_urull").val();
+               var telcode=$("#L_telCode").val();
+               var dptid=$("#L_dptid").val();
+               $.ajax({
+                   url: address + "user/add",
+                   type: "post",
+                   dataType: "JSON",
+                   contentType : "application/json; charset=utf-8",
+                   data: JSON.stringify({"name":name,
+                       "uRull":urull,"telCode":telcode,"status":status,"dptId":dptid }),
+                   success : function(data) {
+                       if(data.code.code === 0) {
+                           alert("添加成功");
+                           x_admin_father_reload();
+                           x_admin_close();
+                       }else{
+                           alert(data.code.message);
+                       }
+                   },
+                   error : function() {
+                       alert("error");
+                   }
+               });
+           });
+       });
+   </script>
+        <div class="x-body">
+             <form class="layui-form">
+                  <div class="layui-form-item">
+                      <label for="L_name" class="layui-form-label">
+                          <span class="x-red">*</span>姓名
+                      </label>
+                      <div class="layui-input-inline">
+                          <input type="text" id="L_name" name="pass" required="" lay-verify="name"
+                          autocomplete="off" class="layui-input">
+                      </div>
+                  </div>
+                  <div class="layui-form-item">
+                      <label for="L_urull" class="layui-form-label">
+                          <span class="x-red">*</span>职位
+                      </label>
+                      <div class="layui-input-inline">
+                          <select id="L_urull" name="uRull" required="" lay-verify="uRull">
+                              <option value="0">待定职位</option>
+                              <option value="1">经理</option>
+                              <option value="2">揽收员</option>
+                              <option value="3">派送员</option>
+                              <option value="4">转运员</option>
+                              <option value="5">打包拆包人员</option>
+                          </select>
+                      </div>
+                  </div>
+                 <div class="layui-form-item">
+                     <label for="L_telCode" class="layui-form-label">
+                         <span class="x-red">*</span>电话号码
+                     </label>
+                     <div class="layui-input-inline">
+                         <input type="text" id="L_telCode" name="telCode" required="" lay-verify="telCode"
+                                autocomplete="off" class="layui-input">
+                     </div>
+                 </div>
+                 <div class="layui-form-item">
+                     <label for="L_dptid" class="layui-form-label">
+                         <span class="x-red">*</span>部门编号
+                     </label>
+                     <div class="layui-input-inline">
+                         <input type="text" id="L_dptid" name="dptId" required="" lay-verify="dptId"
+                                autocomplete="off" class="layui-input">
+                     </div>
+                 </div>
+                  <div class="layui-form-item">
+                      <label class="layui-form-label"></label>
+                      <button id="add" type="button" class="layui-btn" lay-filter="add" lay-submit="">
+                          增加
+                      </button>
+                  </div>
+          </form>
+        </div>
+        <script>
+            layui.use(['form','layer'], function(){
+                $ = layui.jquery;
+                var form = layui.form,layer = layui.layer;
+
+                //自定义验证规则
+                form.verify({
+                    name: function(value){
+                        if(value === '' || value === null){
+                            return '姓名不能为空';
+                        }
+                    }
+                    ,uRull: function(value){
+                        if(value === '' || value === null){
+                            return 'uRull不能为空';
+                        }
+                    }
+                    ,telCode: function(value){
+                        if(value === '' || value === null){
+                            return '电话号码不能为空';
+                        }
+                    }
+                    ,dptId: function(value){
+                        if(value === '' || value === null){
+                            return '部门编号不能为空';
+                        }
+                    }
+                });
+            });
+    </script>
+   </body>
+
+</html>

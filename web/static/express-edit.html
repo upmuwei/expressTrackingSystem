@@ -29,19 +29,19 @@
                 if(data.code.code === 0) {
                     var obj = data.es;
                     document.getElementById("L_id").value = obj.id;
-                    document.getElementById("L_type").value = obj.type;
-                    document.getElementById("L_sender").value = obj.sender;
-                    document.getElementById("L_recever").value = obj.recever;
-                    document.getElementById("L_weight").value = obj.weight;
-                    document.getElementById("L_tranFee").value = obj.tranFee;
-                    document.getElementById("L_packageFee").value = obj.packageFee;
-                    document.getElementById("L_insuFee").value = obj.insuFee;
-                    document.getElementById("L_accepter").value = obj.accepter;
-                    document.getElementById("L_deliver").value = obj.deliver;
-                    document.getElementById("L_accepteTime").value = obj.accepteTime;
-                    document.getElementById("L_deliveTime").value = obj.deliveTime;
-                    document.getElementById("L_acc1").value = obj.acc1;
-                    document.getElementById("L_acc2").value = obj.acc2;
+                    // document.getElementById("L_type").value = obj.type;
+                    // document.getElementById("L_sender").value = obj.sender.name;
+                    // document.getElementById("L_recever").value = obj.recever.name;
+                    // document.getElementById("L_weight").value = obj.weight;
+                    // document.getElementById("L_tranFee").value = obj.tranFee;
+                    // document.getElementById("L_packageFee").value = obj.packageFee;
+                    // document.getElementById("L_insuFee").value = obj.insuFee;
+                    // document.getElementById("L_accepter").value = obj.accepter;
+                    // document.getElementById("L_deliver").value = obj.deliver;
+                    // document.getElementById("L_accepteTime").value = obj.accepteTime;
+                    // document.getElementById("L_deliveTime").value = obj.deliveTime;
+                    // // document.getElementById("L_acc1").value = obj.acc1;
+                    // document.getElementById("L_acc2").value = obj.acc2;
                     document.getElementById("L_status").value = obj.status;
                 }else {
                     alert(data.code.message);
@@ -53,29 +53,25 @@
         });
         $("#edit").click(function () {
             var id = $("#L_id").val();
-            var type = $("#L_type").val();
-            var sender = $("#L_sender").val();
-            var recever = $("#L_recever").val();
-            var weight = $("#L_weight").val();
-            var tranFee = $("#L_tranFee").val();
-            var packageFee = $("#L_packageFee").val();
-            var insuFee = $("#L_insuFee").val();
-            var accepter = $("#L_accepter").val();
-            var deliver = $("#L_deliver").val();
-            var accepteTime = $("#L_accepteTime").val();
-            var deliveTime = $("#L_deliveTime").val();
-            var acc1 = $("#L_acc1").val();
-            var acc2 = $("#L_acc2").val();
+            // var type = $("#L_type").val();
+            // var sender = $("#L_sender").val();
+            // var recever = $("#L_recever").val();
+            // var weight = $("#L_weight").val();
+            // var tranFee = $("#L_tranFee").val();
+            // var packageFee = $("#L_packageFee").val();
+            // var insuFee = $("#L_insuFee").val();
+            // var accepter = $("#L_accepter").val();
+            // var deliver = $("#L_deliver").val();
+            // var accepteTime = $("#L_accepteTime").val();
+            // var deliveTime = $("#L_deliveTime").val();
+            // var acc1 = $("#L_acc1").val();
+            // var acc2 = $("#L_acc2").val();
             var status = $("#L_status").val();
             $.ajax({
-                url: "http://localhost:8080/es/update" ,
+                url: "http://localhost:8080/es/update/"+id+"/"+status ,
                 type: "post",
                 dataType: "JSON",
                 contentType: "application/json; charset=utf-8",
-                data: {"id":id, "type": type, "sender": sender, "recever": recever,
-                    "weight": weight,"tranFee": tranFee,"packageFee": packageFee,"insuFee": insuFee,
-                    "accepter": accepter,"deliver": deliver,"accepteTime": accepteTime,"deliveTime": deliveTime,
-                    "acc1": acc1,"acc2": acc2,"status": status},
                 success: function (data) {
                     if(data.code.code === 0){
                         alert("修改成功");
@@ -103,116 +99,124 @@
                 <input type="text" id="L_id" value="" name="id" required="" lay-verify="id" autocomplete="off" class="layui-input" readonly="readonly">
             </div>
         </div>
-        <div class="layui-form-item">
-            <label for="L_type" class="layui-form-label">
-                <span class="x-red">*</span>类型
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" id="L_type" name="type" required="" lay-verify="type" autocomplete="off" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label for="L_sender" class="layui-form-label">
-                <span class="x-red">*</span>寄件人
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" id="L_sender" name="sender" required="sender" lay-verify="sender" autocomplete="off" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label for="L_recever" class="layui-form-label">
-                <span class="x-red">*</span>收件人
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" id="L_recever" name="recever" required="recever" lay-verify="recever" autocomplete="off" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label for="L_weight" class="layui-form-label">
-                <span class="x-red">*</span>重量
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" id="L_weight" name="weight" required="weight" lay-verify="weight" autocomplete="off" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label for="L_tranFee" class="layui-form-label">
-                <span class="x-red">*</span>快递费
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" id="L_tranFee" name="tranFee" required="tranFee" lay-verify="tranFee" autocomplete="off" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label for="L_packageFee" class="layui-form-label">
-                <span class="x-red">*</span>包装费
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" id="L_packageFee" name="packageFee" required="packageFee" lay-verify="packageFee" autocomplete="off" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label for="L_insuFee" class="layui-form-label">
-                <span class="x-red">*</span>保险费
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" id="L_insuFee" name="insuFee" required="insuFee" lay-verify="insuFee" autocomplete="off" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label for="L_accepter" class="layui-form-label">
-                <span class="x-red">*</span>揽收人
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" id="L_accepter" name="accepter" required="accepter" lay-verify="accepter" autocomplete="off" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label for="L_deliver" class="layui-form-label">
-                <span class="x-red">*</span>交付人
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" id="L_deliver" name="deliver" required="deliver" lay-verify="deliver" autocomplete="off" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label for="L_accepteTime" class="layui-form-label">
-                <span class="x-red">*</span>收件时间
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" id="L_accepteTime" name="accepteTime" required="accepteTime" lay-verify="accepteTime" autocomplete="off" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label for="L_deliveTime" class="layui-form-label">
-                <span class="x-red">*</span>寄件时间
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" id="L_deliveTime" name="deliveTime" required="deliveTime" lay-verify="deliveTime" autocomplete="off" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label for="L_acc1" class="layui-form-label">
-                <span class="x-red">*</span>寄件附件
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" id="L_acc1" name="acc1" required="acc1" lay-verify="acc1" autocomplete="off" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label for="L_acc2" class="layui-form-label">
-                <span class="x-red">*</span>收件附件
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" id="L_acc2" name="acc2" required="acc2" lay-verify="acc2" autocomplete="off" class="layui-input">
-            </div>
-        </div>
+        <!--<div class="layui-form-item">-->
+            <!--<label for="L_type" class="layui-form-label">-->
+                <!--<span class="x-red">*</span>类型-->
+            <!--</label>-->
+            <!--<div class="layui-input-inline">-->
+                <!--<input type="text" id="L_type" name="type" required="" lay-verify="type" autocomplete="off" class="layui-input">-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="layui-form-item">-->
+            <!--<label for="L_sender" class="layui-form-label">-->
+                <!--<span class="x-red">*</span>寄件人-->
+            <!--</label>-->
+            <!--<div class="layui-input-inline">-->
+                <!--<input type="text" id="L_sender" name="sender" required="sender" lay-verify="sender" autocomplete="off" class="layui-input" readonly="readonly">-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="layui-form-item">-->
+            <!--<label for="L_recever" class="layui-form-label">-->
+                <!--<span class="x-red">*</span>收件人-->
+            <!--</label>-->
+            <!--<div class="layui-input-inline">-->
+                <!--<input type="text" id="L_recever" name="recever" required="recever" lay-verify="recever" autocomplete="off" class="layui-input" readonly="readonly">-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="layui-form-item">-->
+            <!--<label for="L_weight" class="layui-form-label">-->
+                <!--<span class="x-red">*</span>重量-->
+            <!--</label>-->
+            <!--<div class="layui-input-inline">-->
+                <!--<input type="text" id="L_weight" name="weight" required="weight" lay-verify="weight" autocomplete="off" class="layui-input">-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="layui-form-item">-->
+            <!--<label for="L_tranFee" class="layui-form-label">-->
+                <!--<span class="x-red">*</span>快递费-->
+            <!--</label>-->
+            <!--<div class="layui-input-inline">-->
+                <!--<input type="text" id="L_tranFee" name="tranFee" required="tranFee" lay-verify="tranFee" autocomplete="off" class="layui-input">-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="layui-form-item">-->
+            <!--<label for="L_packageFee" class="layui-form-label">-->
+                <!--<span class="x-red">*</span>包装费-->
+            <!--</label>-->
+            <!--<div class="layui-input-inline">-->
+                <!--<input type="text" id="L_packageFee" name="packageFee" required="packageFee" lay-verify="packageFee" autocomplete="off" class="layui-input">-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="layui-form-item">-->
+            <!--<label for="L_insuFee" class="layui-form-label">-->
+                <!--<span class="x-red">*</span>保险费-->
+            <!--</label>-->
+            <!--<div class="layui-input-inline">-->
+                <!--<input type="text" id="L_insuFee" name="insuFee" required="insuFee" lay-verify="insuFee" autocomplete="off" class="layui-input">-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="layui-form-item">-->
+            <!--<label for="L_accepter" class="layui-form-label">-->
+                <!--<span class="x-red">*</span>揽收人-->
+            <!--</label>-->
+            <!--<div class="layui-input-inline">-->
+                <!--<input type="text" id="L_accepter" name="accepter" required="accepter" lay-verify="accepter" autocomplete="off" class="layui-input">-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="layui-form-item">-->
+            <!--<label for="L_deliver" class="layui-form-label">-->
+                <!--<span class="x-red">*</span>交付人-->
+            <!--</label>-->
+            <!--<div class="layui-input-inline">-->
+                <!--<input type="text" id="L_deliver" name="deliver" required="deliver" lay-verify="deliver" autocomplete="off" class="layui-input">-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="layui-form-item">-->
+            <!--<label for="L_accepteTime" class="layui-form-label">-->
+                <!--<span class="x-red">*</span>收件时间-->
+            <!--</label>-->
+            <!--<div class="layui-input-inline">-->
+                <!--<input type="text" id="L_accepteTime" name="accepteTime" required="accepteTime" lay-verify="accepteTime" autocomplete="off" class="layui-input">-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="layui-form-item">-->
+            <!--<label for="L_deliveTime" class="layui-form-label">-->
+                <!--<span class="x-red">*</span>寄件时间-->
+            <!--</label>-->
+            <!--<div class="layui-input-inline">-->
+                <!--<input type="text" id="L_deliveTime" name="deliveTime" required="deliveTime" lay-verify="deliveTime" autocomplete="off" class="layui-input">-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="layui-form-item">-->
+            <!--<label for="L_acc1" class="layui-form-label">-->
+                <!--<span class="x-red">*</span>寄件附件-->
+            <!--</label>-->
+            <!--<div class="layui-input-inline">-->
+                <!--<input type="text" id="L_acc1" name="acc1" required="acc1" lay-verify="acc1" autocomplete="off" class="layui-input">-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="layui-form-item">-->
+            <!--<label for="L_acc2" class="layui-form-label">-->
+                <!--<span class="x-red">*</span>收件附件-->
+            <!--</label>-->
+            <!--<div class="layui-input-inline">-->
+                <!--<input type="text" id="L_acc2" name="acc2" required="acc2" lay-verify="acc2" autocomplete="off" class="layui-input">-->
+            <!--</div>-->
+        <!--</div>-->
         <div class="layui-form-item">
             <label for="L_status" class="layui-form-label">
                 <span class="x-red">*</span>状态
             </label>
             <div class="layui-input-inline">
-                <input type="text" id="L_status" name="status" required="status" lay-verify="status" autocomplete="off" class="layui-input">
+                <!--<input type="text" id="L_status" name="status" required="status" lay-verify="status" autocomplete="off" class="layui-input">-->
+                <select id="L_status">
+                    <option value="0">新建</option>
+                    <option value="1">揽收</option>
+                    <option value="2">分拣</option>
+                    <option value="3">转运</option>
+                    <option value="4">派送</option>
+                    <option value="5">交付</option>
+                </select>
             </div>
         </div>
         <div class="layui-form-item">
@@ -230,81 +234,81 @@
 
         //自定义验证规则
         form.verify({
-            id: function(value){
-                if(value === '' || value === null){
-                    return '单号不能为空';
-                }
-            }
-            ,type: function(value){
-                if(value === '' || value === null){
-                    return '类型不能为空';
-                }
-            }
-            ,sender: function(value){
-                if(value === '' || value === null){
-                    return '寄件人编号不能为空';
-                }
-            }
-            ,recever: function(value){
-                if(value === '' || value === null){
-                    return '收件人编号不能为空';
-                }
-            }
-            ,weight: function(value){
-                if(value === '' || value === null){
-                    return '重量不能为空';
-                }
-            }
-            ,tranFee: function(value){
-                if(value === '' || value === null){
-                    return '运费不能为空';
-                }
-            }
-            ,packageFee: function(value){
-                if(value === '' || value === null){
-                    return '包装费不能为空';
-                }
-            }
-            ,insuFee: function(value){
-                if(value === '' || value === null){
-                    return '保险费不能为空';
-                }
-            }
-            ,accepter: function(value){
-                if(value === '' || value === null){
-                    return '揽收人不能为空';
-                }
-            }
-            ,deliver: function(value){
-                if(value === '' || value === null){
-                    return '交付人不能为空';
-                }
-            }
-            ,accepteTime: function(value){
-                if(value === '' || value === null){
-                    return '揽收时间不能为空';
-                }
-            }
-            ,deliverTime: function(value){
-                if(value === '' || value === null){
-                    return '交付时间不能为空';
-                }
-            }
-            ,acc1: function(value){
-                if(value === '' || value === null){
-                    return '寄件附件不能为空';
-                }
-            }
-            ,acc2: function(value){
-                if(value === '' || value === null){
-                    return '收件附件不能为空';
-                }
-            }
-            ,status: function(value){
-                if(value === '' || value === null){
-                    return '状态不能为空';
-                }
-            }
+            // id: function(value){
+            //     if(value === '' || value === null){
+            //         return '单号不能为空';
+            //     }
+            // }
+            // ,type: function(value){
+            //     if(value === '' || value === null){
+            //         return '类型不能为空';
+            //     }
+            // }
+            // ,sender: function(value){
+            //     if(value === '' || value === null){
+            //         return '寄件人编号不能为空';
+            //     }
+            // }
+            // ,recever: function(value){
+            //     if(value === '' || value === null){
+            //         return '收件人编号不能为空';
+            //     }
+            // }
+            // ,weight: function(value){
+            //     if(value === '' || value === null){
+            //         return '重量不能为空';
+            //     }
+            // }
+            // ,tranFee: function(value){
+            //     if(value === '' || value === null){
+            //         return '运费不能为空';
+            //     }
+            // }
+            // ,packageFee: function(value){
+            //     if(value === '' || value === null){
+            //         return '包装费不能为空';
+            //     }
+            // }
+            // ,insuFee: function(value){
+            //     if(value === '' || value === null){
+            //         return '保险费不能为空';
+            //     }
+            // }
+            // ,accepter: function(value){
+            //     if(value === '' || value === null){
+            //         return '揽收人不能为空';
+            //     }
+            // }
+            // ,deliver: function(value){
+            //     if(value === '' || value === null){
+            //         return '交付人不能为空';
+            //     }
+            // }
+            // ,accepteTime: function(value){
+            //     if(value === '' || value === null){
+            //         return '揽收时间不能为空';
+            //     }
+            // }
+            // ,deliverTime: function(value){
+            //     if(value === '' || value === null){
+            //         return '交付时间不能为空';
+            //     }
+            // }
+            // ,acc1: function(value){
+            //     if(value === '' || value === null){
+            //         return '寄件附件不能为空';
+            //     }
+            // }
+            // ,acc2: function(value){
+            //     if(value === '' || value === null){
+            //         return '收件附件不能为空';
+            //     }
+            // }
+            // status: function(value){
+            //     if(value === '' || value === null){
+            //         return '状态不能为空';
+            //     }
+            // }
         });
     });
 </script>
