@@ -308,11 +308,11 @@ public class PackageController {
      * @param status
      * @return
      */
-    @RequestMapping("/getPackageList/{userId}/{operation}/{status}")
-    public JSONObject getPackageList(@PathVariable("userId") Integer userId, @PathVariable("operation") Integer operation, @PathVariable("status") Integer status) {
+    @RequestMapping(value = "/getPackageList",method = RequestMethod.POST)
+    public JSONObject getPackageList(Integer userId,Integer operation,Integer status) {
         JSONObject jsonObject = new JSONObject();
         ResponseCode code = new ResponseCode();
-        if (userId != null && operation != null && status != null) {
+        if (userId != null) {
             code.setCode(ResponseCode.Result.SUCESS);
             jsonObject.put("packageList", transPackageService.getByUserId(userId, operation, status));
         } else {
@@ -328,7 +328,7 @@ public class PackageController {
      *
      * @param property     属性 ID or SourceNode or TargetNode or Status
      * @param restrictions 限定条件 eq or like
-     * @param value        属性值
+     * @param value        属性值Picked up JAVA_TOOL_OPTIONS: -Dfile.encoding=UTF-8
      * @return
      */
     @RequestMapping(value = "/get_package_list/{property}/{restrictions}/{value}", method = RequestMethod.GET)

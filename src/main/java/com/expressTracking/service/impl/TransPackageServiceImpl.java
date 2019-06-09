@@ -231,7 +231,6 @@ public class TransPackageServiceImpl implements TransPackageService {
     @Override
     public List<TransPackage> getTransPackage(Integer userId) throws Exception {
         List<UsersPackage> usersPackageList = userPackageService.getUserPackageList(null, userId);
-
         List<TransPackage> transPackageList = new ArrayList<>();
         if (usersPackageList != null && !usersPackageList.isEmpty()) {
             for (UsersPackage usersPackage : usersPackageList) {

@@ -357,15 +357,14 @@ public class ExpressSheetController {
     public JSONObject getEsListByDispatch(Integer userId, Integer status) {
         JSONObject jsonObject = new JSONObject();
         ResponseCode code = new ResponseCode();
+        code.setCode(ResponseCode.Result.FAIL);
         if (userId != null && status != null) {
             UserInfo userInfo = userInfoService.get(userId);
             if(userInfo != null){
                 List<ExpressSheet> expressSheets = esService.getByDeliverAndStatus(userId + "",status);
-
                 code.setCode(ResponseCode.Result.SUCESS);
                 jsonObject.put("expressSheetList",JSON.parse(JsonUtils.toJson(expressSheets)));
             }else{
-                code.setCode(ResponseCode.Result.FAIL);
                 code.setMessage("用户信息不存在");
             }
         } else {
