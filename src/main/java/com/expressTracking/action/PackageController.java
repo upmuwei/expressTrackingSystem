@@ -243,30 +243,17 @@ public class PackageController {
      * @return
      */
     @RequestMapping("/unpack/{packageId}/{userId}")
-    public JSONObject unpack(@PathVariable("packageId") String pacakgeId, @PathVariable("userId") Integer userId) {
+    public JSONObject unpack(@PathVariable("packageId") String pacakgeId, @PathVariable("userId") Integer userId) throws Exception{
         JSONObject jsonObject = new JSONObject();
         ResponseCode code = new ResponseCode();
         code.setCode(ResponseCode.Result.FAIL);
         if (pacakgeId != null && userId != null) {
-            switch (transPackageService.unPackTransPckage(pacakgeId, userId)) {
-                case 1: {
-                    code.setMessage("包裹信息不存在");
-                    break;
-                }
-                case 2: {
-                    code.setMessage("用户信息不存在");
-                    break;
-                }
-                case 3: {
-                    code.setCode(ResponseCode.Result.SUCESS);
-                    TransPackage transPackage = transPackageService.get(pacakgeId);
-                    jsonObject.put("package", JSON.parse(JsonUtils.toJson(transPackage)));
-                    break;
-                }
-                default: {
-                    code.setMessage("拆包失败");
-                    break;
-                }
+            if(transPackageService.unPackTransPckage(pacakgeId, userId) > 0){
+                code.setCode(ResponseCode.Result.SUCESS);
+                TransPackage transPackage = transPackageService.get(pacakgeId);
+                jsonObject.put("package", JSON.parse(JsonUtils.toJson(transPackage)));
+            }else{
+                code.setMessage("拆包失败");
             }
         } else {
             code.setCode(ResponseCode.Result.ERROR);
@@ -416,6 +403,28 @@ public class PackageController {
      */
     @RequestMapping("/transportingpackage/{userId}")
     public JSONObject getTransportingPackage(@PathVariable("userId") Integer userId) throws Exception {
+        JSONObject jsonObject = new JSONObject();
+        ResponseCode code = new ResponseCode();
+        code.setCode(ResponseCode.Result.FAIL);
+        if (userId != null) {
+            List<TransPackage> transPackageList = transPackageService.getTransPackage(userId);
+            code.setCode(ResponseCode.Result.SUCESS);
+            jsonObject.put("packageList", JSON.parse(JsonUtils.toJson(transPackageList)));
+        } else {
+            code.setCode(ResponseCode.Result.ERROR);
+            code.setMessage("参数错误");
+        }
+        jsonObject.put("code", code);
+        return jsonObject;
+    }
+
+    /**
+     * 获取用户接收的包裹列表
+     * @param userId
+     * @return
+     */
+    @RequestMapping(value = "/transportingpackage/{userId}",method = RequestMethod.POST)
+    public JSONObject getRecevicedPacakge(Integer userId) throws Exception{
         JSONObject jsonObject = new JSONObject();
         ResponseCode code = new ResponseCode();
         code.setCode(ResponseCode.Result.FAIL);

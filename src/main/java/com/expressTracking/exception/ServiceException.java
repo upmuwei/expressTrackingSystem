@@ -40,12 +40,13 @@ public class ServiceException extends RuntimeException {
                 return "包裹不存在 " + serviceException.getMessage();
             case 3001:
                 return "包裹状态错误 " + serviceException.getMessage();
+            case 3002:
+                return "包裹没有被转运 " + serviceException.getMessage();
             case 4000:
                 return "用户没有正在转运的包裹 " + serviceException.getMessage();
             case 4001:
                 return "用户已转运该包裹 " + serviceException.getMessage();
-            case 3002:
-                return "包裹没有被转运 " + serviceException.getMessage();
+
             default:
                 return serviceException.getMessage();
         }

@@ -126,16 +126,19 @@ public class TransPackageServiceImpl implements TransPackageService {
      * @return 1 包裹不存在 2 用户不存在 3 拆包成功
      */
     @Override
-    public int unPackTransPckage(String packageId, int userId) {
+    public int unPackTransPckage(String packageId, int userId){
         TransPackage transPackage = get(packageId);
         if (transPackage == null) {
             //包裹不存在
-            return 1;
+            throw new ServiceException(3000);
+        } else if (transPackage.getStatus() == TransPackage.PACKAGE_TRANS) {
+            throw new ServiceException(3001,"无法拆包");//包裹状态错误
         }
+
         UserInfo userInfo = userInfoService.get(userId);
         if (userInfo == null) {
             //用户不存在
-            return 2;
+           throw  new ServiceException(1000);
         }
 
         //将所有快件移出包裹中
@@ -151,7 +154,7 @@ public class TransPackageServiceImpl implements TransPackageService {
         transPackage.setStatus(TransPackage.PACKAGE_COMPLETE);
         update(transPackage);
         //成功
-        return 3;
+        return update(transPackage);
     }
 
 
@@ -213,12 +216,14 @@ public class TransPackageServiceImpl implements TransPackageService {
         if (transPackage.getStatus() != TransPackage.PACKAGE_TRANS) {
             throw new ServiceException(3001, "包裹没有被转运");
         }
+        transPackage.setStatus(TransPackage.PACKAGE_SORTING); //将包裹状态修改为分拣状态
 
         UsersPackage usersPackage = userPackageService.getUserPackage(packageId, null);
         if (usersPackage == null) {
             throw new ServiceException(3002);
         }
-        return userPackageService.remove(packageId) *
+        return transPackageDao.update(transPackage) *
+                userPackageService.remove(packageId) *
                 packageRecordService.addPackageRecord(packageId, userId, PackageRecord.PACKAGE_RECEIVE);
     }
 
@@ -238,6 +243,12 @@ public class TransPackageServiceImpl implements TransPackageService {
             }
         }
         return transPackageList;
+    }
+
+    @Override
+    public List<TransPackage> getRecevicedPackage(Integer userId) throws Exception {
+
+        return null;
     }
 
     /**

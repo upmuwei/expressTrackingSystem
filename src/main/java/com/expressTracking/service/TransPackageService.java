@@ -59,7 +59,7 @@ public interface TransPackageService {
      * @param userId
      * @return
      */
-    public int unPackTransPckage(String packageId, int userId);
+    public int unPackTransPckage(String packageId, int userId) throws Exception;
 
     /**
      * 接收包裹
@@ -86,6 +86,14 @@ public interface TransPackageService {
      * @return
      */
     public List<TransPackage> getTransPackage(Integer userId) throws Exception;
+
+    /**
+     * 查询用户接收的包裹列表
+     * @param userId
+     * @return
+     * @throws Exception
+     */
+    public List<TransPackage> getRecevicedPackage(Integer userId) throws Exception;
 
 
     /**
