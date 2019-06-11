@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="css/swiper.css">
     <link rel="stylesheet" href="css/font.css">
     <link rel="stylesheet" href="css/xadmin.css">
+    <script type="text/javascript" src="js/cookie.js"></script>
 
     <!-- Demo styles -->
     <style>
@@ -42,7 +43,7 @@
     </a>
     <blockquote  class="layui-elem-quote">
         <div class="layui-inline">
-            <span class="x-red">欢迎管理员：从session中获取姓名!</span>
+            <span class="x-red"></span>
         </div>
         <div class="layui-inline">
             <p id="time" type="text"></p>
@@ -71,6 +72,7 @@
 </div>
 
 <script >
+    $(function () {
         var swiper = new Swiper('.swiper-container', {
             effect: 'coverflow',
             grabCursor: true,
@@ -88,18 +90,19 @@
             },
         });
         $(function () {
-            let dayMsg = new Date();
-            let year = dayMsg.getFullYear(); // 获取年份
-            let month = dayMsg.getMonth()+1;  // 获取月份
-            let day = dayMsg.getDate();  // 获取日
-            let hour = dayMsg.getHours();  // 获取小时
-            let minute = dayMsg.getMinutes();  // 获取分钟
-            let second = dayMsg.getSeconds();  // 获取秒
+            var dayMsg = new Date();
+            var year = dayMsg.getFullYear(); // 获取年份
+            var month = dayMsg.getMonth()+1;  // 获取月份
+            var day = dayMsg.getDate();  // 获取日
+            var hour = dayMsg.getHours();  // 获取小时
+            var minute = dayMsg.getMinutes();  // 获取分钟
+            var second = dayMsg.getSeconds();  // 获取秒
 
-            let nowTime = year + "年" + month + "月" + day + "日" + hour + "时" + minute + "分" + second + "秒";
+            var nowTime = year + "年" + month + "月" + day + "日" + hour + "时" + minute + "分" + second + "秒";
 
             $("#time").text(nowTime);
         });
+    });
 </script>
 </body>
 </html>

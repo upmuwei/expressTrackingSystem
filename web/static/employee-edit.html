@@ -117,8 +117,10 @@
                 <span class="x-red">*</span>状态
             </label>
             <div class="layui-input-inline">
-                <input type="text" id="L_status" name="status" required="" lay-verify="status"
-                       autocomplete="off" class="layui-input">
+                <select id="L_status">
+                    <option value="0">未审核</option>
+                    <option value="1">已审核</option>
+                </select>
             </div>
         </div>
         <div class="layui-form-item">

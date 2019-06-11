@@ -27,9 +27,10 @@ public class MyInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String sessionId = request.getHeader("sessionId");
-       /*
+        System.out.println(sessionId);
+        System.out.println(request.getHeaderNames());
         ResponseCode code = new ResponseCode();
-        if (sessionId == null || request.getSession().getAttribute(sessionId) == null) {
+        if (sessionId == null) {
             code.setCode(2);
             code.setMessage("非法访问");
             PrintWriter writer = response.getWriter();
@@ -37,7 +38,17 @@ public class MyInterceptor extends HandlerInterceptorAdapter {
             response.setContentType("application/json;charset=UTF-8");
             LOGGER.error(request.getRequestURI() + "非法访问");
             return false;
-        }*/
+        }
+        if (!"weixin".equals(sessionId) && request.getSession().getAttribute(sessionId) == null) {
+            System.out.println("error");
+            code.setCode(2);
+            code.setMessage("非法访问");
+            PrintWriter writer = response.getWriter();
+            writer.print(JsonUtils.toJson(code));
+            response.setContentType("application/json;charset=UTF-8");
+            LOGGER.error(request.getRequestURI() + "非法访问");
+            return false;
+        }
         return true;
     }
 

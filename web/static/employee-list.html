@@ -42,12 +42,18 @@
     var currPageSpan;
     function URull(urull){
         switch(urull){
-            case 0:return "待定职位";break;
             case 1:return "经理";break;
             case 2:return "揽收员";break;
             case 3:return "派送员";break;
             case 4:return "转运员";break;
             case 5:return "打包拆包人员";break;
+            default:break;
+        }
+    }
+    function Status(status){
+        switch(status){
+            case 0:return "未审核";break;
+            case 1:return "已审核";break;
             default:break;
         }
     }
@@ -82,7 +88,7 @@
                                 "<td>" + user[i].name + "</td>" +
                                 "<td>" + URull(user[i].uRull)+ "</td>" +
                                 "<td>" + user[i].telCode + " </td>" +
-                                "<td>" + user[i].status + "</td>" +
+                                "<td>" + Status(user[i].status) + "</td>" +
                                 "<td>" + user[i].dptId + "</td>" +
                                 "<td>" + user[i].receivePackageId + "</td> " +
                                 "<td>" + user[i].delivePackageId + "</td> " +

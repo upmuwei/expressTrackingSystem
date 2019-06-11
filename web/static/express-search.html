@@ -53,7 +53,9 @@
                     var obj = data;
                     if(obj.code.code === 0){
                         var list=obj.esList;
-                        $("#numspan").text("显示数据："+list.length+"条");
+                        var listHistory=obj.esListHistory;
+                        var length=list.length+listHistory.length;
+                        $("#numspan").text("显示数据："+length+"条");
                         var tableData;
                         for(var i=0;i<list.length;i++){
                             tableData+="<tr> " +
@@ -72,8 +74,33 @@
                                 // "<td>"+list[i].acc1 +"</td> "+
                                 // "<td>"+list[i].acc2 +"</td> "+
                                 "<td>"+status(list[i].status)+"</td> "+
+                                "<td>否</td> "+
                                 "</tr>";
                         }
+                        var tableData1;
+
+                        $("#numspan1").text("显示数据："+listHistory.length+"条");
+                        for(var i=0;i<listHistory.length;i++){
+                            tableData1+="<tr> " +
+                                "<td>"+listHistory[i].id +"</td> " +
+                                "<td>"+listHistory[i].type +"</td> " +
+                                "<td>"+listHistory[i].sender.name +"</td>" +
+                                "<td>"+listHistory[i].recever.name +"</td>" +
+                                // "<td>"+list[i].weight +" </td>" +
+                                // "<td>"+list[i].tranFee +"</td>" +
+                                // "<td>"+list[i].packageFee +"</td>" +
+                                // "<td>"+list[i].insuFee +"</td> "+
+                                "<td>"+listHistory[i].accepter +"</td> "+
+                                "<td>"+listHistory[i].deliver +"</td> "+
+                                "<td>"+listHistory[i].accepteTime +"</td> "+
+                                "<td>"+listHistory[i].deliveTime +"</td> "+
+                                // "<td>"+list[i].acc1 +"</td> "+
+                                // "<td>"+list[i].acc2 +"</td> "+
+                                "<td>"+status(listHistory[i].status)+"</td> "+
+                                "<td>是</td> "+
+                                "</tr>";
+                        }
+                        tableData+=tableData1;
                         $("#firsttbody").html(tableData);
                     }
                     else{
@@ -120,6 +147,7 @@
             <!--<th>寄件附件</th>-->
             <!--<th>收件附件</th>-->
             <th>快递状态</th>
+            <th>是否历史快件</th>
         </tr>
         </thead>
         <tbody id="firsttbody">

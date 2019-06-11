@@ -3,10 +3,7 @@ package com.expressTracking.action;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.expressTracking.entity.ExpressSheet;
-import com.expressTracking.entity.ResponseCode;
-import com.expressTracking.entity.TransPackage;
-import com.expressTracking.entity.UserInfo;
+import com.expressTracking.entity.*;
 import com.expressTracking.service.ExpressSheetService;
 import com.expressTracking.service.TransPackageContentService;
 import com.expressTracking.service.TransPackageService;
@@ -387,8 +384,15 @@ public class ExpressSheetController {
         code.setCode(ResponseCode.Result.FAIL);
         if (packageId != null){
             List<ExpressSheet> expressSheets = esService.getListInPackage(packageId);
+            List<TransPackageContent> transPackageContents = transPackageContentService.findByPackageIdAndStatus(packageId,1);
+            List<ExpressSheet> expressSheetsHistory=new ArrayList<>();
+            for(int i=0;i<transPackageContents.size();i++){
+                expressSheetsHistory.add(esService.get(transPackageContents.get(i).getExpressId()));
+            }
             code.setCode(ResponseCode.Result.SUCESS);
             jsonObject.put("esList",JSON.parse(JsonUtils.toJson(expressSheets)));
+            jsonObject.put("esListHistory",JSON.parse(JsonUtils.toJson(expressSheetsHistory)));
+            System.out.println("esListHistory"+expressSheetsHistory);
         }else{
             code.setCode(ResponseCode.Result.ERROR);
             code.setMessage("参数错误");
