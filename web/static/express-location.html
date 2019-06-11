@@ -32,15 +32,12 @@
         var url = location.search;
         console.log(url);
         var id=url.split("=")[1];
-        var str="http://localhost:8080/route/getRouteList/"+"es/"+id;
+        var str="http://localhost:8080/route/getRouteList/es/"+id;
         $.ajax({
             url: str,
             type: "GET",
             dataType: "json",
             contentType : "application/json; charset=utf-8",
-            headers : {
-                'sessionId': getCookie("sessionId"),
-            },
             success:function(data){
                 if(data.code.code === 0){
                     var routeList=data.routeList;

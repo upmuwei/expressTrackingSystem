@@ -89,7 +89,7 @@
         });
     });
 </script>
-<div class="x-body">
+<div class="x-body" style="margin-top: 30px">
     <form class="layui-form">
         <div class="layui-form-item">
             <label for="L_id" class="layui-form-label">
@@ -129,9 +129,13 @@
             </label>
             <div class="layui-input-inline">
                 <select class="layui-select" id="L_status" name="status" required="status" lay-verify="status">
-                    <option id="0"  value="0">新建:0</option>
-                    <option id="1"  value="1">打包:1</option>
-                    <option id="2"  value="2">转运:2</option>
+                    <option id="0"  value="0">新建</option>
+                    <option id="1"  value="1">打包</option>
+                    <option id="2"  value="2">转运</option>
+                    <option id="3"  value="3">分拣</option>
+                    <option id="4"  value="4">揽收货篮</option>
+                    <option id="5"  value="5">派送货篮</option>
+                    <option id="6"  value="6">已拆包</option>
                 </select>
             </div>
         </div>
