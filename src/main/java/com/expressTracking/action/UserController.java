@@ -217,9 +217,7 @@ public class UserController {
                                   @PathVariable("value") String value) throws Exception {
         ResponseCode code = new ResponseCode();
         List<UserInfo> userInfoList = new ArrayList<>();
-        System.out.println(1212323);
-        System.out.println(value + " 立构");
-        if (value == null) {
+        if (value.equals("-1")) {
             userInfoList = userInfoService.getAll();
             System.out.println(userInfoList.size());
         } else {

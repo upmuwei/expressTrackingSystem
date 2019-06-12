@@ -25,6 +25,79 @@
     }
 </style>
 <script>
+    var getUser = function () {
+        if($("#input").val() === null ||$("#input").val() === ""){
+            str= address + "user/list/"+$("#select").val()+"/"+$("#selectway").val()+"/"+"-1";
+        }else{
+            var str= address + "user/list/"+$("#select").val()+"/"+$("#selectway").val()+"/"+$("#input").val();
+        }
+
+        $.ajax({
+            url:str,
+            type:"GET",
+            dataType:'JSON',
+            contentType : "application/json; charset=utf-8",
+            headers : {
+                'sessionId': getCookie("sessionId")
+            },
+            success:function(data){
+                if(data.code.code === 0) {
+                    var tableData;
+                    var user = data.userList;
+                    $("#numspan").text("显示数据：" + (user.length).toString() + "条");
+                    for (var i = 0; i < user.length; i++) {
+                        var str = "<td class='td-manage'>" +
+                            '<a title="编辑"  href="javascript:;"  onclick="x_admin_show( \'编辑\',\'employee-edit.html? Data=' + user[i].uId + '\',600,400)">' +
+                            "<i class=\"layui-icon\">&#xe642;</i>" +
+                            "</a>" +
+                            // '<a title="删除" href="javascript:;" onclick="employee_del(this,' + user[i].uId + ')">' +
+                            // "<i class='layui-icon'>&#xe640;</i> " +
+                            // "</a> " +
+                            "</td>";
+
+                        tableData += "<tr> " +
+                            "<td>" + user[i].uId + "</td> " +
+                            "<td>" + user[i].name + "</td>" +
+                            "<td>" + URull(user[i].uRull)+ "</td>" +
+                            "<td>" + user[i].telCode + " </td>" +
+                            "<td>" + Status(user[i].status) + "</td>" +
+                            "<td>" + user[i].dptId + "</td>" +
+                            "<td>" + user[i].receivePackageId + "</td> " +
+                            "<td>" + user[i].delivePackageId + "</td> " +
+                            "<td>" + user[i].transPackageId + "</td> "
+                            + str +
+                            "</tr>";
+                    }
+                    $("#firsttbody").html(tableData);
+
+                    //页面标签变量
+                    blockTable = document.getElementById("table");
+                    preSpan = document.getElementById("spanPre");
+                    firstSpan = document.getElementById("spanFirst");
+                    nextSpan = document.getElementById("spanNext");
+                    lastSpan = document.getElementById("spanLast");
+                    pageNumSpan = document.getElementById("spanTotalPage");
+                    currPageSpan = document.getElementById("spanPageNum");
+
+                    numCount = document.getElementById("table").rows.length - 1;       //取table的行数作为数据总数量（减去标题行1）
+
+                    columnsCounts = blockTable.rows[0].cells.length;
+                    pageCount = 6;
+                    pageNum = parseInt(numCount/pageCount);
+                    if(0 != numCount%pageCount){
+                        pageNum += 1;
+                    }
+                    firstPage();
+                }else{
+                    alert(data.code.message);
+                }
+            },
+            error:function(){
+                alert("error");
+            }
+        });
+    }
+
     //全局变量
     var numCount;       //数据总数量
     var columnsCounts;  //数据列数量
@@ -57,74 +130,8 @@
             default:break;
         }
     }
-    $(function(){
-        $("#submit").click(function () {
-            var str= address + "user/list/"+$("#select").val()+"/"+$("#selectway").val()+"/"+$("#input").val()+ " ";
-            $.ajax({
-                url:str,
-                type:"GET",
-                dataType:'JSON',
-                contentType : "application/json; charset=utf-8",
-                headers : {
-                    'sessionId': getCookie("sessionId")
-                },
-                success:function(data){
-                    if(data.code.code === 0) {
-                        var tableData;
-                        var user = data.userList;
-                        $("#numspan").text("显示数据：" + (user.length).toString() + "条");
-                        for (var i = 0; i < user.length; i++) {
-                            var str = "<td class='td-manage'>" +
-                                '<a title="编辑"  href="javascript:;"  onclick="x_admin_show( \'编辑\',\'employee-edit.html? Data=' + user[i].uId + '\',600,400)">' +
-                                "<i class=\"layui-icon\">&#xe642;</i>" +
-                                "</a>" +
-                                // '<a title="删除" href="javascript:;" onclick="employee_del(this,' + user[i].uId + ')">' +
-                                // "<i class='layui-icon'>&#xe640;</i> " +
-                                // "</a> " +
-                                "</td>";
-
-                            tableData += "<tr> " +
-                                "<td>" + user[i].uId + "</td> " +
-                                "<td>" + user[i].name + "</td>" +
-                                "<td>" + URull(user[i].uRull)+ "</td>" +
-                                "<td>" + user[i].telCode + " </td>" +
-                                "<td>" + Status(user[i].status) + "</td>" +
-                                "<td>" + user[i].dptId + "</td>" +
-                                "<td>" + user[i].receivePackageId + "</td> " +
-                                "<td>" + user[i].delivePackageId + "</td> " +
-                                "<td>" + user[i].transPackageId + "</td> "
-                                + str +
-                                "</tr>";
-                        }
-                        $("#firsttbody").html(tableData);
-
-                        //页面标签变量
-                        blockTable = document.getElementById("table");
-                        preSpan = document.getElementById("spanPre");
-                        firstSpan = document.getElementById("spanFirst");
-                        nextSpan = document.getElementById("spanNext");
-                        lastSpan = document.getElementById("spanLast");
-                        pageNumSpan = document.getElementById("spanTotalPage");
-                        currPageSpan = document.getElementById("spanPageNum");
-
-                        numCount = document.getElementById("table").rows.length - 1;       //取table的行数作为数据总数量（减去标题行1）
-
-                        columnsCounts = blockTable.rows[0].cells.length;
-                        pageCount = 6;
-                        pageNum = parseInt(numCount/pageCount);
-                        if(0 != numCount%pageCount){
-                            pageNum += 1;
-                        }
-                        firstPage();
-                    }else{
-                        alert(data.code.message);
-                    }
-                },
-                error:function(){
-                    alert("error");
-                }
-            });
-        });
+    $(function() {
+        $("#submit").click(getUser);
     });
 </script>
 
@@ -196,6 +203,7 @@
 
    </div>
 <script>
+    getUser();
     layui.use('laydate', function(){
         var laydate = layui.laydate;
         laydate.render({
@@ -231,6 +239,7 @@
             layer.msg('已删除!',{icon:1,time:1000});
         });
     }
+
 </script>
 </body>
 </html>
