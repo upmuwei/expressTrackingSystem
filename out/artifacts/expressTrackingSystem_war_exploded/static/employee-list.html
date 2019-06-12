@@ -12,18 +12,48 @@
     <script type="text/javascript" src="js/xadmin.js"></script>
     <script type="text/javascript" src="js/cookie.js"></script>
     <script type="text/javascript" src="js/address.js"></script>
+    <script type="text/javascript" src="js/pagination.js"></script>
     <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
     <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
 </head>
+<style type="text/css">
+    #pagiDiv span{
+        color: white;
+        background:#189F92;
+        border-radius: .2em;
+        padding:5px;
+    }
+</style>
 <script>
+    //全局变量
+    var numCount;       //数据总数量
+    var columnsCounts;  //数据列数量
+    var pageCount;      //每页显示的数量
+    var pageNum;        //总页数
+    var currPageNum;   //当前页数
+
+    //页面标签变量
+    var blockTable;
+    var preSpan;
+    var firstSpan;
+    var nextSpan;
+    var lastSpan;
+    var pageNumSpan;
+    var currPageSpan;
     function URull(urull){
         switch(urull){
-            case 0:return "待定职位";break;
             case 1:return "经理";break;
             case 2:return "揽收员";break;
             case 3:return "派送员";break;
             case 4:return "转运员";break;
             case 5:return "打包拆包人员";break;
+            default:break;
+        }
+    }
+    function Status(status){
+        switch(status){
+            case 0:return "未审核";break;
+            case 1:return "已审核";break;
             default:break;
         }
     }
@@ -35,6 +65,9 @@
                 type:"GET",
                 dataType:'JSON',
                 contentType : "application/json; charset=utf-8",
+                headers : {
+                    'sessionId': getCookie("sessionId"),
+                },
                 success:function(data){
                     if(data.code.code === 0) {
                         var tableData;
@@ -55,7 +88,7 @@
                                 "<td>" + user[i].name + "</td>" +
                                 "<td>" + URull(user[i].uRull)+ "</td>" +
                                 "<td>" + user[i].telCode + " </td>" +
-                                "<td>" + user[i].status + "</td>" +
+                                "<td>" + Status(user[i].status) + "</td>" +
                                 "<td>" + user[i].dptId + "</td>" +
                                 "<td>" + user[i].receivePackageId + "</td> " +
                                 "<td>" + user[i].delivePackageId + "</td> " +
@@ -64,6 +97,25 @@
                                 "</tr>";
                         }
                         $("#firsttbody").html(tableData);
+
+                        //页面标签变量
+                        blockTable = document.getElementById("table");
+                        preSpan = document.getElementById("spanPre");
+                        firstSpan = document.getElementById("spanFirst");
+                        nextSpan = document.getElementById("spanNext");
+                        lastSpan = document.getElementById("spanLast");
+                        pageNumSpan = document.getElementById("spanTotalPage");
+                        currPageSpan = document.getElementById("spanPageNum");
+
+                        numCount = document.getElementById("table").rows.length - 1;       //取table的行数作为数据总数量（减去标题行1）
+
+                        columnsCounts = blockTable.rows[0].cells.length;
+                        pageCount = 6;
+                        pageNum = parseInt(numCount/pageCount);
+                        if(0 != numCount%pageCount){
+                            pageNum += 1;
+                        }
+                        firstPage();
                     }else{
                         alert(data.code.message);
                     }
@@ -114,7 +166,7 @@
            <button class="layui-btn" onclick="x_admin_show('添加用户','./employee-add.html',600,400)"><i class="layui-icon"></i>添加</button>
            <span class="x-right" id="numspan" style="line-height:40px">显示数据：0条</span>
        </xblock>
-       <table class="layui-table x-admin">
+       <table id="table" class="layui-table x-admin">
         <thead>
         <tr>
             <th>UID</th>
@@ -134,13 +186,13 @@
 
         </table>
 
-        <div class="page">
-            <div>
-                <a class="prev" href="">&lt;&lt;</a>
-                <a class="num"  href="">1</a>
-                <a class="next" href="">&gt;&gt;</a>
-            </div>
-        </div>
+       <div id="pagiDiv" align="center" style="width:1200px">
+           <span id="spanFirst">First</span>
+           <span id="spanPre">Pre</span>
+           <span id="spanNext">Next</span>
+           <span id="spanLast">Last</span>
+           <span id="spanPageNum"></span>/<span id="spanTotalPage"></span>
+       </div>
 
    </div>
 <script>
@@ -165,6 +217,9 @@
                 type:"GET",
                 dataType:'JSON',
                 contentType : "application/json; charset=utf-8",
+                headers : {
+                    'sessionId': getCookie("sessionId"),
+                },
                 success:function(data){
                     layer.msg('已删除!',{icon:1,time:1000});
                 },

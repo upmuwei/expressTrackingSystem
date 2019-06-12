@@ -40,6 +40,10 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
+    public List<UserInfo> getAll() {
+        return userInfoDao.getAll();
+    }
+    @Override
     public int save(UserInfo userInfo) throws Exception {
         if (userInfoDao.checkByTelCode(userInfo.getTelCode()) == null) {
             String receivePackageId = System.currentTimeMillis() + userInfo.getTelCode();

@@ -31,6 +31,9 @@
                    type: "post",
                    dataType: "JSON",
                    contentType : "application/json; charset=utf-8",
+                   headers : {
+                       'sessionId': getCookie("sessionId"),
+                   },
                    data: JSON.stringify({"name":name,
                        "uRull":urull,"telCode":telcode,"status":status,"dptId":dptid }),
                    success : function(data) {

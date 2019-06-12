@@ -9,6 +9,8 @@ import java.util.List;
 @Repository
 public interface UserInfoDao {
 
+    public List<UserInfo> getAll();
+
     public int update(UserInfo userInfo);
 
     public int delete(int uId);

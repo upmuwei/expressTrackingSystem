@@ -216,15 +216,21 @@ public class UserController {
                                   @PathVariable("value") String value) throws Exception {
         ResponseCode code = new ResponseCode();
         List<UserInfo> userInfoList = new ArrayList<>();
-        switch (restrictions.toLowerCase()) {
-            case "eq":
-                userInfoList = userInfoService.findBy(property, value);
-                break;
-            case "like":
-                userInfoList = userInfoService.findLike(property, value + "%");
-                break;
-            default:
-                throw new Exception("参数错误");
+        if (value == null) {
+            userInfoList = userInfoService.getAll();
+        } else {
+
+            switch (restrictions.toLowerCase()) {
+                case "eq":
+                    userInfoList = userInfoService.findBy(property, value);
+                    break;
+                case "like":
+                    userInfoList = userInfoService.findLike(property, value + "%");
+                    break;
+                default:
+                    throw new Exception("参数错误");
+            }
+
         }
         JSONObject jsonObject = new JSONObject();
         if (userInfoList != null) {

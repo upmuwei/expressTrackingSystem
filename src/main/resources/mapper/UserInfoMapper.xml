@@ -26,6 +26,10 @@
         from userinfo
     </sql>
 
+    <select id="getAll" resultMap="userInfoMap">
+        <include refid="userInfo_get" /> where 1 = 1
+    </select>
+
     <select id="checkByTelCode" parameterType="string" resultType="string">
         select 1 from userinfo where TelCode = #{telCode,jdbcType=VARCHAR}
     </select>
