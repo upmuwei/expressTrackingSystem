@@ -31,7 +31,6 @@
         }else{
             var str= address + "user/list/"+$("#select").val()+"/"+$("#selectway").val()+"/"+$("#input").val();
         }
-
         $.ajax({
             url:str,
             type:"GET",
@@ -96,7 +95,7 @@
                 alert("error");
             }
         });
-    }
+    };
 
     //全局变量
     var numCount;       //数据总数量
