@@ -73,7 +73,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public int update(UserInfo userInfo) {
-        if (userInfo != null) {
+        if (userInfo != null&& userInfo.getPassword() != null) {
             userInfo.setPassword(MD5Utils.getSaltMD5(userInfo.getPassword()));
         }
         return userInfoDao.update(userInfo);

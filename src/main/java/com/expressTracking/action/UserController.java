@@ -149,6 +149,7 @@ public class UserController {
     public JSONObject update(@RequestBody UserInfo userInfo) {
         ResponseCode code = new ResponseCode();
         JSONObject jsonObject = new JSONObject();
+        userInfo.setPassword(null);
         if (userInfoService.update(userInfo) > 0) {
             code.setCode(ResponseCode.Result.SUCESS);
         } else {
@@ -216,8 +217,11 @@ public class UserController {
                                   @PathVariable("value") String value) throws Exception {
         ResponseCode code = new ResponseCode();
         List<UserInfo> userInfoList = new ArrayList<>();
+        System.out.println(1212323);
+        System.out.println(value + " 立构");
         if (value == null) {
             userInfoList = userInfoService.getAll();
+            System.out.println(userInfoList.size());
         } else {
 
             switch (restrictions.toLowerCase()) {

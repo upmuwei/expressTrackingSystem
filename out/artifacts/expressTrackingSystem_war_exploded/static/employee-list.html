@@ -59,7 +59,7 @@
     }
     $(function(){
         $("#submit").click(function () {
-            var str= address + "user/list/"+$("#select").val()+"/"+$("#selectway").val()+"/"+$("#input").val();
+            var str= address + "user/list/"+$("#select").val()+"/"+$("#selectway").val()+"/"+$("#input").val()+ " ";
             $.ajax({
                 url:str,
                 type:"GET",
