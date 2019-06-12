@@ -12,6 +12,7 @@
     <script type="text/javascript" src="lib/layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="js/xadmin.js"></script>
     <script type="text/javascript" src="js/cookie.js"></script>
+    <script type="text/javascript" src="js/address.js"></script>
 </head>
 <body>
 <script>
@@ -20,7 +21,7 @@
         console.log(url);
         var id=url.split("=")[1];
         //未获取登陆账号的id
-        var str="http://localhost:8080/user/get"+11;
+        var str=address+"user/get"+11;
         $.ajax({
             url:str,
             type:"GET",

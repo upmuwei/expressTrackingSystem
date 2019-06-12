@@ -12,6 +12,7 @@
       <script type="text/javascript" src="js/xadmin.js"></script>
       <script type="text/javascript" src="js/pagination.js"></script>
       <script type="text/javascript" src="js/cookie.js"></script>
+    <script type="text/javascript" src="js/address.js"></script>
 </head>
 <style type="text/css">
     #pagiDiv span{
@@ -51,7 +52,7 @@
     var currPageSpan;
     $(function(){
         $("#submit").click(function () {
-            var str="http://localhost:8080/package/get_package_list/"+$("#select").val()+"/"+$("#selectway").val()+"/"+$("#input").val();
+            var str=address+"package/get_package_list/"+$("#select").val()+"/"+$("#selectway").val()+"/"+$("#input").val();
             $.ajax({
                 url:str,
                 type:"GET",

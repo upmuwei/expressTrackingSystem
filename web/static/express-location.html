@@ -32,7 +32,7 @@
         var url = location.search;
         console.log(url);
         var id=url.split("=")[1];
-        var str="http://localhost:8080/route/getRouteList/es/"+id;
+        var str=address+"route/getRouteList/es/"+id;
         $.ajax({
             url: str,
             type: "GET",
@@ -74,7 +74,7 @@
                     });
 
 
-                    //画图标
+                    //画图标，每隔500个坐标点进行一次绘制
                     for (var i = 0, j = trackPoint.length; i < j; i++) {
                         if(i%500 === 0){
                             var marker = new BMap.Marker(trackPoint[i], {

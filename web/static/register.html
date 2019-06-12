@@ -13,6 +13,7 @@
     <script src="lib/layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="js/xadmin.js"></script>
     <script type="text/javascript" src="js/cookie.js"></script>
+    <script type="text/javascript" src="js/address.js"></script>
 </head>
 <body class="login-bg">
 
@@ -40,7 +41,7 @@
             var password=$("#password").val();
             var password2=$("#password2").val();
             $.ajax({
-                url: "http://localhost:8080/user/add",
+                url: address+"user/add",
                 dataType:"json",
                 type:"post",
                 contentType : "application/json; charset=utf-8",

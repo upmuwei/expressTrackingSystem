@@ -12,6 +12,7 @@
     <script type="text/javascript" src="./lib/layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="./js/xadmin.js"></script>
     <script type="text/javascript" src="./js/cookie.js"></script>
+    <script type="text/javascript" src="js/address.js"></script>
 </head>
 
 <body>
@@ -20,7 +21,7 @@
         var url = location.search;
         console.log(url);
         var id=url.split("=")[1];
-        var str="http://localhost:8080/package/get_package/"+id;
+        var str=address+"package/get_package/"+id;
         $.ajax({
             url:str,
             type:"GET",

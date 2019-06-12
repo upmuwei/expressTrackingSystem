@@ -13,6 +13,7 @@
     <script type="text/javascript" src="lib/layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="js/xadmin.js"></script>
     <script type="text/javascript" src="js/cookie.js"></script>
+    <script type="text/javascript" src="js/address.js"></script>
 </head>
 
 <body>
@@ -22,7 +23,7 @@
             var id=$("#L_id").val();
             var uId=$("#L_uId").val();
             $.ajax({
-                url: "http://localhost:8080/es/get/"+uId,
+                url: address+"es/get/"+uId,
                 type: "get",
                 dataType: "JSON",
                 contentType : "application/json; charset=utf-8",

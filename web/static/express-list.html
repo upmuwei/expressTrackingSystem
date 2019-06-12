@@ -13,6 +13,7 @@
       <script type="text/javascript" src="js/xadmin.js"></script>
       <script type="text/javascript" src="js/cookie.js"></script>
       <script type="text/javascript" src="js/pagination.js"></script>
+      <script type="text/javascript" src="js/address.js"></script>
       <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
       <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
   </head>
@@ -54,7 +55,7 @@
           }
           $(function(){
               $("#submit").click(function () {
-                  var str="http://localhost:8080/es/list";
+                  var str=address+"es/list";
                   var property=$("#select").val();
                   var inputValue=$("#input").val();
                   $.ajax({

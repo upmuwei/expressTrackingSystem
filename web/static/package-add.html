@@ -13,6 +13,7 @@
     <script type="text/javascript" src="lib/layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="js/xadmin.js"></script>
     <script type="text/javascript" src="js/cookie.js"></script>
+    <script type="text/javascript" src="js/address.js"></script>
 </head>
 
 <body>
@@ -25,7 +26,7 @@
             var status=$("#L_status").val();
             var uid=$("#L_uid").val();
             $.ajax({
-                url: "http://localhost:8080/package/save/"+uid,
+                url: address+"package/save/"+uid,
                 type: "post",
                 dataType: "JSON",
                 contentType : "application/json; charset=utf-8",
