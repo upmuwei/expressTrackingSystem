@@ -58,6 +58,9 @@
                 url:  address + "user/update",
                 type: "post",
                 dataType: "JSON",
+                headers : {
+                    'sessionId': getCookie("sessionId"),
+                },
                 contentType : "application/json; charset=utf-8",
                 data: JSON.stringify({"uId":uId, "name":name,"uRull":urull,"telCode":telcode,"status":status,"dptId":dptid}),
                 success : function(data) {
@@ -94,7 +97,6 @@
             </label>
             <div class="layui-input-inline">
                 <select id="L_urull" name="uRull" required="" lay-verify="uRull">
-                    <option value="0">待定职位</option>
                     <option value="1">经理</option>
                     <option value="2">揽收员</option>
                     <option value="3">派送员</option>
