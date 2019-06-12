@@ -39,6 +39,7 @@
             <mvc:mapping path="/transNode/*/*/*"/>
             <mvc:mapping path="/transNode/*/*/*/*"/>
             <mvc:exclude-mapping path="/user/login"/>
+            <mvc:exclude-mapping path="/user/forget_password"/>
             <mvc:exclude-mapping path="/user/add"/>
             <mvc:exclude-mapping path="/es/getPackageListByesId/*"/>
             <mvc:exclude-mapping path="/route/getRouteList/es/*"/>

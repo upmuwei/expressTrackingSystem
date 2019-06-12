@@ -4,10 +4,7 @@ import com.expressTracking.controller.DomainController;
 import com.expressTracking.dao.*;
 import com.expressTracking.entity.*;
 import com.expressTracking.exception.ServiceException;
-import com.expressTracking.service.PackageRecordService;
-import com.expressTracking.service.TransPackageService;
-import com.expressTracking.service.UserInfoService;
-import com.expressTracking.service.UserPackageService;
+import com.expressTracking.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +38,8 @@ public class TransPackageServiceImpl implements TransPackageService {
     private UserInfoService userInfoService;
     @Autowired
     private PackageRecordService packageRecordService;
+    @Autowired
+    private ExpressSheetService esService;
 
     @Override
     public List<TransPackage> findBy(String propertyName, String value) {
@@ -126,19 +125,19 @@ public class TransPackageServiceImpl implements TransPackageService {
      * @return 1 包裹不存在 2 用户不存在 3 拆包成功
      */
     @Override
-    public int unPackTransPckage(String packageId, int userId){
+    public int unPackTransPckage(String packageId, int userId) {
         TransPackage transPackage = get(packageId);
         if (transPackage == null) {
             //包裹不存在
             throw new ServiceException(3000);
         } else if (transPackage.getStatus() == TransPackage.PACKAGE_TRANS) {
-            throw new ServiceException(3001,"无法拆包");//包裹状态错误
+            throw new ServiceException(3001, "无法拆包");//包裹状态错误
         }
 
         UserInfo userInfo = userInfoService.get(userId);
         if (userInfo == null) {
             //用户不存在
-           throw  new ServiceException(1000);
+            throw new ServiceException(1000);
         }
 
         //将所有快件移出包裹中
@@ -191,6 +190,13 @@ public class TransPackageServiceImpl implements TransPackageService {
         UsersPackage usersPackage = userPackageService.getUserPackage(packageId, userId);
         if (usersPackage != null) {
             throw new ServiceException(4001, "包裹已经被转运");
+        }
+
+        List<ExpressSheet> expressSheetList =esService.getEsListFromPackage(packageId);
+        for(int i = 0;i < expressSheetList.size();i++){
+            ExpressSheet expressSheet = expressSheetList.get(i);
+            expressSheet.setStatus(ExpressSheet.STATUS.STATUS_TRANSPORT);
+            expressSheetDao.update(expressSheet);
         }
 
         //添加UserPackage 和 用户操作包裹的记录 修改包裹状态

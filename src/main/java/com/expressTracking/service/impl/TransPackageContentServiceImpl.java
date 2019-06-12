@@ -68,8 +68,8 @@ public class TransPackageContentServiceImpl implements TransPackageContentServic
         }
         //快件处于揽收和分拣状态时才可以移入包裹中
         switch (expressSheet.getStatus()) {
-            case ExpressSheet.STATUS.STATUS_CREATED:{
-                expressSheetService.updateEsStatus(esId,ExpressSheet.STATUS.STATUS_RECEIVED);
+            case ExpressSheet.STATUS.STATUS_CREATED: {
+                expressSheetService.updateEsStatus(esId, ExpressSheet.STATUS.STATUS_RECEIVED);
                 break;
             }
             case ExpressSheet.STATUS.STATUS_RECEIVED:
@@ -94,10 +94,15 @@ public class TransPackageContentServiceImpl implements TransPackageContentServic
             }
         }
 
-        if(transPackage.getStatus() == TransPackage.PACKAGE_NEW){
+        expressSheet.setStatus(ExpressSheet.STATUS.STATUS_PACKAGED);//将快件状态设为已打包状态
+
+        expressSheetService.update(expressSheet);
+
+        if (transPackage.getStatus() == TransPackage.PACKAGE_NEW) {
             transPackage.setStatus(TransPackage.PACKAGE_PACK);
             transPackageService.update(transPackage);
         }
+
         return addTransPackageContent(packageId, esId) > 0 ? 6 : 5;
     }
 
@@ -166,7 +171,7 @@ public class TransPackageContentServiceImpl implements TransPackageContentServic
     @Override
     public TransPackageContent findByExpressIdAndStatus(String expressId, int status) {
         List<TransPackageContent> transPackageContents = transPackageContentDao.findByExpressIdAndStatus(expressId, status);
-        if(transPackageContents != null && !transPackageContents.isEmpty()) {
+        if (transPackageContents != null && !transPackageContents.isEmpty()) {
             return transPackageContents.get(0);
         }
         return null;
@@ -179,7 +184,7 @@ public class TransPackageContentServiceImpl implements TransPackageContentServic
 
     @Override
     public List<TransPackageContent> findByExpressId(String expressId) {
-        return transPackageContentDao.findByExpressIdAndStatus(expressId,null);
+        return transPackageContentDao.findByExpressIdAndStatus(expressId, null);
     }
 
 //    @Override
@@ -191,8 +196,9 @@ public class TransPackageContentServiceImpl implements TransPackageContentServic
     public TransPackageContent containExpress(String packageId, String esId) {
         return transPackageContentDao.findByPackageIdAndEsId(packageId, esId);
     }
+
     @Override
-    public List<String> getPackageId(String expressId){
+    public List<String> getPackageId(String expressId) {
         return transPackageContentDao.getPackageId(expressId);
     }
 }
