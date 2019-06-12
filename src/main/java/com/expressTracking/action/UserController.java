@@ -164,20 +164,31 @@ public class UserController {
      * 修改用户密码
      *
      * @param phone
-     * @param password
+     * @param op
+     * @param oldPassword
+     * @param newPassword
      * @return
      */
-    @RequestMapping(value = "/forget_password",method = RequestMethod.POST)
-    public JSONObject forgetPassword(String phone, String password) {
+    @RequestMapping(value = "/forget_password", method = RequestMethod.POST)
+    public JSONObject forgetPassword(String phone, String op, String oldPassword, String newPassword) {
         JSONObject jsonObject = new JSONObject();
         ResponseCode code = new ResponseCode();
-        if (phone == null || password == null) {
-            UserInfo userInfo = userInfoService.getUserByTelCode(phone);
+        code.setCode(ResponseCode.Result.FAIL);
+        if (phone != null) {
+            UserInfo userInfo = null;
+            switch (op) {
+                case "forget": {
+                    userInfo = userInfoService.getUserByTelCode(phone);
+                    break;
+                }
+                case "update": {
+                    userInfo = userInfoService.checkLogin(phone, oldPassword);
+                }
+            }
             if (userInfo == null) {
                 //密码修改失败
-                code.setCode(ResponseCode.Result.FAIL);
-                code.setMessage("该电话号码未注册");
-            } else if (userInfoService.updatePassword(userInfo.getuId(), password) > 0) {
+                code.setMessage("修改密码失败");
+            } else if (userInfoService.updatePassword(userInfo.getuId(), newPassword) > 0) {
                 //密码修改成功
                 code.setCode(ResponseCode.Result.SUCESS);
             }
@@ -189,7 +200,6 @@ public class UserController {
         jsonObject.put("code", JSON.parse(JsonUtils.toJson(code)));
         return jsonObject;
     }
-
 
     /**
      * 查询员工信息
