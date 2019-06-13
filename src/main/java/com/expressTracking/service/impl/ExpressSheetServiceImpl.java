@@ -154,8 +154,7 @@ public class ExpressSheetServiceImpl implements ExpressSheetService {
         expressSheet.setAccepter(userInfo.getuId() + "");
         //将快件状态设置揽收状态
         expressSheet.setStatus(ExpressSheet.STATUS.STATUS_RECEIVED);
-        return save(expressSheet) *
-                transPackageContentService.moveEsToPackage(userInfo.getReceivePackageId(), expressSheet.getId()) > 0 ? 3 : 4;
+        return save(expressSheet) > 0 ? 3 : 4;
     }
 
     @Override
@@ -165,7 +164,6 @@ public class ExpressSheetServiceImpl implements ExpressSheetService {
             return 0;
         } else {
             expressSheet.setType(0);
-            expressSheet.setStatus(ExpressSheet.STATUS.STATUS_CREATED);
             expressSheet.setAccepteTime(DateUtil.getCurrentDate());
             return expressSheetDao.insert(expressSheet);
         }

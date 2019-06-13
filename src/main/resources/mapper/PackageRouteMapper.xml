@@ -55,8 +55,8 @@
 
     <select id="getByPackageIds" parameterType="java.util.List" resultMap="packageRouteMap">
         select SN, PackageID, x, y, tm
-        from packageroute
-        <foreach collection="list" item="packageId" separator="," open="where PackageID in (" close=")">
+        from packageroute where PackageID in
+        <foreach collection="list" item="packageId" separator="," open="(" close=")">
             #{packageId}
         </foreach>
         order by tm asc;

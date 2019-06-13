@@ -165,6 +165,12 @@ public class PackageRouteServiceImpl implements PackageRouteService {
                 packageIds.add(transPackageContent.getPackageId());
             }
         }
-        return packageRouteDao.getByPackageIds(packageIds);
+        List<PackageRoute> packageRoutes = new ArrayList<>();
+        System.out.println(packageIds);
+        if(packageIds != null && !packageIds.isEmpty()){
+            packageRoutes = packageRouteDao.getByPackageIds(packageIds);
+        }
+        return packageRoutes;
+
     }
 }

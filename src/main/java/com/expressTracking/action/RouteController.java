@@ -68,7 +68,7 @@ public class RouteController {
         JSONObject jsonObject = new JSONObject();
         ResponseCode code = new ResponseCode();
         code.setCode(ResponseCode.Result.FAIL);
-
+        System.out.println("getRouteList=" + id);
         if (type != null && id != null) {
             List<PackageRoute> routeList = new ArrayList<>();
             switch (type) {
